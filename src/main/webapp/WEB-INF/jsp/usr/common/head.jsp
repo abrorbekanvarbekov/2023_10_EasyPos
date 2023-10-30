@@ -24,51 +24,51 @@
     <title>${pageTitle}</title>
 </head>
 <body>
-<div class="h-20 flex justify-between text-3xl pl-10 bg-gray-600 text-white">
+<div class="header">
     <a class="px-3 flex items-center" href="/">
         <span class="text-red-500">Easy</span>
         <span>Pos</span>
     </a>
-    <ul class="flex justify-around w-6/12 header-box">
+    <ul class="header-box">
         <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+            <a class="" href="">
                 <span class="material-symbols-outlined text-4xl">print</span>
                 <span class="text-sm">직전 영수증</span>
             </a>
         </li>
         <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+            <a class="" href="">
                 <span class="material-symbols-outlined text-4xl">format_align_right</span>
                 <span class="text-sm">메뉴 ON/OFF</span>
             </a>
         </li>
-        <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+        <li >
+            <a href="">
                 <span class="material-symbols-outlined text-4xl">currency_exchange</span>
                 <span class="text-sm">환전</span>
             </a>
         </li>
-        <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+        <li >
+            <a href="">
                 <span class="material-symbols-outlined text-4xl">calendar_month</span>
                 <span class="text-sm">예약현황</span>
             </a>
         </li>
 
-        <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+        <li>
+            <a href="">
                 <span class="material-symbols-outlined text-4xl">desktop_windows</span>
                 <span class="text-sm">바탕화면</span>
             </a>
         </li>
-        <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+        <li >
+            <a href="">
                 <span class="material-symbols-outlined text-4xl">currency_exchange</span>
                 <span class="text-sm">총매출</span>
             </a>
         </li>
-        <li class="">
-            <a class="h-full w-full px-3 flex items-center flex-col justify-center" href="">
+        <li>
+            <a href="">
                 <span class="material-symbols-outlined text-4xl">close</span>
             </a>
         </li>

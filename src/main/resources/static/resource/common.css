@@ -24,24 +24,40 @@ html > body {
     align-items: center;
 }
 
+body > .header{
+    display: flex;
+    justify-content: space-between;
+    height: 8%;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    padding-left: 2.5rem;
+    background-color: rgba(75, 85 , 99 ,1);
+    color: white;
+}
+
+.header-box {
+    display: flex;
+    justify-content: space-around;
+    width: 58%;
+}
 body .header-box li:hover{
     border: 1px solid darkgray;
 }
 
-.container- {
-    float: right;
-    width: 1300px;
-    height: 85%;
-    background-color: rgba(250, 250, 250, 0.2);
-    position: relative;
-    border-left: 1px solid grey;
+.header-box li a{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 121px;
+    height: 100%;
 }
 
 .floors{
     display: flex;
     height: 60px;
     float: right;
-    width: 1300px;
+    width: 82.7%;
     background-color: grey;
     color: white;
 }
@@ -55,6 +71,123 @@ body .header-box li:hover{
     border-right: 1px solid black;
     cursor: pointer;
 }
+
+/*Home Page Right Feed*/
+
+.container- {
+    float: right;
+    width: 82.7%;
+    height: 72%;
+    background-color: rgba(250, 250, 250, 0.2);
+    position: relative;
+    border-left: 1px solid rgba(169, 169, 169, .3);
+}
+
+/*HOme Page Left Feed*/
+.homeLeftFeed{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    float: left;
+    width: 17.3%;
+    height: 80%;
+}
+.homeLeftFeed > .miniWindow{
+    width: 100%;
+    height: 165px;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.homeLeftFeed > .clock{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.homeLeftFeed > .tableFunctions{
+    width: 100%;
+    height: 283px;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.tableFunctions div {
+    display: flex;
+    padding: 10px 10px 10px 15px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.homeLeftFeed > .productInfo {
+    width: 100%;
+    height: 270px;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.productInfo div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.productInfo > div:first-child{
+    padding: 10px 10px 10px 50px;
+}
+.productInfo div span {
+    display: flex;
+    padding: 10px 10px 10px 15px;
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid rgba(169, 169, 169, .3);
+}
+
+/*FooterFeed*/
+.footerFeed {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+}
+
+.footerFeed > ul{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.footerFeed > ul li {
+    width: 9.5%;
+    height: 100%;
+    background-color: rgb(75 85 99);
+    border-right: 1px solid rgba(255, 255, 255, .5);
+}
+
+.footerFeed > ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+/*Main Page Tables*/
 .tables {
     display: flex;
     justify-content: center;
@@ -68,20 +201,14 @@ body .header-box li:hover{
     text-decoration: none;
 }
 
+/*Detail Page LeftFeed*/
 .manuPage {
     display: flex;
     width: 100%;
-    height: 91.5%;
+    height: 88%;
 }
 
-.manuPage > div:last-child {
-    width: 1300px;
-    height: 100%;
-    position: relative;
-    border-left: 1px solid grey;
-}
-
-.manuPage > div:first-child {
+.manuPage > .manuPageLeft {
     float: left;
     width: 40%;
     height: 100%;
@@ -89,97 +216,215 @@ body .header-box li:hover{
     border-left: 1px solid grey;
 }
 
-.manuPage > div:last-child > .productType-box {
+.selectedManuList {
     display: flex;
-    flex-wrap: wrap;
-    border: 1px solid darkgray;
-}
-
-.manuPage > div:last-child > .productType-box li{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 100px;
-    border: 1px solid darkgray;
-}
-
-.manuPage > div:last-child > .product-box {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.manuPage > div:last-child > .product-box li{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 100px;
-    background-color: aqua;
-    border: 1px solid darkgray;
-}
-
-.table-box-type-1 {
-    height: 40%;
-}
-
-.table-box-type-1 > table {
-    font-size: 0.9rem;
+    flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: 42%;
+    overflow: auto;
 }
 
-.table-box-type-1 > table th, .table-box-type-1 > table td {
-    border: 1px solid darkgray;
-    padding: 6px;
-    text-align: center;
-}
-
-.table-box-type-1 > table > tbody tr:hover {
-    background-color: aqua;
-}
-
-.table-box-type-1 > table th:nth-child(1){
-    width: 5%;
-}
-
-.table-box-type-1 > table th:nth-child(2){
-    width: 40%;
-}
-
-.table-box-type-1 > table th:nth-child(3){
-    width: 7%;
-}
-
-.table-box-type-1 > table th:nth-child(4){
-    width: 15%;
-}
-
-.table-box-type-1 > table th:nth-child(5){
-    width: 15%;
-}
-
-.table-box-type-1 > .buttons {
+.selectedManuList > .thead {
+    position: sticky;
+    top: 0px;
     display: flex;
     align-items: center;
     width: 100%;
+    height: 30px;
+    border : 1px solid darkgray;
+    background-color: white;
 }
 
-.table-box-type-1 > .buttons button:nth-child(1){
+.selectedManuList > ul li{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    border : 1px solid darkgray;
+    cursor: pointer;
+}
+
+.selectedManuList > ul{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 270px;
+}
+
+.selectedManuList > .thead span, .selectedManuList > ul li span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    border: 1px solid darkgray;
+    border-top: none;
+}
+
+.selectedManuList > .thead span:nth-child(1), .selectedManuList > ul li span:nth-child(1){
+    width: 35px;
+}
+
+.selectedManuList > .thead span:nth-child(2), .selectedManuList > ul li span:nth-child(2){
+    width: 310px;
+}
+
+.selectedManuList > .thead span:nth-child(3), .selectedManuList > ul li span:nth-child(3){
+    width: 65px;
+}
+
+.selectedManuList > .thead span:nth-child(4), .selectedManuList > ul li span:nth-child(4){
+    width: 159px;
+}
+
+.selectedManuList > .thead span:nth-child(5), .selectedManuList > ul li span:nth-child(5){
+    width: 140px;
+}
+
+.manuPage .buttons {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+}
+
+.manuPage  .buttons button:nth-child(1){
     width: 30%;
     border: 1px solid darkgray;
     border-radius: inherit;
 }
-.table-box-type-1 > .buttons button:nth-child(2){
+.manuPage .buttons button:nth-child(2){
     width: 25%;
     border: 1px solid darkgray;
     border-radius: inherit;
 }
-.table-box-type-1 > .buttons button:not(:nth-child(1), :nth-child(2)){
+.manuPage .buttons button:not(:nth-child(1), :nth-child(2)){
     width: 11.2%;
     border: 1px solid darkgray;
     border-radius: inherit;
+}
+
+/* CalculatePage*/
+.calculatePage {
+    display: flex;
+    padding-top: 5px;
+    justify-content: space-between;
+    width: 100%;
+    height: 47%;
+    border: 1px solid rgba(255, 255, 255, .5);
+}
+
+.calculatePage > .allProductInfo{
+    display: flex;
+    flex-direction: column;
+    width: 42%;
+    height: 100%;
+    padding: 5px;
+}
+
+
+.allProductInfo div:not(div:last-child) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(169, 169, 169, .3);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.allProductInfo div:not(div:last-child) span:first-child{
+    background-color: rgba(173, 216, 230, .4);
+    color: dodgerblue;
+}
+
+.allProductInfo div:not(div:last-child) span {
+    display: flex;
+    padding: 4px 10px 4px 13px;
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid rgba(169, 169, 169, .3);
+}
+
+.allProductInfo div:last-child{
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(169, 169, 169, .3);
+}
+.calculatePage > .calculator{
+    display: flex;
+    justify-content: space-between;
+    width: 58%;
+    height: 100%;
+    padding: 5px;
+    border: 2px solid rgba(169, 169, 169, .3);
+}
+
+.calculator > .numberFeed > input{
+    width: 100%;
+    height: 45px;
+    border: 1px solid black;
+}
+
+.calculator > .numberFeed {
+    width: 75%;
+    height: 100%;
+}
+
+.calculator > .numberFeed div{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.calculator > .numberFeed div:not(div:first-child) span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.calculator > .buttonsFeed {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 100%;
+}
+
+.calculator > .buttonsFeed span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(75, 85 , 99 , .9);
+    color: white;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+/*Detail ManuPage RightFeed*/
+.manuPage > .manuPageRight {
+    width: 1300px;
+    height: 100%;
+    position: relative;
+    border-left: 1px solid grey;
+}
+
+.manuPage > .manuPageRight > .productType-box {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid darkgray;
+}
+
+.manuPage > .manuPageRight > .productType-box li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100px;
+    border: 1px solid darkgray;
 }
 
 .productType-box li > button{
@@ -195,3 +440,38 @@ body .header-box li:hover{
 .productType-box li > button:active{
     transform: translateY(2px);
 }
+
+.manuPage > .manuPageRight > .product-box {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.manuPage > .manuPageRight > .product-box li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100px;
+    background-color: aqua;
+    border: 1px solid darkgray;
+}
+
+.product-box li {
+    outline: none;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+.product-box li:active{
+    transform: translateY(2px);
+}
+
+
+
+
+
+
+
+

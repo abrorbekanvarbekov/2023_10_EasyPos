@@ -1,8 +1,15 @@
 package com.example.easypos.Util;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
 
 public class Util {
+    private HttpServletRequest request;
+
+    public Util(HttpServletRequest request) {
+        this.request = request;
+    }
+
     public static boolean empty(Object obj) {
         if (obj == null) {
             return true;
