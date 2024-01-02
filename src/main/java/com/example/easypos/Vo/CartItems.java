@@ -15,7 +15,10 @@ public class CartItems {
     private int product_id;
     private int table_id;
     private int quantity;
-    private String name;
-    private int price;
-    private int PriceSum;
+    private String productName;
+    private int productPrice;
+    private int productSumPrice;
+    private int priceSum;
+    private int productSailPrice;
+    private int cart_id;
 }

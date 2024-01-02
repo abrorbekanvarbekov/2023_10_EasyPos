@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
+public class TableGroup {
     private int id;
     private String regDate;
     private String updateDate;
-    private int tabId;
-    private int floor;
+    private int groupNum;
+    private int tableCnt;
+    private String color;
 }

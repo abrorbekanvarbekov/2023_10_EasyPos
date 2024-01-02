@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.easypos.DAO.TableDao">
+    <select id="getPayedTotalAmount" resultType="int">
+        select ifnull(sum(payCart.cartTotalAmount), 0)
+        from paymentCreditCart as payCart
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCart.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCart.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCart.floor = 3
+        </if>
+        union all
+        select ifnull(sum(payCash.cashTotalAmount), 0)
+        from paymentCash as payCash
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCash.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCash.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCash.floor = 3
+        </if>
+    </select>
+
+    <select id="getPayedTotalCnt" resultType="int">
+        select ifnull(count(payCart.cartTotalAmount), 0)
+        from paymentCreditCart as payCart
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCart.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCart.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCart.floor = 3
+        </if>
+        union all
+        select ifnull(count(payCash.cashTotalAmount), 0)
+        from paymentCash as payCash
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCash.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCash.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCash.floor = 3
+        </if>
+    </select>
+
+    <select id="getPayedTotalDiscountAmount" resultType="int">
+        select ifnull(sum(payCart.discountAmount), 0)
+        from paymentCreditCart as payCart
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCart.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCart.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCart.floor = 3
+        </if>
+        union all
+        select ifnull(sum(payCash.discountAmount), 0)
+        from paymentCash as payCash
+        <if test="floor == '전체'">
+
+        </if>
+        <if test="floor == '1층'">
+            where payCash.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCash.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCash.floor = 3
+        </if>
+    </select>
+</mapper>
+

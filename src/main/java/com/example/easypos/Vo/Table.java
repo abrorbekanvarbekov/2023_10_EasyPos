@@ -17,4 +17,5 @@ public class Table {
     private int left;
     private int top;
     private int authLevel;
+    private int floor;
 }

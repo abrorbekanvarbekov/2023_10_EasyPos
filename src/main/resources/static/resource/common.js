@@ -1,7 +1,7 @@
-const container = document.querySelector(".container-")
-if (container != null) {
-    const {width: containerWidth, height: containerHeight} = container.getBoundingClientRect();
+const HomeContainer = document.querySelector(".container-")
 
+if (HomeContainer != null) {
+    const {width: containerWidth, height: containerHeight} = HomeContainer.getBoundingClientRect();
     let posX = null;
     let posY = null;
     let tableId = null;
@@ -11,10 +11,13 @@ if (container != null) {
     let originY = null;
     let boxWidth = null;
     let boxHeight = null;
+    let floor = null;
+
 
     document.querySelectorAll(".container- .tables").forEach((element) => {
         element.addEventListener("dragstart", (e) => {
             tableId = e.target.id
+            floor = e.target.attributes.floor.value
             posX = e.offsetX;
             posY = e.offsetY;
             originX = e.clientX;
@@ -34,7 +37,6 @@ if (container != null) {
     document.querySelector(".container-").addEventListener("drop", (e) => {
         e.preventDefault();
         e.stopPropagation();
-
         const tableEl = document.getElementById(tableId);
         const diffX = e.clientX - originX;
         const diffY = e.clientY - originY;
@@ -46,7 +48,8 @@ if (container != null) {
         $.get('/usr/tables/update', {
             elPosX: tableEl.offsetLeft,
             elPosY: tableEl.offsetTop,
-            id: tableId
+            number: tableId.substring(tableId.indexOf("_") + 1),
+            floor: floor
         }, function (data) {
             console.log("성공")
         }, 'json')
@@ -60,6 +63,7 @@ if (product_list_box != null) {
     product_list_box.style.backgroundColor = "aqua";
     product_list_box.classList.add("checked")
 }
+
 document.querySelectorAll(".product-box-list").forEach((element) => {
     element.addEventListener("click", (e) => {
         product_list_box.style.backgroundColor = "inherit";

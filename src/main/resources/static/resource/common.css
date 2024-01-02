@@ -24,36 +24,60 @@ html > body {
     align-items: center;
 }
 
-body > .header{
+body > .header, .header-detail {
     display: flex;
     justify-content: space-between;
     height: 8%;
     font-size: 1.875rem;
-    line-height: 2.25rem;
+    line-height: 2.2rem;
     padding-left: 2.5rem;
-    background-color: rgba(75, 85 , 99 ,1);
+    background-color: rgba(75, 85, 99, 1);
     color: white;
+    padding-right: 10px;
 }
 
-.header-box {
+.header-box, .header-box-detail {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     width: 58%;
 }
-body .header-box li:hover{
+
+body .header-box li:hover, .header-box-detail li:hover {
     border: 1px solid darkgray;
+    cursor: pointer;
 }
 
-.header-box li a{
+.header-box li a, .header-box-detail li a {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    width: 121px;
+    width: 100px;
     height: 100%;
 }
 
-.floors{
+.header-box li:not(:last-child) a span:last-child, .header-box-detail li:not(:last-child) a span:last-child {
+    font-size: 0.83rem;
+}
+
+.header-box-detail li:nth-child(1) a, li:nth-child(4) a, .header-box li:first-child a {
+    position: relative;
+}
+
+.header-box-detail li:nth-child(1) a div, li:nth-child(4) a div, .header-box li:first-child a div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    top: 25px;
+    right: 27px;
+    border-radius: 100%;
+    position: absolute;
+    background-color: dodgerblue;
+}
+
+.floors {
     display: flex;
     height: 60px;
     float: right;
@@ -77,47 +101,69 @@ body .header-box li:hover{
 .container- {
     float: right;
     width: 82.7%;
-    height: 72%;
+    height: 78%;
     background-color: rgba(250, 250, 250, 0.2);
     position: relative;
     border-left: 1px solid rgba(169, 169, 169, .3);
 }
 
-/*HOme Page Left Feed*/
-.homeLeftFeed{
+/* HOme Massage Box*/
+.home-msg-box {
     display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 80px;
-    float: left;
-    width: 17.3%;
-    height: 80%;
-}
-.homeLeftFeed > .miniWindow{
+    align-items: center;
+    height: 4.3%;
     width: 100%;
-    height: 165px;
     border: 1px solid rgba(169, 169, 169, .3);
 }
 
-.homeLeftFeed > .clock{
+.home-msg-box > span:first-child {
+    color: blue;
+    font-size: 2.5rem;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+/*HOme Page Left Feed*/
+.homeLeftFeed {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 8%;
+    float: left;
+    width: 17.3%;
+    height: 84.5%;
+}
+
+.homeLeftFeed > .miniWindow {
+    width: 100%;
+    height: 150px;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+}
+
+.miniWindow > img {
+    max-width: 53%;
+    height: 100%;
+}
+
+.homeLeftFeed > .clock {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 45px;
+    height: 5%;
     padding: 10px;
-    border: 1px solid rgba(169, 169, 169, .3);
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
 }
 
-.homeLeftFeed > .tableFunctions{
+.homeLeftFeed > .tableFunctions {
     width: 100%;
-    height: 283px;
-    border: 1px solid rgba(169, 169, 169, .3);
+    height: 40%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
 }
 
 .tableFunctions div {
     display: flex;
-    padding: 10px 10px 10px 15px;
+    padding: 5px 8px 8px 13px;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(169, 169, 169, .3);
@@ -125,10 +171,9 @@ body .header-box li:hover{
     cursor: pointer;
 }
 
-.homeLeftFeed > .productInfo {
+.homeLeftFeed > .productInfo, .tableMovementInfo, .tableGroupInfo {
     width: 100%;
-    height: 270px;
-    border: 1px solid rgba(169, 169, 169, .3);
+    height: 42%;
 }
 
 .productInfo div {
@@ -140,9 +185,10 @@ body .header-box li:hover{
     cursor: pointer;
 }
 
-.productInfo > div:first-child{
+.productInfo > div:first-child {
     padding: 10px 10px 10px 50px;
 }
+
 .productInfo div span {
     display: flex;
     padding: 10px 10px 10px 15px;
@@ -153,15 +199,311 @@ body .header-box li:hover{
     border-right: 1px solid rgba(169, 169, 169, .3);
 }
 
+.tableMovementInfo div:nth-child(3) div, .tableMovementInfo div:last-child div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tableMovementInfo div:nth-child(3) div span, .tableMovementInfo div:last-child div span {
+    width: 50%;
+}
+
+.tableMovementInfo div:nth-child(3) div input, .tableMovementInfo div:last-child div input {
+    width: 50%;
+}
+
+.tableMovementInfo div:nth-child(3) div input {
+    text-align: center;
+}
+
+.table-Group-box {
+    width: 100%;
+    height: 75%;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.table-Group-box > div:first-child {
+    display: flex;
+    width: 100%;
+    height: 15%;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(169, 169, 169, .3);
+    cursor: pointer;
+    background-color: lightskyblue;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+}
+
+.table-Group-box > div:last-child {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 155px;
+    overflow: auto;
+}
+
+.table-Group-box > div:last-child div {
+    display: flex;
+    width: 100%;
+    height: 18%;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(169, 169, 169, .3);
+    cursor: pointer;
+}
+
+.table-Group-box > div:last-child div span {
+    border-right: 2px solid rgba(169, 169, 169, .3);
+    text-align: center;
+}
+
+.table-Group-box > div:last-child div span:first-child {
+    height: 100%;
+    width: 13%;
+}
+
+.table-Group-box > div:last-child div span:not(:first-child) {
+    width: 41.5%;
+}
+
+.table-Group-box > div:last-child div span:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
+
+.group-add-remove-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 98%;
+    height: 10%;
+}
+
+.group-add-remove-buttons button {
+    border: 1px solid lightskyblue;
+    height: 100%;
+}
+
+
+.group-add-remove-buttons button:last-child {
+    width: 50%;
+    height: 100%;
+}
+
+.tableSummary {
+    width: 100%;
+    height: 43.6%;
+}
+
+.tableSummary > span {
+    display: flex;
+    width: 100%;
+    height: 12%;
+    align-items: center;
+    padding-left: 5%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: black;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+}
+
+.tableSummary > ul {
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    height: 75.2%;
+}
+
+.tableSummary > ul li:first-child{
+    position: sticky;
+    top: 0;
+}
+
+.tableSummary > ul li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 14.4%;
+    background-color: #ddedeb;
+}
+
+.tableSummary > ul li span{
+    height: 100%;
+    padding: 2%;
+    border: 1px solid rgba(169, 169, 169, .3);
+    text-align: center;
+    overflow: hidden;
+    font-size: 0.8rem;
+}
+
+.tableSummary > ul li span:nth-child(1){
+    width: 15%;
+}
+
+.tableSummary > ul li span:nth-child(2){
+    width: 35%;
+}
+
+.tableSummary > ul li span:nth-child(3){
+    width: 20%;
+}
+
+.tableSummary > ul li span:nth-child(4){
+    width: 30%;
+}
+
+.tableSummary > .tableSummarySumPrice{
+    display: flex;
+    width: 100%;
+    height: 14%;
+}
+
+.tableSummary > .tableSummarySumPrice > span:first-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 23%;
+    height: 100%;
+    background-color: lightskyblue;
+    border: 2px solid rgba(169, 169, 169, .3);
+}
+
+.tableSummary > .tableSummarySumPrice > span:last-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 77%;
+    height: 100%;
+    border: 2px solid rgba(169, 169, 169, .3);
+}
+
+.summaryAlertFeed{
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 33%;
+    left: 25%;
+    width: 27%;
+    height: 26%;
+    min-width: 500px;
+    min-height: 245px;
+    border-radius: 25px;
+    border: 2px solid rgba(169, 169, 169, .3);
+    box-shadow: 3px 3px 3px gray;
+    background-color: #ffffff;
+}
+
+.summaryAlertFeed > .info{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: dodgerblue;
+    font-size: 2rem;
+    border-radius: 100%;
+    color: white;
+}
+
+.summaryAlertFeed > .summaryAlertFeedTitle{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 28%;
+    padding: 7px;
+}
+
+.summaryAlertFeed > .summaryAlertFeedTitle > h1:first-child{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.summaryAlertFeed > .summaryAlertFeedTitle > h1:last-child{
+    border-bottom: 2px dashed rgba(169, 169, 169, .3);
+}
+
+.summaryAlertFeed > ul{
+    display: flex;
+    flex-direction: column;
+    padding: 7px;
+    width: 100%;
+    height: 60%;
+    overflow: hidden;
+    border-bottom: 2px dashed rgba(169, 169, 169, .3);
+}
+
+.summaryAlertFeed > ul li:first-child{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 28.4%;
+    border-bottom: 2px dashed rgba(169, 169, 169, .3);
+}
+
+.summaryAlertFeed > ul li:not(:first-child){
+    padding-top: 7px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 15.5%;
+}
+
+.summaryAlertFeed > ul li span:nth-child(1){
+    padding-left: 20px;
+    width: 40%;
+    height: 100%;
+}
+
+.summaryAlertFeed > ul li span:nth-child(2){
+    text-align: center;
+    width: 10%;
+    height: 100%;
+}
+
+.summaryAlertFeed > ul li span:nth-child(3){
+    text-align: center;
+    width: 25%;
+    height: 100%;
+}
+
+.summaryAlertFeed > ul li span:nth-child(4){
+    text-align: center;
+    width: 25%;
+    height: 100%;
+}
+
+
+.summaryAlertFeed > .summaryAlertFeedFooter{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 12%;
+    padding: 0px 7px 0px 7px;
+}
+
+.summaryAlertFeed > .summaryAlertFeedFooter span:nth-child(2){
+    display: flex;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+}
+
+.summaryAlertFeed > .summaryAlertFeedFooter span:nth-child(n2){
+    background-color: black;
+    color: black;
+}
 /*FooterFeed*/
 .footerFeed {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 70px;
+    height: 67px;
 }
 
-.footerFeed > ul{
+.footerFeed > ul {
     display: flex;
     width: 100%;
     height: 100%;
@@ -176,6 +518,7 @@ body .header-box li:hover{
     height: 100%;
     background-color: rgb(75 85 99);
     border-right: 1px solid rgba(255, 255, 255, .5);
+    cursor: pointer;
 }
 
 .footerFeed > ul li a {
@@ -201,6 +544,19 @@ body .header-box li:hover{
     text-decoration: none;
 }
 
+.tables > .tableGroupNum {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: red;
+}
+
 /*Detail Page LeftFeed*/
 .manuPage {
     display: flex;
@@ -211,16 +567,32 @@ body .header-box li:hover{
 .manuPage > .manuPageLeft {
     float: left;
     width: 40%;
-    height: 100%;
+    height: 97%;
     position: relative;
     border-left: 1px solid grey;
+}
+
+.order-msg-box {
+    display: flex;
+    align-items: center;
+    height: 5%;
+    width: 100%;
+    border: 1px solid rgba(169, 169, 169, .3);
+    margin-top: 7%;
+}
+
+.order-msg-box > span:first-child {
+    font-size: 2rem;
+    color: blue;
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 .selectedManuList {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 42%;
+    height: 34%;
     overflow: auto;
 }
 
@@ -231,27 +603,27 @@ body .header-box li:hover{
     align-items: center;
     width: 100%;
     height: 30px;
-    border : 1px solid darkgray;
+    border: 1px solid darkgray;
     background-color: white;
 }
 
-.selectedManuList > ul li{
+.selectedManuList > ul li {
     display: flex;
     align-items: center;
     width: 100%;
     height: 30px;
-    border : 1px solid darkgray;
+    border: 1px solid darkgray;
     cursor: pointer;
 }
 
-.selectedManuList > ul{
+.selectedManuList > ul {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 270px;
 }
 
-.selectedManuList > .thead span, .selectedManuList > ul li span{
+.selectedManuList > .thead span, .selectedManuList > ul li input {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -260,23 +632,23 @@ body .header-box li:hover{
     border-top: none;
 }
 
-.selectedManuList > .thead span:nth-child(1), .selectedManuList > ul li span:nth-child(1){
+.selectedManuList > .thead span:nth-child(1), .selectedManuList > ul li input:nth-child(1) {
     width: 35px;
 }
 
-.selectedManuList > .thead span:nth-child(2), .selectedManuList > ul li span:nth-child(2){
+.selectedManuList > .thead span:nth-child(2), .selectedManuList > ul li input:nth-child(2) {
     width: 310px;
 }
 
-.selectedManuList > .thead span:nth-child(3), .selectedManuList > ul li span:nth-child(3){
+.selectedManuList > .thead span:nth-child(3), .selectedManuList > ul li input:nth-child(3) {
     width: 65px;
 }
 
-.selectedManuList > .thead span:nth-child(4), .selectedManuList > ul li span:nth-child(4){
+.selectedManuList > .thead span:nth-child(4), .selectedManuList > ul li input:nth-child(4) {
     width: 159px;
 }
 
-.selectedManuList > .thead span:nth-child(5), .selectedManuList > ul li span:nth-child(5){
+.selectedManuList > .thead span:nth-child(5), .selectedManuList > ul li input:nth-child(5) {
     width: 140px;
 }
 
@@ -287,17 +659,19 @@ body .header-box li:hover{
     height: 30px;
 }
 
-.manuPage  .buttons button:nth-child(1){
+.manuPage .buttons button:nth-child(1) {
     width: 30%;
     border: 1px solid darkgray;
     border-radius: inherit;
 }
-.manuPage .buttons button:nth-child(2){
+
+.manuPage .buttons button:nth-child(2) {
     width: 25%;
     border: 1px solid darkgray;
     border-radius: inherit;
 }
-.manuPage .buttons button:not(:nth-child(1), :nth-child(2)){
+
+.manuPage .buttons button:not(:nth-child(1), :nth-child(2)) {
     width: 11.2%;
     border: 1px solid darkgray;
     border-radius: inherit;
@@ -313,11 +687,11 @@ body .header-box li:hover{
     border: 1px solid rgba(255, 255, 255, .5);
 }
 
-.calculatePage > .allProductInfo{
+.calculatePage > .allProductInfo {
     display: flex;
     flex-direction: column;
     width: 42%;
-    height: 100%;
+    height: 114%;
     padding: 5px;
 }
 
@@ -331,12 +705,12 @@ body .header-box li:hover{
     cursor: pointer;
 }
 
-.allProductInfo div:not(div:last-child) span:first-child{
+.allProductInfo div:not(div:last-child) span:first-child {
     background-color: rgba(173, 216, 230, .4);
     color: dodgerblue;
 }
 
-.allProductInfo div:not(div:last-child) span {
+.allProductInfo div:not(div:last-child) span, input {
     display: flex;
     padding: 4px 10px 4px 13px;
     width: 50%;
@@ -346,25 +720,30 @@ body .header-box li:hover{
     border-right: 1px solid rgba(169, 169, 169, .3);
 }
 
-.allProductInfo div:last-child{
+.allProductInfo div:last-child {
     padding: 5px;
     width: 100%;
     height: 100%;
     border: 2px solid rgba(169, 169, 169, .3);
 }
-.calculatePage > .calculator{
+
+.calculatePage > .calculator {
     display: flex;
     justify-content: space-between;
     width: 58%;
-    height: 100%;
+    height: 112%;
     padding: 5px;
     border: 2px solid rgba(169, 169, 169, .3);
 }
 
-.calculator > .numberFeed > input{
+.calculator > .numberFeed > input {
+    direction: rtl;
     width: 100%;
+    font-weight: bold;
+    font-size: 1.1rem;
     height: 45px;
     border: 1px solid black;
+    padding: 5px;
 }
 
 .calculator > .numberFeed {
@@ -372,13 +751,13 @@ body .header-box li:hover{
     height: 100%;
 }
 
-.calculator > .numberFeed div{
+.calculator > .numberFeed div {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-.calculator > .numberFeed div:not(div:first-child) span{
+.calculator > .numberFeed div:not(div:first-child) span {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -395,11 +774,11 @@ body .header-box li:hover{
     height: 100%;
 }
 
-.calculator > .buttonsFeed span{
+.calculator > .buttonsFeed span {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(75, 85 , 99 , .9);
+    background-color: rgba(75, 85, 99, .9);
     color: white;
     border: 1px solid rgba(169, 169, 169, .3);
 }
@@ -418,7 +797,7 @@ body .header-box li:hover{
     border: 1px solid darkgray;
 }
 
-.manuPage > .manuPageRight > .productType-box li{
+.manuPage > .manuPageRight > .productType-box li {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -427,7 +806,7 @@ body .header-box li:hover{
     border: 1px solid darkgray;
 }
 
-.productType-box li > button{
+.productType-box li > button {
     padding: 12px 35px;
     outline: none;
     color: #fff;
@@ -437,7 +816,7 @@ body .header-box li:hover{
     height: 100%;
 }
 
-.productType-box li > button:active{
+.productType-box li > button:active {
     transform: translateY(2px);
 }
 
@@ -447,7 +826,7 @@ body .header-box li:hover{
     margin-top: 10px;
 }
 
-.manuPage > .manuPageRight > .product-box li{
+.manuPage > .manuPageRight > .product-box li {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -464,14 +843,422 @@ body .header-box li:hover{
     height: 100%;
 }
 
-.product-box li:active{
+.product-box li:active {
     transform: translateY(2px);
 }
 
+/*==== TotalSalesPage ====*/
+
+.totalSales-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 91%;
+}
+
+.totalSales-container > div:first-child {
+    display: flex;
+    padding: 20px 114px;
+    width: 100%;
+    height: 14%;
+    align-items: center;
+    border-bottom: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:first-child > span:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 17.61%;
+    height: 93%;
+    background-color: rgba(138, 230, 253, .4);
+    border: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:first-child > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 93%;
+    padding-left: 55px;
+    border: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:first-child > div > select {
+    width: 10%;
+}
+
+.totalSales-container > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 114px;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    border-bottom: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:nth-last-child(-n+2) div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 169px;
+}
+
+.totalSales-container > div:nth-last-child(-n+2) div span:nth-child(2n+1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 17.61%;
+    height: 100%;
+    background-color: rgba(138, 230, 253, .4);
+    border: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:nth-last-child(-n+2) div span:nth-child(2n+2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 31.3%;
+    height: 100%;
+    border: 2px solid rgba(140, 140, 140, .3);
+}
+
+.totalSales-container > div:last-child {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 114px;
+    width: 100%;
+    height: 36%;
+    align-items: center;
+    border-bottom: 2px solid rgba(140, 140, 140, .3);
+}
+
+/* ======= payByCreditCartPage ======= */
+
+.byCreditCartPage {
+    display: flex;
+    width: 100%;
+    height: 91%;
+}
+
+.byCreditCartPage > .byCreditCartLeftPage {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 100%;
+    border-right: 1px solid rgba(140, 140, 140, .3);
+    background-color: rgba(138, 230, 253, .4);
+}
+
+.byCreditCartLeftPage div {
+    display: flex;
+    padding: 0px 25px 0px 25px;
+    width: 100%;
+    height: 6%;
+}
+
+.byCreditCartLeftPage div:first-child {
+    display: flex;
+    margin-top: 25px;
+    width: 100%;
+    height: 6%;
+}
+
+.byCreditCartLeftPage div span:nth-child(2n+1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 29%;
+    background-color: rgba(138, 230, 253, .4);
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCreditCartLeftPage div span:nth-child(2n) {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 71%;
+    padding-left: 100px;
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCreditCartLeftPage div:nth-child(9) {
+    display: flex;
+    margin: 0px 26px 0px 26px;
+    width: 93.3%;
+    height: 14%;
+    background-color: white;
+}
+
+.byCreditCartPage > .byCreditCartRightPage {
+    display: flex;
+    width: 60%;
+    height: 40%;
+}
+
+.byCreditCartRightPage > div:not(:last-child) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCreditCartRightPage > div:first-child > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+    width: 60%;
+    height: 26%;
+    border-radius: 14px;
+    background-color: rgba(138, 230, 253, .4);
+}
+
+.byCreditCartRightPage > div:nth-child(2) > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+    width: 60%;
+    height: 26%;
+    border-radius: 14px;
+}
+
+.byCreditCartRightPage > div:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    height: 100%;
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCreditCartRightPage > div:last-child > div {
+    margin-top: 5%;
+    width: 50%;
+    height: 80%;
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCreditCartRightPage > div:last-child > div div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.byCreditCartRightPage > div:last-child > div span {
+    width: 33%;
+    background-color: lightskyblue;
+}
+
+.installment {
+    direction: rtl;
+}
+
+/* =========== PayByCashPage =============*/
+.payByCash {
+    display: flex;
+    width: 100%;
+    height: 91%;
+}
+
+.payByCash > .byCashLeftPage {
+    display: flex;
+    flex-direction: column;
+    background-color: #ddedeb;
+    width: 55%;
+    height: 100%;
+}
+
+.payByCash > .byCashLeftPage > div:first-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 40%;
+    width: 100%;
+    border-bottom: 2px solid rgba(140, 140, 140, .3);
+}
+
+.payByCash > .byCashLeftPage > div:first-child > div:first-child {
+    padding-left: 7%;
+}
+
+.payByCash > .byCashLeftPage > div:first-child > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 15%;
+    width: 70%;
+    height: 16%;
+}
+
+.payByCash > .byCashLeftPage > div:first-child > div:last-child > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    color: white;
+    border: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCashLeftPage > div:nth-child(2) {
+    display: flex;
+    height: 60%;
+    width: 100%;
+}
+
+.byCashLeftPage > div:nth-child(2) > div:first-child {
+    width: 50%;
+    height: 100%;
+}
+
+.byCashLeftPage > div:nth-child(2) > div:first-child input {
+    direction: rtl;
+}
+
+.byCashLeftPage .calc-box {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 93%;
+    border-right: 1px solid rgba(140, 140, 140, .3);
+}
+
+.byCashLeftPage .calc-box div {
+    height: 100%;
+}
+
+.byCashLeftPage .calc-box div span {
+    width: 32%;
+    height: 93%;
+    font-size: 1.5rem;
+    background-color: lightskyblue;
+}
+
+.byCashRightPage {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    height: 100%;
+}
+
+.byCashRightPage > .payPriceFeed {
+    display: flex;
+    width: 100%;
+    height: 50%;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+
+.byCashRightPage > .payPriceFeed > span:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    font-size: 2.2rem;
+    width: 100%;
+    height: 30%;
+}
+
+.byCashRightPage > .payPriceFeed > span:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    font-size: 3rem;
+    width: 100%;
+    height: 30%;
+    color: blue;
+}
+
+.byCashRightPage > div:last-child {
+    display: flex;
+    height: 40%;
+    justify-content: space-evenly;
+    align-items: start;
+
+}
+
+.byCashRightPage > div:last-child > button {
+    margin-top: 5%;
+    box-shadow: 1px 1px 1px blue;
+    transition-duration: 0.3s;
+    width: 30%;
+    height: 16%;
+    background-color: silver;
+}
+
+.byCashRightPage > div:last-child > button:active {
+    padding-top: 5px;
+    padding-left: 5px;
+    box-shadow: none;
+}
+
+/* 모달 msg Page*/
+.messagePage-msg-box > .layer, .layer-1, .layer-bg, .layer-bg-1 {
+    display: none;
+}
+
+.layer, .layer-1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgba(255, 255, 255);
+    color: white;
+    width: 47%;
+    height: 54%;
+    border-radius: 10px;
+    border: 8px solid darkgray;
+    z-index: 2;
+}
+
+.layer-bg, .layer-bg-1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, .1);
+    z-index: 1;
+}
 
 
+.layer > .confirm-message, .layer-1 > .confirm-message-1 {
+    text-align: center;
+    font-size: 1.2rem;
+    color: black;
+    margin: 100px;
+}
 
+.layer > #check-btn {
+    position: absolute;
+    width: 30%;
+    height: 1.5%;
+    left: 16%;
+    bottom: 16%;
+    color: white;
+}
 
+.layer-1 > #check-btn-1 {
+    position: absolute;
+    width: 20%;
+    height: 1.5%;
+    left: 40%;
+    bottom: 16%;
+    color: white;
+}
 
-
+.layer > #cancel-btn {
+    position: absolute;
+    width: 30%;
+    height: 1.5%;
+    right: 16%;
+    bottom: 16%;
+    color: white;
+}
 

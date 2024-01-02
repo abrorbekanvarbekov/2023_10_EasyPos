@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -17,60 +18,9 @@
     <!-- 폰트어썸 불러오기 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
     <%-- google Icons   --%>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="/resource/common.css" type="text/css">
     <script src="/resource/common.js" defer="defer"></script>
     <title>${pageTitle}</title>
 </head>
 <body>
-<div class="header">
-    <a class="px-3 flex items-center" href="/">
-        <span class="text-red-500">Easy</span>
-        <span>Pos</span>
-    </a>
-    <ul class="header-box">
-        <li class="">
-            <a class="" href="">
-                <span class="material-symbols-outlined text-4xl">print</span>
-                <span class="text-sm">직전 영수증</span>
-            </a>
-        </li>
-        <li class="">
-            <a class="" href="">
-                <span class="material-symbols-outlined text-4xl">format_align_right</span>
-                <span class="text-sm">메뉴 ON/OFF</span>
-            </a>
-        </li>
-        <li >
-            <a href="">
-                <span class="material-symbols-outlined text-4xl">currency_exchange</span>
-                <span class="text-sm">환전</span>
-            </a>
-        </li>
-        <li >
-            <a href="">
-                <span class="material-symbols-outlined text-4xl">calendar_month</span>
-                <span class="text-sm">예약현황</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="">
-                <span class="material-symbols-outlined text-4xl">desktop_windows</span>
-                <span class="text-sm">바탕화면</span>
-            </a>
-        </li>
-        <li >
-            <a href="">
-                <span class="material-symbols-outlined text-4xl">currency_exchange</span>
-                <span class="text-sm">총매출</span>
-            </a>
-        </li>
-        <li>
-            <a href="">
-                <span class="material-symbols-outlined text-4xl">close</span>
-            </a>
-        </li>
-    </ul>
-</div>
