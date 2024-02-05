@@ -637,7 +637,7 @@
                     checkedProductSailPrice.value = 0;
                     let disCountAmount = $(".discountAmount").html()
                     $(".discountAmount").html(parseInt(disCountAmount) - parseInt(checkedProductSumPrice.value))
-                    $(".amountToPay").html(parseInt(amountToPay) + parseInt(checkedProductSumPrice.value))
+                    // $(".amountToPay").html(parseInt(amountToPay) + parseInt(checkedProductSumPrice.value))
                 }
             }
         }
