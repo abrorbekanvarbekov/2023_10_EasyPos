@@ -28,19 +28,20 @@
         </div>
         <div>
             <span>승인금액</span>
-            <span class="text-4xl text-blue-500">${splitAmount.length() != 0 ? splitAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",") : amountToBeReceivedCartS.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+            <span class="text-4xl text-blue-500 "
+                  id="amountPay">${splitAmount != 0 ? splitAmount : amountToBeReceivedCart}</span>
         </div>
         <div>
             <span>총금액</span>
-            <span>${totalAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+            <span class="totalAmount">${splitAmount != 0 ? splitAmount : amountToBeReceivedCart}</span>
         </div>
         <div>
             <span>받은금액</span>
-            <span>0</span>
+            <span class="amountReceived">${splitAmount}</span>
         </div>
         <div>
             <span>받을금액</span>
-            <span>${amountToBeReceivedCartS.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+            <span class="amountToBeReceived">${amountToBeReceivedCart}</span>
         </div>
         <div></div>
         <div class="flex justify-center mt-6 w-full">
@@ -106,6 +107,21 @@
 </div>
 <script>
 
+    function insertComma() {
+        let amountPay = $("#amountPay").html()
+        let totalAmount = $(".totalAmount").html()
+        let amountReceived = $(".amountReceived").html()
+        let amountToBeReceived = $(".amountToBeReceived").html()
+        $("#amountPay").html(Number(amountPay).toLocaleString())
+        $(".totalAmount").html(Number(totalAmount).toLocaleString())
+        $(".amountReceived").html(Number(amountReceived).toLocaleString())
+        $(".amountToBeReceived").html(Number(amountToBeReceived).toLocaleString())
+    }
+
+    insertComma();
+
+
+
     function showConfirmDialog(message) {
         return new Promise((resolve, reject) => {
             let confirmMessage = document.querySelector(".confirm-message");
@@ -144,8 +160,12 @@
         document.querySelector(".byCreditCartLeftPage > div:nth-child(2) > span:last-child").innerHTML = "${CreditCartCompany}";
         document.querySelector(".byCreditCartLeftPage > div:nth-child(3) > span:last-child > p:first-child").innerHTML = "${CreditCartValidYear}년";
         document.querySelector(".byCreditCartLeftPage > div:nth-child(3) > span:last-child > p:last-child").innerHTML = "${CreditCartValidMonth}월";
-        setTimeout(function () {
-            exampleFunction().then((result) => {
+
+        let amountPay = document.querySelector("#amountPay").textContent.replace(",", "")
+        let amountToBeReceived = ${amountToBeReceivedCart};
+
+        if (amountPay < amountToBeReceived == true) {
+            setTimeout(function () {
                 $.get("/usr/tables/orderPage/paymentCreditCart", {
                     tabId:${tabId},
                     floor: ${floor},
@@ -153,13 +173,30 @@
                     splitAmount: ${splitAmount == "" ? 0 : splitAmount},
                     CreditCartNumber: ${CreditCartNumber},
                     cartTotalSailAmount: ${cartTotalSailAmount},
-                    amountToBeReceivedCartS: ${amountToBeReceivedCartS},
-                    isPrintReceipt: result
+                    amountToBeReceivedCart: ${amountToBeReceivedCart},
+                    isPrintReceipt: 'false'
                 }, function (data) {
                     location.replace(data.msg);
                 }, "json")
-            })
-        }, 1000)
+            }, 1000)
+        }else{
+            setTimeout(function () {
+                exampleFunction().then((result) => {
+                    $.get("/usr/tables/orderPage/paymentCreditCart", {
+                        tabId:${tabId},
+                        floor: ${floor},
+                        totalAmount: ${totalAmount},
+                        splitAmount: ${splitAmount == "" ? 0 : splitAmount},
+                        CreditCartNumber: ${CreditCartNumber},
+                        cartTotalSailAmount: ${cartTotalSailAmount},
+                        amountToBeReceivedCart: ${amountToBeReceivedCart},
+                        isPrintReceipt: result
+                    }, function (data) {
+                        location.replace(data.msg);
+                    }, "json")
+                })
+            }, 1000)
+        }
     }, 1300)
 
 
@@ -203,3 +240,5 @@
     }
 
 </script>
+
+<%@include file="../common/footer.jsp" %>

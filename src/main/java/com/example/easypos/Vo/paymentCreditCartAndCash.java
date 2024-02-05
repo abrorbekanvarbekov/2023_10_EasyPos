@@ -16,7 +16,11 @@ public class paymentCreditCartAndCash {
     private int floor;
     private int totalAmount;
     private int CartAmountPaid;
+    private int sumCartAmountPaid;
     private int CashAmountPaid;
+    private int sumCashAmountPaid;
     private int discountAmount;
-    private int payByCreditCartNumber;
+    private int cart_id;
+    private int isReturn;
+
 }

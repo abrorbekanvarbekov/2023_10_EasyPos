@@ -38,17 +38,30 @@ public class OrderController {
 
     @RequestMapping("/usr/tables/detail")
     public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, Model model) {
+
+
         int tabNum = Integer.parseInt(tabId);
 
         if (floor <= 0 || floor > 3) {
             return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
         }
 
-
         List<ProductType> productTypes = orderService.getProductTypes();
         List<Product> products = orderService.getProductList();
         List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor);
         int discountSumAMount = orderService.getDiscountSumAmount(tabNum, floor);
+
+        Cart cart = orderService.getCart(floor, tabNum);
+
+        if (cart != null) {
+            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId());
+            List<paymentCreditCart> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId());
+
+            if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
+                model.addAttribute("paymentCashList", paymentCashList);
+                model.addAttribute("paymentCartList", paymentCartList);
+            }
+        }
 
         model.addAttribute("tabId", tabId);
         model.addAttribute("floor", floor);
@@ -64,8 +77,9 @@ public class OrderController {
     @RequestMapping("/usr/tables/insertProduct")
     @ResponseBody
     public String insertProduct(String productIds, String productCnts,
-                                String productSailPrices, String productPrices, String productNames, String delProductIds,
+                                String productSailPrices, String productPrices, String productNames, @RequestParam(defaultValue = "") String delProductIds,
                                 @RequestParam(defaultValue = "1") int floor, int tabId, String isPrintControl) {
+
 
         if (floor <= 0 || floor > 3) {
             return Util.jsHistoryBack("갯층 값이 잘 못 입력하였습니다.");
@@ -77,10 +91,10 @@ public class OrderController {
                 delProductList.add(Integer.parseInt(ids));
             }
 
-            System.out.println(delProductList);
             for (int i = 0; i < delProductList.size(); i++) {
                 CartItems cancelProduct = orderService.getCartItem(delProductList.get(i), tabId, floor);
                 orderService.cancelProduct(delProductList.get(i), tabId, floor);
+
                 if (isPrintControl.equals("true")) {
                     System.out.println("     [주문서]     ");
                     System.out.println(String.format("[%d층]  %d번", floor, tabId));
@@ -89,6 +103,10 @@ public class OrderController {
                     System.out.println("고객수 :   0");
                     System.out.println("주문번호 :   0");
                     System.out.println("===========================");
+                }
+                List<CartItems> cartItems = orderService.getCartItemsList(tabId, floor);
+                if (cartItems.size() == 0) {
+                    orderService.removeCart(tabId, floor);
                 }
             }
         }
@@ -146,10 +164,14 @@ public class OrderController {
                         System.out.println("===========================");
                     }
                 } else {
-                    if (cartItem.getQuantity() != productCntList.get(i) || cartItem.getProductSailPrice() != productSailPriceList.get(i)) {
+                    if (cartItem.getQuantity() != productCntList.get(i) ||
+                            cartItem.getProductSailPrice() != productSailPriceList.get(i) ||
+                            cartItem.getPriceSum() != productPricesList.get(i)) {
                         orderService.updateCartItems(productIdList.get(i), productCntList.get(i), productSailPriceList.get(i),
                                 productPricesList.get(i), productNamesList.get(i), tabId, floor);
-                        if (isPrintControl.equals("true")) {
+
+                        if (isPrintControl.equals("true") && cartItem.getQuantity() != productCntList.get(i) ||
+                                cartItem.getPriceSum() == productSailPriceList.get(i)) {
                             System.out.println("     [주문서]     ");
                             System.out.println(String.format("[%d층]  %d번", floor, tabId));
                             System.out.println(String.format("%s   " + "    %d", productNamesList.get(i),

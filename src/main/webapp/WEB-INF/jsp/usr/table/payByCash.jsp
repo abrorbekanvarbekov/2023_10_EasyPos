@@ -52,7 +52,7 @@
     <div class="byCashRightPage">
         <div class="payPriceFeed">
             <span>승인금액</span>
-            <span>${splitAmount.length() != 0 ? splitAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",") : amountToBeReceivedCash.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+            <span id="amountPay">${splitAmount != 0 ? splitAmount : amountToBeReceivedCash}</span>
         </div>
         <hr>
         <div>
@@ -73,7 +73,22 @@
         </button>
     </div>
 </div>
+
+<div class="messagePage-msg-box">
+    <div class="change-layer-bg"></div>
+    <div class="change-layer">
+        <div class="change-confirm-message">등록된 상품을 취소하시겠습니까?</div>
+        <button id="change-check-btn" value="true" class="btn btn-active btn-info  mt-2 confirm-button">확인</button>
+    </div>
+</div>
 <script>
+
+    function insertComma() {
+        let amountPay = $("#amountPay").html()
+        $("#amountPay").html(Number(amountPay).toLocaleString())
+    }
+
+    insertComma();
 
     <%--    =========== MSG box open close functions ===============--%>
 
@@ -99,6 +114,21 @@
         });
     }
 
+    function showChangeAmountPage() {
+        return new Promise((resolve, reject) => {
+            let checkButton = document.querySelector("#change-check-btn");
+
+
+            checkButton.onclick = function () {
+                closeChangeBox();
+                resolve("true");
+            };
+
+            openChangeBox();
+
+        });
+    }
+
     async function exampleFunction() {
         try {
             const result = await showConfirmDialog("영수증을 발행하시겠습니까?");
@@ -118,48 +148,119 @@
         $('.layer-bg').hide();
     }
 
+    async function openChangeBox(message) {
+        $('.change-layer-bg').show();
+        $('.change-layer').show();
+        $(".change-confirm-message").html(message)
+    }
+
+    function closeChangeBox() {
+        $('.change-layer').hide();
+        $('.change-layer-bg').hide();
+    }
+
     <%--    =========== 승인 없이 현금 결제 ===============--%>
     $(".unauthorizedPayment").click(async function () {
-        setTimeout(function () {
-            exampleFunction().then((result) => {
+
+        let amountPay = parseInt(document.querySelector("#amountPay").textContent.replace(",", "")) // 받은 현금 금액
+        let amountToBeReceived = ${amountToBeReceivedCash}; // 결제할 현금 금액
+        let changeAmount = amountPay - amountToBeReceived // 거스름돈 금액
+        if (amountPay < amountToBeReceived == true) {
+            // ======== 분할 현금 결제일때  ===== //
+            setTimeout(function () {
                 $.get("/usr/tables/orderPage/paymentCash", {
                     tabId: ${tabId},
                     floor: ${floor},
                     totalAmount: ${totalAmount},
-                    splitAmount: ${splitAmount.length() != 0 ? splitAmount : 0},
+                    splitAmount: ${splitAmount != 0 ? splitAmount : 0},
+                    cashChangeAmount: 0,
                     cashTotalSailAmount: ${cashTotalSailAmount},
-                    amountToBeReceivedCartS: ${amountToBeReceivedCash},
-                    isPrintReceipt: result,
+                    amountToBeReceivedCash: ${amountToBeReceivedCash},
+                    isPrintReceipt: 'false',
                 }, function (data) {
                     location.replace(data.msg);
                 }, "json")
-            })
-        }, 1300)
-    })
-
-    <%--    =========== 승인하고 현금 결제 ===============--%>
-    $(".authorizedPayment").click(function () {
-        let authorizedNumber = document.querySelector(".authorizedNumber")
-        authorizedNumber.focus()
-        if (authorizedNumber.value.length == 0 || authorizedNumber.value.length < 11){
-            alert("등록번호를 입력해주세요")
-        }else{
+            }, 1300)
+        } else {
+            // ========= 전체 현금 결제일때 ============= //
             setTimeout(function () {
                 exampleFunction().then((result) => {
                     $.get("/usr/tables/orderPage/paymentCash", {
                         tabId: ${tabId},
                         floor: ${floor},
                         totalAmount: ${totalAmount},
-                        splitAmount: ${splitAmount.length() != 0 ? splitAmount : 0},
+                        splitAmount: ${splitAmount != 0 ? splitAmount : 0},
+                        cashChangeAmount: changeAmount,
+                        cashTotalSailAmount: ${cashTotalSailAmount},
+                        amountToBeReceivedCash: ${amountToBeReceivedCash},
+                        isPrintReceipt: result,
+                    }, function (data) {
+                        if (changeAmount != 0) {
+                            openChangeBox("거스름돈  : " + changeAmount.toLocaleString())
+                            $("#change-check-btn").click(function () {
+                                closeChangeBox()
+                                location.replace(data.msg);
+                            })
+                        }
+                    }, "json")
+
+                })
+            }, 1300)
+        }
+    })
+
+    <%--    =========== 승인하고 현금 결제 ===============--%>
+    $(".authorizedPayment").click(function () {
+        let authorizedNumber = document.querySelector(".authorizedNumber")
+        authorizedNumber.focus()
+        if (authorizedNumber.value.length == 0 || authorizedNumber.value.length < 11) {
+            alert("등록번호를 입력해주세요")
+        } else {
+            let amountPay = parseInt(document.querySelector("#amountPay").textContent.replace(",", "")) // 받은 현금 금액
+            let amountToBeReceived = ${amountToBeReceivedCash}; // 결제할 현금 금액
+            let changeAmount = amountPay - amountToBeReceived // 거스름돈 금액
+
+            if (amountPay < amountToBeReceived == true) {
+                // ============= 분할 현금 결제시 ========= //
+                setTimeout(function () {
+                    $.get("/usr/tables/orderPage/paymentCash", {
+                        tabId: ${tabId},
+                        floor: ${floor},
+                        totalAmount: ${totalAmount},
+                        splitAmount: ${splitAmount != 0 ? splitAmount : 0},
+                        cashChangeAmount: 0,
                         cashTotalSailAmount: ${cashTotalSailAmount},
                         amountToBeReceivedCartS: ${amountToBeReceivedCash},
-                        isPrintReceipt: result,
-                        authorizedNumber: authorizedNumber.value
+                        isPrintReceipt: 'false',
                     }, function (data) {
                         location.replace(data.msg);
                     }, "json")
-                })
-            }, 1300)
+                }, 1300)
+            } else {
+                // ======== 전체 현금 결제시 ======= //
+                setTimeout(function () {
+                    exampleFunction().then((result) => {
+                        $.get("/usr/tables/orderPage/paymentCash", {
+                            tabId: ${tabId},
+                            floor: ${floor},
+                            totalAmount: ${totalAmount},
+                            splitAmount: ${splitAmount != 0 ? splitAmount : 0},
+                            cashChangeAmount: changeAmount,
+                            cashTotalSailAmount: ${cashTotalSailAmount},
+                            amountToBeReceivedCartS: ${amountToBeReceivedCash},
+                            isPrintReceipt: result,
+                        }, function (data) {
+                            if (changeAmount != 0) {
+                                openChangeBox("거스름돈  : " + changeAmount.toLocaleString())
+                                $("#change-check-btn").click(function () {
+                                    closeChangeBox()
+                                    location.replace(data.msg);
+                                })
+                            }
+                        }, "json")
+                    })
+                }, 1300)
+            }
         }
     })
 
@@ -192,3 +293,5 @@
     }
 
 </script>
+
+<%@include file="../common/footer.jsp" %>

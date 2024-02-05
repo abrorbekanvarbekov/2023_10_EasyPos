@@ -5,6 +5,12 @@
 
 <%@include file="../common/detailHead.jsp" %>
 
+<div class="businessDate">
+    <span>> 담당자: &nbsp;&nbsp; ${loginedEmployeeName}</span>
+    <span>> 영업일자: &nbsp; &nbsp; ${businessDate}</span>
+    <span>> 포스번호 : &nbsp; &nbsp; 1</span>
+</div>
+
 <div class="manuPage">
     <div class="manuPageLeft">
         <ul class="selectedManuList " id="selectedManuList-1">
@@ -72,12 +78,19 @@
                     <span>0</span>
                 </div>
                 <div>
-                    ${floor}층 ${tabId}번
+                    <span>${floor}층 ${tabId}번 </span> <br>
+                    <c:forEach var="paymentCash" items="${paymentCashList}">
+                        현금결제 : ${paymentCash.cashAmountPaid} <br>
+                    </c:forEach>
+
+                    <c:forEach var="paymentCart" items="${paymentCartList}">
+                        카드결제 : ${paymentCart.cartAmountPaid} <br>
+                    </c:forEach>
                 </div>
             </div>
             <div class="calculator">
                 <div class="numberFeed">
-                    <input type="text" value="">
+                    <input type="number" value="">
                     <div>
                         <span onclick="clearInput();" class="btn w-full text-base">Clear</span>
                         <span onclick="arrow_back();" class="material-symbols-outlined btn text-4xl">arrow_back</span>
@@ -104,12 +117,24 @@
                     </div>
                 </div>
                 <div class="buttonsFeed">
-                    <span class="btn">상품조회</span>
-                    <span class="btn">금액할인</span>
-                    <span onclick="calSailFunc();" class="btn">% 할인</span>
-                    <span class="btn">금액변경</span>
-                    <span class="btn">수량변경</span>
-                    <span class="btn">Enter</span>
+                    <div>
+                        <span class="btn">상품조회</span>
+                    </div>
+                    <div>
+                        <span onclick="amountDiscountFunc();" class="btn">금액할인</span>
+                    </div>
+                    <div>
+                        <span onclick="calSailFunc();" class="btn">% 할인</span>
+                    </div>
+                    <div>
+                        <span onclick="changeAmount();" class="btn">금액변경</span>
+                    </div>
+                    <div>
+                        <span onclick="changeQuantity();" class="btn">수량변경</span>
+                    </div>
+                    <div>
+                        <span class="btn">Enter</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,6 +144,11 @@
         </div>
     </div>
     <script>
+
+        <%--  ========= 등록된 상품 있으면 order-msg-box 에서 수량 보여주기 ===============--%>
+        if (${cartItemsList.size() != 0}) {
+            $(".msg-tag").html(`상품 총 수량 \${${cartItemsList.size()}}개`)
+        }
 
         // ========== Close button 클릭시 주문한 상푼 있는지 확인 여부에 따라 문자 매세기 처리
         $(".btn-close").click(function () {
@@ -224,8 +254,10 @@
                         beforeDuplProduct.style.backgroundColor = "inherit";
                         beforeDuplProduct.classList.remove("checked");
                     }
+
                     duplProduct.children[2].value++ // product 수 증가
-                    duplProduct.children[3].value = duplProduct.children[3].dataset.value * duplProduct.children[2].value // product 갯수에 맞는 총가격
+                    const productSumPrice = (duplProduct.children[3].dataset.value * duplProduct.children[2].value) // product 갯수에 맞는 총가격
+                    duplProduct.children[3].value = productSumPrice
                     duplProduct.style.backgroundColor = "aqua"; // 배경색 주기
                     duplProduct.classList.add("checked"); // 클래스 입력
                     beforeDuplProduct = duplProduct;
@@ -245,9 +277,16 @@
                         justBeforeChild.style.backgroundColor = "inherit";
                         justBeforeChild.classList.remove("checked");
                     }
-                    productIndex++;
 
-                    $(".tbody").append(str);
+                    <%--  ========= 등록된 상품 있으면 order-msg-box 에서 수량 보여주기 ===============--%>
+                    if (productIndex != 0) {
+                        $(".msg-tag").html(`상품 총 수량 \${productIndex}개`)
+                    }
+
+                    const tbody = $(".tbody").html()
+                    productIndex++;
+                    $(".tbody").html(tbody + str);
+
                     let productLastChild = document.querySelector("#selectedManuList-1 li:last-child")
                     productLastChild.style.backgroundColor = "aqua";
                     productLastChild.classList.add("checked")
@@ -320,9 +359,9 @@
                     let cancelPrice = checkedProduct[i].children[3].value
                     let discountPrice = checkedProduct[i].children[4].value
 
-                    if (discountPrice != 0){
+                    if (discountPrice != 0) {
                         let discountAmount = $(".discountAmount").html()
-                        $(".discountAmount").html(discountAmount-discountPrice)
+                        $(".discountAmount").html(discountAmount - discountPrice)
                     }
                     getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
 
@@ -343,16 +382,17 @@
         function addProduct() {
             let n = 1
             let checkedProduct = $(".checked")
+
             if (checkedProduct.length != 0) {
-                let productQuantityInput = checkedProduct[0].childNodes[5];
-                let productSumPriceInput = checkedProduct[0].childNodes[7];
+                let productQuantityInput = checkedProduct[0].children[2];
+                let productSumPriceInput = checkedProduct[0].children[3];
                 let beforeQuantity = productQuantityInput.value
                 let productPrice = productSumPriceInput.dataset.value;
 
-                if (beforeQuantity >= 1) {
+                if (beforeQuantity >= 1 && productSumPriceInput.value != 0) {
                     let afterQuantity = parseInt(beforeQuantity) + n
                     productQuantityInput.value = afterQuantity;
-                    productSumPriceInput.value = afterQuantity * productPrice;
+                    productSumPriceInput.value = parseInt(productSumPriceInput.value) + parseInt(productPrice);
 
                     getProductTotalSumPriceAndTotalQuantity__2(productPrice);
                 }
@@ -362,16 +402,18 @@
         function removeProduct() {
             let n = 1
             let checkedProduct = $(".checked")
+
             if (checkedProduct.length != 0) {
-                let productQuantityInput = checkedProduct[0].childNodes[5];
-                let productSumPriceInput = checkedProduct[0].childNodes[7];
+                let productQuantityInput = checkedProduct[0].children[2];
+                let productSumPriceInput = checkedProduct[0].children[3];
+
                 let productPrice = productSumPriceInput.dataset.value;
                 let beforeQuantity = productQuantityInput.value
 
-                if (beforeQuantity > 1) {
+                if (beforeQuantity > 1 && productSumPriceInput.value != 0) {
                     let afterQuantity = parseInt(beforeQuantity) - n
                     productQuantityInput.value = afterQuantity;
-                    productSumPriceInput.value = afterQuantity * productPrice;
+                    productSumPriceInput.value = parseInt(productSumPriceInput.value) - parseInt(productPrice);
 
                     getProductTotalSumPriceAndTotalQuantity__2(-productPrice);
                 }
@@ -401,47 +443,186 @@
         }
 
         // ============ 메뉴 분할 결제나 할인 처리 =========
-
-        let eachSailPrice = 0;
-
         function calSailFunc() {
             let discountPercentage = document.querySelector(".numberFeed input").value
-
-            if (discountPercentage.length != 0) {
+            let currPrice = 0
+            if (discountPercentage != 0 && discountPercentage <= 100) {
                 let checkedProduct = $(".tbody > .checked")
                 let checkedProductSumPrice = 0;
-                let eachSailPrice2 = 0;
+                let asd = 0;
                 for (let i = 0; i < checkedProduct.length; i++) {
-                    checkedProductSumPrice += parseInt(checkedProduct[i].children[3].value)
-                    eachSailPrice += parseInt(checkedProduct[i].children[3].value) / 100 * discountPercentage
-                    eachSailPrice2 = parseInt(checkedProduct[i].children[3].value) / 100 * discountPercentage
-                    if (eachSailPrice != 0) {
+                    let costPrice = parseInt(checkedProduct[i].children[3].dataset.value)
+                    let productCnt = parseInt(checkedProduct[i].children[2].value)
+                    currPrice = parseInt(checkedProduct[i].children[3].value)
+
+                    if (currPrice != 0) {
+                        asd += parseInt(checkedProduct[i].children[4].value)
+                        let eachSailPrice = (costPrice * productCnt) / 100 * discountPercentage
+                        checkedProductSumPrice += (costPrice * productCnt)
                         checkedProduct[i].children[4].value = eachSailPrice
+                        checkedProduct[i].children[3].value = (costPrice * productCnt) - eachSailPrice
                     }
                 }
-                let allSailPrice = checkedProductSumPrice / 100 * discountPercentage
-                let productsTotalSumPrice = document.querySelector(".amountToPay").innerHTML
-                $(".amountToPay").html(productsTotalSumPrice - allSailPrice)
-                let discountSumAMount = ${discountSumAMount};
-                let disAmount = $(".discountAmount").html()
-                if (discountSumAMount == 0) {
-                    $(".discountAmount").html(parseInt(disAmount) + eachSailPrice2)
-                } else {
-                    $(".discountAmount").html(parseInt(disAmount) + eachSailPrice2)
+
+
+                if (currPrice != 0 || checkedProduct.length > 1) {
+                    let allSailPrice = checkedProductSumPrice / 100 * discountPercentage
+                    let amountToPaySumPrice = document.querySelector(".amountToPay").textContent
+                    let productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
+                    let discountAmount = $(".discountAmount")[0].innerHTML
+
+                    if (discountAmount == 0) {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + parseInt(asd)) - allSailPrice
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html(parseInt(productsTotalSumPrice) - amountToPay)
+                    } else {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + parseInt(asd)) - allSailPrice
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html((parseInt(productsTotalSumPrice) - amountToPay))
+                    }
+                }
+
+                clearInput();
+
+            } else {
+                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
+            }
+        }
+
+        function amountDiscountFunc() {
+            let discountAmount = document.querySelector(".numberFeed input").value
+
+            if (discountAmount != 0) {
+                let checkedProduct = $(".tbody > .checked")
+                let discountAmountSumPrice = 0;
+                let currPrice = 0;
+                let asd = 0;
+
+                for (let i = 0; i < checkedProduct.length; i++) {
+                    let oldPrice = parseInt(checkedProduct[i].children[3].value)
+                    let productCnt = parseInt(checkedProduct[i].children[2].value)
+                    let costPrice = parseInt(checkedProduct[i].children[3].dataset.value)
+                    currPrice = parseInt(checkedProduct[i].children[3].value)
+
+                    if (oldPrice != 0 && discountAmount <= (costPrice * productCnt)) {
+                        asd += parseInt(checkedProduct[i].children[4].value)
+                        discountAmountSumPrice += parseInt(discountAmount)
+                        checkedProduct[i].children[4].value = parseInt(discountAmount)
+                        checkedProduct[i].children[3].value = (costPrice * productCnt) - parseInt(discountAmount)
+                    }
+                }
+
+                if (currPrice != 0 || checkedProduct.length > 1) {
+                    const amountToPaySumPrice = document.querySelector(".amountToPay").textContent
+                    const productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
+                    const discountAmount = document.querySelector(".discountAmount").innerHTML
+
+                    if (discountAmount == 0) {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + asd) - parseInt(discountAmountSumPrice) - ${discountSumAMount};
+                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay) + ${discountSumAMount};
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html(afterDiscountPrice)
+                    } else {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + asd) - parseInt(discountAmountSumPrice);
+                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay);
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html(afterDiscountPrice)
+                    }
+
                 }
                 clearInput();
+
+            } else {
+                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
+            }
+        }
+
+        function changeAmount() {
+            let changeAmount = document.querySelector(".numberFeed input").value
+
+            if (changeAmount != 0) {
+                let checkedProduct = $(".tbody > .checked")
+                let changeAmountSumPrice = 0;
+                let currDisPrice = 0;
+                let oldPrice = 0;
+
+                for (let i = 0; i < checkedProduct.length; i++) {
+                    currDisPrice = checkedProduct[i].children[4].value
+                    oldPrice = checkedProduct[i].children[3].value
+
+                    if (oldPrice != 0) {
+                        changeAmountSumPrice += parseInt(oldPrice) - parseInt(changeAmount)
+                        checkedProduct[i].children[3].value = parseInt(changeAmount)
+
+                        if (currDisPrice != 0) {
+                            let discountSumPrice = $(".discountAmount").html()
+                            $(".discountAmount").html(discountSumPrice - currDisPrice)
+                            checkedProduct[i].children[4].value = 0
+                        }
+                    }
+                }
+
+                let amountToPaySumPrice = document.querySelector(".amountToPay").innerHTML
+                let productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
+
+                $(".amountToPay").html(amountToPaySumPrice - changeAmountSumPrice)
+
+                if (oldPrice != 0) {
+                    $(".ProductsTotalSumPrice").val(productsTotalSumPrice - changeAmountSumPrice - currDisPrice)
+                } else {
+                    $(".ProductsTotalSumPrice").val(productsTotalSumPrice - changeAmountSumPrice)
+                }
+
+                clearInput();
+
+            } else {
+                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
+            }
+        }
+
+        function changeQuantity() {
+            let changeQuantity = document.querySelector(".numberFeed input").value
+
+            if (changeQuantity != 0) {
+                let checkedProduct = $(".tbody > .checked")
+                let changeAmountSumPrice = 0;
+                let oldSumPrice = 0;
+
+                for (let i = 0; i < checkedProduct.length; i++) {
+                    let oldPrice = parseInt(checkedProduct[i].children[3].value)
+                    oldSumPrice += parseInt(oldPrice)
+                    let costPrice = checkedProduct[i].children[3].dataset.value
+
+                    if (oldPrice != 0) {
+                        changeAmountSumPrice += parseInt(changeQuantity) * parseInt(costPrice)
+                        checkedProduct[i].children[2].value = changeQuantity
+                        checkedProduct[i].children[3].value = parseInt(changeQuantity) * parseInt(costPrice)
+                    }
+                }
+
+                let amountToPaySumPrice = document.querySelector(".amountToPay").innerHTML
+                let productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
+
+                $(".amountToPay").html(parseInt(amountToPaySumPrice) + parseInt(changeAmountSumPrice) - parseInt(oldSumPrice))
+
+                $(".ProductsTotalSumPrice").val(parseInt(productsTotalSumPrice) + parseInt(changeAmountSumPrice) - parseInt(oldSumPrice))
+
+                clearInput();
+
+            } else {
+                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
             }
         }
 
         // =============== 메뉴 서비스 처리 ====================
 
         function freeProduct() {
-            getProductTotalSumPriceAndTotalQuantity__2(null)
             let checkedProducts = document.querySelectorAll(".tbody > .checked");
             for (let i = 0; i < checkedProducts.length; i++) {
                 let checkedProductName = checkedProducts[i].children[1].value;
                 let checkedProductSumPrice = checkedProducts[i].children[3];
                 let checkedProductSailPrice = checkedProducts[i].children[4];
+                let amountToPay = document.querySelector(".amountToPay").innerHTML
 
                 if (checkedProductSumPrice.value != 0) {
                     checkedProductSailPrice.value = checkedProductSumPrice.value;
@@ -449,14 +630,14 @@
                     checkedProducts[i].children[1].value = "[S]" + checkedProductName;
                     let disCountAmount = $(".discountAmount").html()
                     $(".discountAmount").html(parseInt(disCountAmount) + parseInt(checkedProductSailPrice.value))
-                    getProductTotalSumPriceAndTotalQuantity__2(null)
+                    $(".amountToPay").html(parseInt(amountToPay) - parseInt(checkedProductSailPrice.value))
                 } else {
                     checkedProducts[i].children[1].value = checkedProductName.substring(3);
                     checkedProductSumPrice.value = checkedProductSailPrice.value;
                     checkedProductSailPrice.value = 0;
                     let disCountAmount = $(".discountAmount").html()
                     $(".discountAmount").html(parseInt(disCountAmount) - parseInt(checkedProductSumPrice.value))
-                    getProductTotalSumPriceAndTotalQuantity__2(null)
+                    $(".amountToPay").html(parseInt(amountToPay) + parseInt(checkedProductSumPrice.value))
                 }
             }
         }
@@ -475,10 +656,24 @@
                 <li id="productItems" onclick="selectMenu(${product.id})"
                     class="flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
                     <span class="h-3/5" name="productName">${product.name}</span>
-                    <span class="text-red-400 pt-2 h-2/5" name="price">${product.price}원</span>
+                    <span class="text-red-400 pt-2 h-2/5 price" name="price">${product.price}원</span>
                 </li>
             </c:forEach>
         </ul>
     </div>
 </div>
+
+
+<script>
+    function PutComma(){
+        document.querySelectorAll(".price").forEach( (el)=>{
+            let num = el.innerHTML.replace("원", "")
+            el.innerHTML = Number(num).toLocaleString();
+        })
+    }
+
+    PutComma();
+</script>
 <%@include file="../common/foot.jsp" %>
+
+<%@include file="../common/footer.jsp" %>

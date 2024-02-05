@@ -16,5 +16,7 @@ public class paymentCash {
     private int floor;
     private int cashTotalAmount;
     private int cashAmountPaid;
+    private int sumCashAmountPaid;
     private int discountAmount;
+    private int cart_id;
 }

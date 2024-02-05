@@ -21,6 +21,7 @@
                 <input type="hidden" name="CashTotalSailAmount" value=""/>
                 <input type="hidden" name="CashTotalAmount" value=""/>
                 <input type="hidden" name="CashSplitAmount" value=""/>
+                <input type="hidden" name="CashChangeAmount" value=""/>
                 <input type="hidden" name="floor" value="${rq.floor}"/>
                 <input type="hidden" name="tabId" value="${param.tabId}"/>
             </form>
@@ -82,42 +83,61 @@
             $(".payByCreditCartBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
         } else {
-            let amountToPay = document.querySelector(".amountToPay").innerHTML
-            let totalAmount = document.querySelector(".ProductsTotalSumPrice").value
+            let amountToPay = parseInt(document.querySelector(".amountToPay").innerHTML)
+            let totalAmount = parseInt(document.querySelector(".ProductsTotalSumPrice").value)
             let splitAmount = document.querySelector(".numberFeed > input").value
-            let cartTotalSailAmount = document.querySelector(".discountAmount").innerHTML
+            let cartTotalSailAmount = parseInt(document.querySelector(".discountAmount").innerHTML)
 
-            if (parseInt(splitAmount) > parseInt(amountToPay)) {
+
+            if (parseInt(splitAmount) == 0) {
                 $(".order-msg-box > .msg-tag").html("결제할 금액을 확인해주세요!");
             } else {
                 $('input[name=AmountToBeReceivedCart]').val(amountToPay)
                 $('input[name=CartTotalAmount]').val(totalAmount)
-                $('input[name=CartSplitAmount]').val(splitAmount)
+                $('input[name=CartSplitAmount]').val(splitAmount == "" ? 0 : parseInt(splitAmount))
                 $('input[name=CartTotalSailAmount]').val(cartTotalSailAmount)
+                // ==========================================================//
+                doInsertProduct();
                 $('form[name=do-pay-creditCart-form]').submit();
             }
 
         }
     })
 
+
+    //  ==================================================================================== //
     $(".payByCashBtn").click(function () {
         let cartItemsList = $(".product-box-list")
         if (cartItemsList.length == 0) {
             $(".payByCreditCartBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
         } else {
-            let amountToPay = document.querySelector(".amountToPay").innerHTML
-            let totalAmount = document.querySelector(".ProductsTotalSumPrice").value
-            let splitAmount = document.querySelector(".numberFeed > input").value.trim()
-            let cashTotalSailAmount = document.querySelector(".discountAmount").innerHTML
+            let amountToPay = parseInt(document.querySelector(".amountToPay").innerHTML);
+            let totalAmount = parseInt(document.querySelector(".ProductsTotalSumPrice").value);
+            let splitAmount = document.querySelector(".numberFeed > input").value.trim();
+            let cashTotalSailAmount = parseInt(document.querySelector(".discountAmount").innerHTML);
 
-            if (parseInt(splitAmount) > parseInt(amountToPay)) {
+            if (parseInt(splitAmount) > amountToPay) {
+                // =========== 현금 결제 거름돈이 있을시 ======== //
+                $('input[name=AmountToBeReceivedCash]').val(amountToPay);
+                $('input[name=CashTotalAmount]').val(totalAmount);
+                $('input[name=CashSplitAmount]').val(parseInt(splitAmount));
+                $('input[name=CashChangeAmount]').val(parseInt(splitAmount) - amountToPay);
+                $('input[name=CashTotalSailAmount]').val(cashTotalSailAmount);
+                // ==========================================================//
+                doInsertProduct();
+                $('form[name=do-pay-cash-form]').submit();
+            } else if (parseInt(splitAmount) == 0) {
                 $(".order-msg-box > .msg-tag").html("결제할 금액을 확인해주세요!");
-            }else{
-                $('input[name=AmountToBeReceivedCash]').val(amountToPay)
-                $('input[name=CashTotalAmount]').val(totalAmount)
-                $('input[name=CashSplitAmount]').val(splitAmount)
-                $('input[name=CashTotalSailAmount]').val(cashTotalSailAmount)
+            } else {
+                // ======== 현금 분할 결제나 현금 전체 결제시 ========//
+                $('input[name=AmountToBeReceivedCash]').val(amountToPay);
+                $('input[name=CashTotalAmount]').val(totalAmount);
+                $('input[name=CashSplitAmount]').val(splitAmount == "" ? 0 : parseInt(splitAmount));
+                $('input[name=CashChangeAmount]').val(0);
+                $('input[name=CashTotalSailAmount]').val(cashTotalSailAmount);
+                // ==========================================================//
+                doInsertProduct();
                 $('form[name=do-pay-cash-form]').submit();
             }
         }
@@ -131,6 +151,7 @@
         const productPrices = $('.product-box-list').map((index, el) => el.children[3].value).toArray();
         const productNames = $('.product-box-list').map((index, el) => el.children[1].value).toArray();
 
+
         $('input[name=productNames]').val(productNames.join(","))
         $('input[name=productPrices]').val(productPrices.join(","))
         $('input[name=productSailPrices]').val(productSailPrices.join(","))
@@ -139,6 +160,39 @@
 
         $('form[name=do-insert-product-form]').submit();
     })
+
+    function doInsertProduct() {
+
+        $.get("/usr/tables/orderPage/isExistCartItem", {
+            floor:${rq.floor},
+            tabId:${param.tabId}
+        }, function (data) {
+            let isExistCartItem = data.dataName
+
+            if (isExistCartItem !== "true") {
+                const productIds = $('.product-box-list').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
+                const productCnts = $('.product-box-list').map((index, el) => el.children[2].value).toArray();
+                const productSailPrices = $('.product-box-list').map((index, el) => el.children[4].value).toArray();
+                const productPrices = $('.product-box-list').map((index, el) => el.children[3].value).toArray();
+                const productNames = $('.product-box-list').map((index, el) => el.children[1].value).toArray();
+
+                $.get("/usr/tables/insertProduct", {
+                    productIds: productIds.join(","),
+                    productCnts: productCnts.join(","),
+                    productSailPrices: productSailPrices.join(","),
+                    productPrices: productPrices.join(","),
+                    productNames: productNames.join(","),
+                    floor: ${rq.floor},
+                    tabId: ${param.tabId},
+                    isPrintControl: "true"
+                }, function (data) {
+
+                }, "json")
+            }
+
+        }, "json")
+
+    }
 
 </script>
 </body>

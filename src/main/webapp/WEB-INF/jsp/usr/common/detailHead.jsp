@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@include file="head.jsp" %>
+<script src="/resource/detail.js" defer="defer"></script>
 <div class="header-detail">
     <a class="px-3 flex items-center cursor-default">
         <span class="text-red-500">Easy</span>
@@ -58,6 +59,14 @@
         <button id="cancel-btn" value="false" class="btn btn-active btn-ghost mt-2 cancel-button">취소</button>
     </div>
 </div>
+
+<div class="messagePage-msg-box">
+    <div class="change-layer-bg"></div>
+    <div class="change-layer">
+        <div class="change-confirm-message">등록된 상품을 취소하시겠습니까?</div>
+        <button id="change-check-btn" value="true" class="btn btn-active btn-info  mt-2 confirm-button">확인</button>
+    </div>
+</div>
 <script>
 
     function showConfirmDialog(message) {
@@ -84,12 +93,13 @@
 
     async function exampleFunction() {
         try {
-            const result = await showConfirmDialog("영수증을 발행하시겠습니까?");
+            const result = await showConfirmDialog("등록된 상품을 취소하시겠습니까?");
             return result;
         } catch (error) {
             return error;
         }
     }
+
 
     function openMsgBox() {
         $('.layer').show();
@@ -118,8 +128,6 @@
             $('input[name=isPrintControl]').val("true");
         }
     })
-
-
 
     //  ============ Detail smg box ============== //
     $(".btn-last-receipt").click(function () {
