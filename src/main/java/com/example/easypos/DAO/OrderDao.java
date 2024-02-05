@@ -1,9 +1,6 @@
 package com.example.easypos.DAO;
 
-import com.example.easypos.Vo.Cart;
-import com.example.easypos.Vo.CartItems;
-import com.example.easypos.Vo.Product;
-import com.example.easypos.Vo.ProductType;
+import com.example.easypos.Vo.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -146,4 +143,27 @@ public interface OrderDao {
                   and c.delStatus = 0  
             """)
     int getTotalSailPrice(int tabId, int floor);
+
+    @Delete("""
+            delete from Cart
+            where tabId = #{tabId}
+            and floor = #{floor}
+            """)
+    void removeCart(int tabId, int floor);
+
+    @Select("""
+            select * from paymentCash
+            where cart_id = #{cartId}
+            and tabId = #{tabNum}
+            and floor = #{floor};
+            """)
+    List<paymentCash> getPaymentCashList(int tabNum, int floor, int cartId);
+
+    @Select("""
+            select cartAmountPaid from paymentCreditCart
+            where cart_id = #{cartId}
+            and tabId = #{tabNum}
+            and floor = #{floor};
+            """)
+    List<paymentCreditCart> getPaymentCartList(int tabNum, int floor, int cartId);
 }

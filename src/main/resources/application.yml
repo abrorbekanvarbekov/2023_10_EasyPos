@@ -12,6 +12,11 @@ spring:
     username: root
     password:
 
+server:
+  servlet:
+    session:
+      timeout: 86400
+
 mybatis:
   type-aliases-package: com.example.easypos.Vo
   mapper-locations: mapper/**.xml

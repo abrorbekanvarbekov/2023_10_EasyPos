@@ -4,10 +4,15 @@
 <c:set var="pageTitle" value="Home"/>
 <%@include file="../common/mainHead.jsp" %>
 
+<div class="businessDate">
+    <span>> 담당자: &nbsp;&nbsp; ${loginedEmployeeName}</span>
+    <span>> 영업일자: &nbsp; &nbsp; ${businessDate}</span>
+    <span>> 포스번호 : &nbsp; &nbsp; 1</span>
+</div>
 <div class="floors">
-    <%--    <a onclick="getTables(1)" class="bg-blue-400">1층</a>--%>
-    <%--    <a onclick="getTables(2)" class="">2층</a>--%>
-    <%--    <a onclick="getTables(3)" class="">3층</a>--%>
+    <%--    <a onclick="getTables(1)" id="floor_1" class="bg-blue-400">1층</a>--%>
+    <%--    <a onclick="getTables(2)" id="floor_2" class="">2층</a>--%>
+    <%--    <a onclick="getTables(3)" id="floor_3" class="">3층</a>--%>
     <a href="/?floor=1" class="${floor == 1? 'bg-blue-400' : ""}">1층</a>
     <a href="/?floor=2" class="${floor == 2? 'bg-blue-400' : ""}">2층</a>
     <a href="/?floor=3" class="${floor == 3? 'bg-blue-400' : ""}">3층</a>
@@ -25,7 +30,8 @@
                     <span class="${cartItems != null ? "text-red-400" : ""}">${table.number}번</span>
                     <c:forEach var="priceSum" items="${priceSumList}">
                         <c:if test="${priceSum.table_id == table.number}">
-                            <span class="text-blue-400" id="table_${table.number}sumPrice">${priceSum.priceSum}</span>
+                            <span class="text-blue-400 asd"
+                                  id="table_${table.number}sumPrice">${priceSum.priceSum}</span>
                         </c:if>
                     </c:forEach>
                     <c:forEach var="cartItem" items="${cartItems}">
@@ -41,7 +47,9 @@
         </c:forEach>
     </div>
 </div>
-<div class="homeLeftFeed">
+
+
+<div class="homeLeftFeed" id="homeLeftFeed">
     <div class="miniWindow">
         <img src="/resource/images/a.png" alt="">
     </div>
@@ -204,12 +212,6 @@
             <span>금액</span>
             <span>주문시간</span>
         </li>
-        <li>
-            <span>모모 시그니처 한판</span>
-            <span>1개</span>
-            <span>56,000원</span>
-            <span>18:38:22</span>
-        </li>
     </ul>
     <div class="summaryAlertFeedFooter">
         <span class="material-symbols-outlined">crop_square</span>
@@ -219,6 +221,15 @@
     </div>
 </div>
 <script>
+
+    function PutComma() {
+        document.querySelectorAll(".asd").forEach((el) => {
+            let num = el.innerHTML
+            el.innerHTML = Number(num).toLocaleString();
+        })
+    }
+
+    PutComma();
 
     function showConfirmDialog(message) {
         return new Promise((resolve, reject) => {
@@ -390,7 +401,6 @@
             });
             let checkedTableGroup = document.querySelector(".table-groups .checked");
             if (checkedTableGroup != null) {
-                console.log("asdasd")
                 document.querySelectorAll(".tables-box a").forEach((ele) => {
                     let groupNumSpan = document.querySelector(".checked span:first-child")
                     checkedGroupNumId = checkedTableGroup.id.substring(checkedTableGroup.id.indexOf("_") + 1);
@@ -567,18 +577,18 @@
                                             <span>\${i + 1}</span>
                                             <span>\${tableSummary[i].productName}</span>
                                             <span>\${tableSummary[i].quantity}</span>
-                                            <span>\${tableSummary[i].productSumPrice}</span>
+                                            <span>\${tableSummary[i].productSumPrice.toLocaleString()}</span>
                                          </li>
                                         `
                                 str2 += `
                                         <li>
                                             <span>\${tableSummary[i].productName}</span>
                                             <span>\${tableSummary[i].quantity}개</span>
-                                            <span>\${tableSummary[i].productSumPrice}</span>
+                                            <span>\${tableSummary[i].productSumPrice.toLocaleString()}</span>
                                             <span>\${tableSummary[i].regDate.substring(tableSummary[1].updateDate.indexOf(" "))}</span>
                                         </li>
                                         `
-                                }
+                            }
 
                             if (tableSummary.length < 6) {
                                 str += `
@@ -598,7 +608,7 @@
                             }
 
                             let firstOrder = tableSummary[0].regDate.substring(tableSummary[1].updateDate.indexOf(" "))
-                            let lastOrder = tableSummary[tableSummary.length-1].regDate.substring(tableSummary[1].updateDate.indexOf(" "))
+                            let lastOrder = tableSummary[tableSummary.length - 1].regDate.substring(tableSummary[1].updateDate.indexOf(" "))
                             let sumPriceStr = sumPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                             $(".summaryAlertFeedTitle > h1:nth-child(1)").html(`테이블 \${tabId} 주문내역`)
                             $(".summaryAlertFeedTitle > h1:nth-child(2)").html(`최초주문시간 \${firstOrder} 최초주문시간 \${lastOrder}`)
@@ -669,5 +679,5 @@
     }
 
     selectTableFunc();
-
 </script>
+<%@include file="../common/footer.jsp" %>

@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@include file="head.jsp"%>
+<script src="/resource/home.js" defer="defer"></script>
 <div class="header">
     <a class="px-3 flex items-center cursor-default">
         <span class="text-red-500">Easy</span>
@@ -46,7 +47,7 @@
             </a>
         </li>
         <li class="btn-close">
-            <a onclick="history.back();">
+            <a href="/usr/home/homeMainPage">
                 <span class="material-symbols-outlined text-4xl">close</span>
             </a>
         </li>

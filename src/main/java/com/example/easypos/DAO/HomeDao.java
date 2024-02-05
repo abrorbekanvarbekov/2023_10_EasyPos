@@ -101,6 +101,7 @@ public interface HomeDao {
             select * from Cart
                        where tabId = #{tabId}
                        and floor = #{floor}
+                       limit 1
             """)
     Cart getCart(int floor, int tabId);
 
@@ -216,4 +217,11 @@ public interface HomeDao {
                 order by regDate
             """)
     List<CartItems> getCartItemsList(int tableId, int floor);
+
+    @Select("""
+            select COUNT(*) from paymentCreditCartAndCash
+            where paymentCreditCartAndCash.isReturn = 1
+            """)
+    int getNumberOfReturns();
+
 }

@@ -124,4 +124,8 @@ public class HomeService {
     public List<CartItems> getCartItemsList(int tableId, int floor) {
         return homeDao.getCartItemsList(tableId, floor);
     }
+
+    public int getNumberOfReturns() {
+        return homeDao.getNumberOfReturns();
+    }
 }

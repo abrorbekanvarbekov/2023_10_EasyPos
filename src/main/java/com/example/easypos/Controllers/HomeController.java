@@ -19,18 +19,14 @@ import java.util.List;
 public class HomeController {
     private HomeService homeService;
     private Rq rq;
-    private LocalTime now;
     private Date dateNow;
-    private DateTimeFormatter formatter;
     private SimpleDateFormat dateFormatter;
 
     @Autowired
     public HomeController(HomeService homeService, Rq rq) {
         this.homeService = homeService;
         this.rq = rq;
-        this.now = LocalTime.now();
         this.dateNow = new Date();
-        this.formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     }
 
@@ -53,6 +49,8 @@ public class HomeController {
         }
 
 
+        model.addAttribute("loginedEmployeeName", rq.getLoginedEmployee().getName());
+        model.addAttribute("businessDate", rq.getBusinessDate());
         model.addAttribute("orderTablesCnt", orderTablesCnt);
         model.addAttribute("tableGroups", tableGroups);
         model.addAttribute("priceSumList", priceSumList);
@@ -62,6 +60,37 @@ public class HomeController {
 
         return "/usr/home/home";
     }
+
+//    @RequestMapping("/home")
+//    @ResponseBody
+//    public ResultDate Home(Model model, @RequestParam(defaultValue = "1") int floor) {
+//
+//        if (floor <= 0 || floor > 3) {
+//            return ResultDate.from("F-1", "잘못 된 번호 입력");
+//        }
+//
+//        rq.floor(floor);
+//        List<CartItems> cartItems = homeService.getCartItems(floor);
+//        List<Table> tables = homeService.getTableLIst(floor);
+//        List<CartItems> priceSumList = homeService.getPriceSumList(floor);
+//        List<TableGroup> tableGroups = homeService.getTableGroups();
+//        int orderTablesCnt = 0;
+//        for (int i = 1; i <= 3; i++) {
+//            List<CartItems> orderTablesList = homeService.getOrderTablesList(i);
+//            orderTablesCnt += orderTablesList.size();
+//        }
+//
+//
+//        model.addAttribute("orderTablesCnt", orderTablesCnt);
+//        model.addAttribute("tableGroups", tableGroups);
+//        model.addAttribute("priceSumList", priceSumList);
+//        model.addAttribute("cartItems", cartItems);
+//        model.addAttribute("tables", tables);
+//        model.addAttribute("floor", floor);
+//
+//        return ResultDate.from("S-1", "성공", "tables", tables,
+//                "priceSumList", priceSumList, "cartItems", cartItems);
+//    }
 
     // ==============================================================//
 
@@ -76,10 +105,12 @@ public class HomeController {
 
     @RequestMapping("/usr/main/salesSummary")
     public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) {
+
         String todayDate = dateFormatter.format(dateNow);
         List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor);
         List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor);
         List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor);
+        int numberOfReturns = homeService.getNumberOfReturns();
         int outstandingAmount = homeService.getOutstandingAmount();
 
         int VAT_Amount = (payedTotalAmount.get(1) / 100) * 11;
@@ -87,13 +118,14 @@ public class HomeController {
         model.addAttribute("todayDate", todayDate);
         model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0) + payedTotalDiscountAmount.get(1)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
-        model.addAttribute("payedCashSumAmount", String.valueOf(payedTotalAmount.get(0)));
-        model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(1)));
+        model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(0)));
+        model.addAttribute("payedCashSumAmount", String.valueOf(payedTotalAmount.get(1)));
         model.addAttribute("VAT_Amount", String.valueOf(VAT_Amount));
         model.addAttribute("outstandingAmount", String.valueOf(outstandingAmount));
         model.addAttribute("expectedSales", String.valueOf(outstandingAmount + payedTotalAmount.get(0) + payedTotalAmount.get(1)));
-        model.addAttribute("payedCashCnt", payedTotalCnt.get(0));
-        model.addAttribute("payedCartCnt", payedTotalCnt.get(1));
+        model.addAttribute("payedCartCnt", payedTotalCnt.get(0));
+        model.addAttribute("payedCashCnt", payedTotalCnt.get(1));
+        model.addAttribute("numberOfReturns", numberOfReturns);
         return "/usr/home/salesSummary";
     }
 
@@ -110,6 +142,7 @@ public class HomeController {
         }
 
         Cart cart = homeService.getCart(floor, currTableNum);
+
         if (currCartItems.size() != 0) {
             for (CartItems currentCartItem : currCartItems) {
                 CartItems item = homeService.getCartItem(currentCartItem.getProduct_id(), afterTableNum, floor);

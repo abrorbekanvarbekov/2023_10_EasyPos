@@ -3,6 +3,7 @@
 
 <c:set var="pageName" value="매출요약"/>
 <c:set var="pageTitle" value="매출요약"/>
+<c:set var="pageTitle" value="매출요약"/>
 
 <%@include file="../common/PayCashTotalSalesHead.jsp" %>
 
@@ -37,7 +38,7 @@
         </div>
         <div>
             <span>반품건수</span>
-            <span>0</span>
+            <span>${numberOfReturns}</span>
             <span>카드매출</span>
             <span>${payedCartSumAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")} [${payedCartCnt}건]</span>
         </div>
@@ -105,3 +106,5 @@
         }
     })
 </script>
+
+<%@include file="../common/footer.jsp"%>

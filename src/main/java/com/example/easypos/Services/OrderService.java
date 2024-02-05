@@ -1,10 +1,7 @@
 package com.example.easypos.Services;
 
 import com.example.easypos.DAO.OrderDao;
-import com.example.easypos.Vo.Cart;
-import com.example.easypos.Vo.CartItems;
-import com.example.easypos.Vo.Product;
-import com.example.easypos.Vo.ProductType;
+import com.example.easypos.Vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +80,18 @@ public class OrderService {
 
     public int getTotalSailPrice(int tabId, int floor) {
         return orderDao.getTotalSailPrice(tabId, floor);
+    }
+
+    public void removeCart(int tabId, int floor) {
+        orderDao.removeCart(tabId, floor);
+    }
+
+    public List<paymentCash> getPaymentCashList(int tabNum, int floor, int cart_id) {
+        return orderDao.getPaymentCashList(tabNum, floor, cart_id);
+    }
+
+    public List<paymentCreditCart> getPaymentCartList(int tabNum, int floor, int cart_id) {
+        return orderDao.getPaymentCartList(tabNum, floor, cart_id);
     }
 
     // ==============================================================//
