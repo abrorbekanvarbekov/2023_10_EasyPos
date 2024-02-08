@@ -2,7 +2,7 @@
 
 <%@include file="../common/head.jsp" %>
 <c:set var="pageName" value="개점처리"/>
-<%@include file="../common/PayCashTotalSalesHead.jsp" %>
+<%@include file="../common/somePageHead.jsp" %>
 <c:set var="pageTitle" value="employeeListPage"/>
 
 <section class="employeePage">
@@ -12,13 +12,12 @@
                 <li>
                     <span>영업일자</span>
                     <span>
-                        <span class="business-date">${todayDate}</span>
-                        <span class="material-symbols-outlined" id="calendar_month">calendar_month</span>
+                        <input type="date" class="business-date" value="${todayDate}">
                     </span>
                 </li>
                 <li>
                     <span>시스템일자</span>
-                    <span>${todayDate}</span>
+                    <span><input type="date" value="${todayDate}"></span>
                 </li>
                 <li>
                     <span>사원코드</span>
@@ -91,7 +90,7 @@
 
         if (element.id != "") {
             element.addEventListener("click", (event) => {
-                let businessDate = document.querySelector(".business-date").innerHTML
+                let businessDate = document.querySelector(".business-date").value
                 let employeeCode = document.querySelector(".employeeCode")
                 employeeCode.value = element.id;
                 let employeeName = document.querySelector(".employeeName")
@@ -99,7 +98,6 @@
                 let employeePw = document.querySelector(".employeePw")
                 employeePw.type = "password"
                 employeePw.focus();
-
                 //     ==================================       //
                 $("#open-btn").click(() => {
                     $.get("/usr/member/getEmployee", {

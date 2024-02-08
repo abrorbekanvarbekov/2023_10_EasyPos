@@ -42,7 +42,6 @@ public class PayController {
     public String payByCash(int AmountToBeReceivedCash, int CashTotalAmount, int CashSplitAmount,
                             int CashChangeAmount, int CashTotalSailAmount, int floor, int tabId, Model model) {
 
-        System.out.println(AmountToBeReceivedCash);
         model.addAttribute("floor", floor);
         model.addAttribute("tabId", tabId);
         model.addAttribute("amountToBeReceivedCash", AmountToBeReceivedCash);

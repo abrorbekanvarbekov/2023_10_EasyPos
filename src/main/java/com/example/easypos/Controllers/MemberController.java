@@ -92,6 +92,7 @@ public class MemberController {
         List<Employee> employeeList = memberService.getEmployeeList(rq.getLoginedMemberId());
 
         String todayDate = dateFormatter.format(dateNow);
+
         model.addAttribute("todayDate", todayDate);
 
         if (employeeList.size() != 0) {
@@ -103,10 +104,6 @@ public class MemberController {
     @RequestMapping("/usr/member/getEmployee")
     @ResponseBody
     public ResultDate getEmployee(int employeeCode, String employeePw, String businessDate) {
-
-        if (businessDate.length() != 0) {
-            rq.setBusinessDate(businessDate);
-        }
 
         Employee employee = memberService.getEmployee(employeeCode);
 
@@ -128,6 +125,12 @@ public class MemberController {
         }
 
         rq.loginEmployee(employee);
+
+        String currentTime = formatter.format(now);
+
+        if (businessDate.length() != 0) {
+            rq.setBusinessDate(businessDate + " "+ currentTime);
+        }
         return ResultDate.from("S-1", "/?floor=1");
     }
 

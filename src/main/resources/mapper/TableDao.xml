@@ -3,98 +3,194 @@
 
 <mapper namespace="com.example.easypos.DAO.HomeDao">
     <select id="getPayedTotalAmount" resultType="int">
-        select ifnull(sum(payCart.cartTotalAmount), 0)
-        from paymentCreditCart as payCart
+        select ifnull(sum(payCart.CartAmountPaid), 0)
+        from paymentCreditCartAndCash as payCart
         <if test="floor == '전체'">
-
+            where payCart.isReturn = 0
         </if>
         <if test="floor == '1층'">
             where payCart.floor = 1
+            and payCart.isReturn = 0
         </if>
         <if test="floor == '2층'">
             where payCart.floor = 2
+            and payCart.isReturn = 0
         </if>
         <if test="floor == '3층'">
             where payCart.floor = 3
+            and payCart.isReturn = 0
         </if>
         union all
-        select ifnull(sum(payCash.cashTotalAmount), 0)
-        from paymentCash as payCash
+        select ifnull(sum(payCash.CashAmountPaid), 0)
+        from paymentCreditCartAndCash as payCash
         <if test="floor == '전체'">
-
+            where payCash.isReturn = 0
         </if>
         <if test="floor == '1층'">
             where payCash.floor = 1
+            and payCash.isReturn = 0
         </if>
         <if test="floor == '2층'">
             where payCash.floor = 2
+            and payCash.isReturn = 0
         </if>
         <if test="floor == '3층'">
             where payCash.floor = 3
+            and payCash.isReturn = 0
         </if>
     </select>
 
     <select id="getPayedTotalCnt" resultType="int">
-        select ifnull(count(payCart.cartTotalAmount), 0)
-        from paymentCreditCart as payCart
+        select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
+        from paymentCreditCartAndCash as payCart
         <if test="floor == '전체'">
-
+            where payCart.isReturn = 0
         </if>
         <if test="floor == '1층'">
             where payCart.floor = 1
+            and payCart.isReturn = 0
         </if>
         <if test="floor == '2층'">
             where payCart.floor = 2
+            and payCart.isReturn = 0
         </if>
         <if test="floor == '3층'">
             where payCart.floor = 3
+            and payCart.isReturn = 0
         </if>
         union all
-        select ifnull(count(payCash.cashTotalAmount), 0)
-        from paymentCash as payCash
+        select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as cashPaidAllCnt
+        from paymentCreditCartAndCash as payCash
         <if test="floor == '전체'">
-
+            where payCash.isReturn = 0
         </if>
         <if test="floor == '1층'">
             where payCash.floor = 1
+            and payCash.isReturn = 0
         </if>
         <if test="floor == '2층'">
             where payCash.floor = 2
+            and payCash.isReturn = 0
         </if>
         <if test="floor == '3층'">
             where payCash.floor = 3
+            and payCash.isReturn = 0
         </if>
     </select>
 
     <select id="getPayedTotalDiscountAmount" resultType="int">
-        select ifnull(sum(payCart.discountAmount), 0)
-        from paymentCreditCart as payCart
+        select ifnull(sum(payCartandCash.discountAmount), 0)
+        from paymentCreditCartAndCash as payCartandCash
         <if test="floor == '전체'">
-
+            where payCartandCash.isReturn = 0
         </if>
         <if test="floor == '1층'">
-            where payCart.floor = 1
+            where payCartandCash.floor = 1
+            and payCartandCash.isReturn = 0
         </if>
         <if test="floor == '2층'">
-            where payCart.floor = 2
+            where payCartandCash.floor = 2
+            and payCartandCash.isReturn = 0
         </if>
         <if test="floor == '3층'">
-            where payCart.floor = 3
+            where payCartandCash.floor = 3
+            and payCartandCash.isReturn = 0
+        </if>
+    </select>
+
+    <select id="getNumberOfReturns" resultType="int">
+        select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as returnItemCnt
+        from paymentCreditCartAndCash as payCart
+        <if test="floor == '전체'">
+            where payCart.isReturn = 1
+        </if>
+        <if test="floor == '1층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 3
         </if>
         union all
-        select ifnull(sum(payCash.discountAmount), 0)
-        from paymentCash as payCash
+        select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as returnItemCnt
+        from  paymentCreditCartAndCash as payCash
         <if test="floor == '전체'">
-
+            where payCash.isReturn = 1
         </if>
         <if test="floor == '1층'">
-            where payCash.floor = 1
+            where payCash.isReturn = 1
+            and payCash.floor = 1
         </if>
         <if test="floor == '2층'">
-            where payCash.floor = 2
+            where payCash.isReturn = 1
+            and payCash.floor = 2
         </if>
         <if test="floor == '3층'">
-            where payCash.floor = 3
+            where payCash.isReturn = 1
+            and payCash.floor = 3
+        </if>
+    </select>
+
+    <select id="getAmountOfReturns" resultType="int">
+        select ifnull(sum(payCart.CartAmountPaid), 0)
+        from paymentCreditCartAndCash as payCart
+        <if test="floor == '전체'">
+            where payCart.isReturn = 1
+        </if>
+        <if test="floor == '1층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCart.isReturn = 1
+            and payCart.floor = 3
+        </if>
+        union all
+        select ifnull(sum(payCash.CashAmountPaid), 0)
+        from paymentCreditCartAndCash as payCash
+        <if test="floor == '전체'">
+            where payCash.isReturn = 1
+        </if>
+        <if test="floor == '1층'">
+            where payCash.isReturn = 1
+            and payCash.floor = 1
+        </if>
+        <if test="floor == '2층'">
+            where payCash.isReturn = 1
+            and payCash.floor = 2
+        </if>
+        <if test="floor == '3층'">
+            where payCash.isReturn = 1
+            and payCash.floor = 3
+        </if>
+    </select>
+
+    <select id="getOutstandingAmount" resultType="int">
+        select ifnull(sum(CartItems.productSumPrice), 0)
+        from CartItems
+        <if test="floor == '전체'">
+            where CartItems.delStatus = 0
+        </if>
+        <if test="floor == '1층'">
+            where CartItems.delStatus = 0
+            and CartItems.floor_id = 1
+        </if>
+        <if test="floor == '2층'">
+            where CartItems.delStatus = 0
+            and CartItems.floor_id = 2
+        </if>
+        <if test="floor == '3층'">
+            where CartItems.delStatus = 0
+            and CartItems.floor_id = 3
         </if>
     </select>
 </mapper>

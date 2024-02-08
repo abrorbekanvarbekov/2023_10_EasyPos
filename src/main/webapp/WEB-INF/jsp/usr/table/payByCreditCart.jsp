@@ -4,7 +4,7 @@
 <c:set var="pageTitle" value="신용카드"/>
 <c:set var="pageName" value="신용카드"/>
 
-<%@include file="../common/PayCashTotalSalesHead.jsp" %>
+<%@include file="../common/somePageHead.jsp" %>
 <div class="byCreditCartPage">
     <div class="byCreditCartLeftPage">
         <div>

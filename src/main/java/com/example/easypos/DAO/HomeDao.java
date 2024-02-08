@@ -73,12 +73,11 @@ public interface HomeDao {
 
     List<Integer> getPayedTotalDiscountAmount(String floor);
 
-    @Select("""
-            select ifnull(sum(CartItems.productSumPrice), 0)
-                from CartItems
-                where delStatus = 0;
-            """)
-    int getOutstandingAmount();
+    List<Integer> getNumberOfReturns(String floor);
+
+    List<Integer> getAmountOfReturns(String floor);
+
+    int getOutstandingAmount(String floor);
 
     // ==============================================================//
 
@@ -218,10 +217,5 @@ public interface HomeDao {
             """)
     List<CartItems> getCartItemsList(int tableId, int floor);
 
-    @Select("""
-            select COUNT(*) from paymentCreditCartAndCash
-            where paymentCreditCartAndCash.isReturn = 1
-            """)
-    int getNumberOfReturns();
 
 }

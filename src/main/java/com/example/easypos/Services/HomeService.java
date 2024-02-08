@@ -58,8 +58,8 @@ public class HomeService {
         return homeDao.getPayedTotalDiscountAmount(floor);
     }
 
-    public int getOutstandingAmount() {
-        return homeDao.getOutstandingAmount();
+    public int getOutstandingAmount(String floor) {
+        return homeDao.getOutstandingAmount(floor);
     }
 
     // ==============================================================//
@@ -125,7 +125,11 @@ public class HomeService {
         return homeDao.getCartItemsList(tableId, floor);
     }
 
-    public int getNumberOfReturns() {
-        return homeDao.getNumberOfReturns();
+    public List<Integer> getNumberOfReturns(String floor) {
+        return homeDao.getNumberOfReturns(floor);
+    }
+
+    public List<Integer> getAmountOfReturns(String floor) {
+        return homeDao.getAmountOfReturns(floor);
     }
 }

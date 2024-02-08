@@ -1228,7 +1228,7 @@ body .header-box li:hover, .header-box-detail li:hover {
 .messagePage-msg-box >
 .layer, .layer-1,
 .layer-bg, .layer-bg-1,
-.change-layer, .change-layer-bg{
+.change-layer, .change-layer-bg {
     display: none;
 }
 
@@ -1259,21 +1259,21 @@ body .header-box li:hover, .header-box-detail li:hover {
 }
 
 .layer > .confirm-message,
-.layer-1 > .confirm-message-1{
+.layer-1 > .confirm-message-1 {
     text-align: center;
     font-size: 1.2rem;
     color: black;
     margin: 100px;
 }
 
-.change-layer > .change-confirm-message{
+.change-layer > .change-confirm-message {
     text-align: center;
     font-size: 3.2rem;
     color: black;
     margin: 100px;
 }
 
-.change-layer > #change-check-btn{
+.change-layer > #change-check-btn {
     position: absolute;
     width: 30%;
     height: 1.5%;
@@ -1384,7 +1384,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 40%;
 }
 
-.num-recognition-body-top > div:nth-child(2) > input{
+.num-recognition-body-top > div:nth-child(2) > input {
     width: 70%;
     height: 70%;
     border: 1px solid #797979;
@@ -1398,7 +1398,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     border-bottom: 1px solid #797979;
 }
 
-.num-recognition-body-bottom > textarea{
+.num-recognition-body-bottom > textarea {
     width: 100%;
     height: 100%;
     border: 1px solid #797979;
@@ -1854,11 +1854,31 @@ body .header-box li:hover, .header-box-detail li:hover {
 }
 
 .mainManu-bottom-part div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 16.6666%;
     height: 50%;
+    padding: 0.5% 2% 0.5% 2%;
     border: 1px solid rgba(169, 169, 169, .3);
+    cursor: pointer;
 }
 
+.mainManu-bottom-part div div {
+    display: flex;
+    justify-content: center;
+    box-shadow: 2px 2px 2px;
+    cursor: pointer;
+    width: 33%;
+    height: 66%;
+    background-color: #2B7ABB;
+    border-radius: 5%;
+    color: white;
+}
+
+.mainManu-bottom-part div div span {
+    font-size: 2rem;
+}
 
 /* =============== Sales History Page ============== */
 
@@ -2056,7 +2076,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 72%;
+    height: 90%;
     overflow-y: scroll;
 }
 
@@ -2217,3 +2237,177 @@ body .header-box li:hover, .header-box-detail li:hover {
     justify-content: space-between;
     align-items: center;
 }
+
+
+/* ============== DeadLineSettlementPage =================*/
+
+.deadlineSettlement-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 91%;
+}
+
+.deadlineSettlement-top {
+    display: flex;
+    padding: 1.2% 5%;
+    width: 100%;
+    height: 12%;
+    align-items: center;
+    border-bottom: 2px solid rgba(169, 169, 169, .3);
+}
+
+.deadlineSettlement-top span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(169, 169, 169, .3);
+}
+
+.deadlineSettlement-top span:nth-child(2n+1) {
+    width: 13%;
+    height: 100%;
+    background-color: lightskyblue;
+}
+
+.deadlineSettlement-top span:nth-child(2n) {
+    width: 20%;
+    height: 100%;
+    background-color: white;
+}
+
+.deadlineSettlement-main {
+    display: flex;
+    width: 100%;
+    height: 83%;
+}
+
+.deadline-mainLeft {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 82%;
+    height: 100%;
+    border-right: 1px solid rgba(169, 169, 169, .3);
+    padding: 1%;
+}
+
+.settlementDetails:not(:nth-child(3)) {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    height: 55%;
+}
+
+.settlementDetails:nth-child(3){
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    height: 62%;
+}
+
+.settlementDetails:nth-child(6){
+    margin-top: 4%;
+}
+
+.settlementDetails > div {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+}
+
+.settlementDetails li {
+    display: flex;
+    width: 100%;
+    height: 12.9%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-size: 0.8rem;
+}
+
+.settlementDetails li span:nth-child(2n+1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1% 4%;
+    width: 43%;
+    height: 100%;
+    background-color: lightskyblue;
+}
+
+.settlementDetails li span:nth-child(2n) {
+    text-align: end;
+    padding: 5%;
+    font-size: .9rem;
+    width: 65%;
+    height: 100%;
+    background-color: white;
+    border-right: 1px solid rgba(169, 169, 169, .3);
+}
+
+
+.deadline-mainRight {
+    display: flex;
+    flex-direction: column;
+    width: 18%;
+    height: 100%;
+    padding: 1%;
+}
+
+.deadline-mainRight .calc-box {
+    display: flex;
+    flex-direction: column;
+    margin-left: 6%;
+    width: 95%;
+    height: 60%;
+    padding-bottom: 5%;
+}
+
+.deadline-mainRight .calc-box div:first-child {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.deadline-mainRight .calc-box div:first-child > span:nth-child(1) {
+    width: 63%;
+    height: 100%;
+    background-color: lightskyblue;
+}
+
+.deadline-mainRight .calc-box div:nth-child(1) > span:nth-child(2) {
+    width: 30%;
+    height: 100%;
+    margin-right: 5%;
+    background-color: lightskyblue;
+}
+
+.deadline-mainRight .calc-box div {
+    height: 100%;
+}
+
+.deadline-mainRight .calc-box div:not(:nth-child(1)) span {
+    width: 30%;
+    height: 100%;
+    background-color: #BFBFBF;
+}
+
+.deadline-mainRight > div:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 50%;
+    padding: 7% 5%;
+    margin-left: 1%;
+}
+
+.deadline-mainRight > div:nth-child(3) button {
+    width: 100%;
+    height: 26%;
+    border: 1px solid #2B7ABB;
+    margin-bottom: 4%;
+    font-size: 1.1rem;
+}
+

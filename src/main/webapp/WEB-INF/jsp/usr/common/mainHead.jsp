@@ -47,7 +47,7 @@
             </a>
         </li>
         <li class="btn-close">
-            <a href="/usr/home/homeMainPage">
+            <a href="/usr/home-main/homeMainPage">
                 <span class="material-symbols-outlined text-4xl">close</span>
             </a>
         </li>

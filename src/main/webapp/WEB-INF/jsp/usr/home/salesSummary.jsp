@@ -3,15 +3,14 @@
 
 <c:set var="pageName" value="매출요약"/>
 <c:set var="pageTitle" value="매출요약"/>
-<c:set var="pageTitle" value="매출요약"/>
 
-<%@include file="../common/PayCashTotalSalesHead.jsp" %>
+<%@include file="../common/somePageHead.jsp" %>
 
 <div class="totalSales-container">
     <div>
         <span>영업일자</span>
         <div>
-            <span>${todayDate}</span>
+            <span>${businessDate}</span>
             <form action="" method="get" name="selected-floor-form">
                 <select data-value="${floor}" id="floor-select-box" name="floor"
                         class="select select-bordered select-sm ">
@@ -34,11 +33,11 @@
             <span>현금매출</span>
             <span>${payedCashSumAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")} [${payedCashCnt}건]</span>
             <span>반품금액</span>
-            <span>0</span>
+            <span>${amountOfReturns.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
         </div>
         <div>
             <span>반품건수</span>
-            <span>${numberOfReturns}</span>
+            <span>${numberOfReturns.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
             <span>카드매출</span>
             <span>${payedCartSumAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")} [${payedCartCnt}건]</span>
         </div>

@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -106,17 +104,19 @@ public class HomeController {
     @RequestMapping("/usr/main/salesSummary")
     public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) {
 
-        String todayDate = dateFormatter.format(dateNow);
         List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor);
         List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor);
         List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor);
-        int numberOfReturns = homeService.getNumberOfReturns();
-        int outstandingAmount = homeService.getOutstandingAmount();
+        List<Integer> numberOfReturns = homeService.getNumberOfReturns(floor);
+        List<Integer> amountOfReturns = homeService.getAmountOfReturns(floor);
+        int outstandingAmount = homeService.getOutstandingAmount(floor);
+        int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String businessDate = businessFullDate[0];
 
-        int VAT_Amount = (payedTotalAmount.get(1) / 100) * 11;
         model.addAttribute("floor", floor);
-        model.addAttribute("todayDate", todayDate);
-        model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0) + payedTotalDiscountAmount.get(1)));
+        model.addAttribute("businessDate", businessDate);
+        model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
         model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(0)));
         model.addAttribute("payedCashSumAmount", String.valueOf(payedTotalAmount.get(1)));
@@ -125,11 +125,12 @@ public class HomeController {
         model.addAttribute("expectedSales", String.valueOf(outstandingAmount + payedTotalAmount.get(0) + payedTotalAmount.get(1)));
         model.addAttribute("payedCartCnt", payedTotalCnt.get(0));
         model.addAttribute("payedCashCnt", payedTotalCnt.get(1));
-        model.addAttribute("numberOfReturns", numberOfReturns);
-        return "/usr/home/salesSummary";
+        model.addAttribute("numberOfReturns", String.valueOf(numberOfReturns.get(0) + numberOfReturns.get(1)));
+        model.addAttribute("amountOfReturns", String.valueOf(amountOfReturns.get(0) + amountOfReturns.get(1)));
+        return "usr/home/salesSummary";
     }
 
-    // ==============================================================//
+    // ============================================================== //
 
     @RequestMapping("/usr/tables/movement")
     @ResponseBody
@@ -213,7 +214,7 @@ public class HomeController {
         return ResultDate.from("s-1", "data 보내기 성공", "tableGroup", tableGroup);
     }
 
-    // ==============================================================//
+    // ============================================================== //
 
     @RequestMapping("/usr/tables/getProductSummary")
     @ResponseBody

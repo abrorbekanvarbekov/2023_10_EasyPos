@@ -4,7 +4,7 @@
 <c:set var="pageTitle" value="현금영수증처리"/>
 <c:set var="pageName" value="현금영수증처리"/>
 
-<%@include file="../common/PayCashTotalSalesHead.jsp" %>
+<%@include file="../common/somePageHead.jsp" %>
 <div class="payByCash">
     <div class="byCashLeftPage">
         <div>

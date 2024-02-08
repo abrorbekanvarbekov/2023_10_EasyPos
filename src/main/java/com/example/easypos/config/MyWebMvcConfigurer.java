@@ -33,11 +33,13 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
                 .addPathPatterns("/usr/member/employeeListPage")
-                .addPathPatterns("/usr/tables/detail");
+                .addPathPatterns("/usr/tables/detail")
+                .addPathPatterns("/usr/home/homeMainPage");
         registry.addInterceptor(needEmployeeLoginInterceptor)
                 .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
-                .addPathPatterns("/usr/tables/detail");
+                .addPathPatterns("/usr/tables/detail")
+                .addPathPatterns("/usr/home/homeMainPage");
     }
 
 }

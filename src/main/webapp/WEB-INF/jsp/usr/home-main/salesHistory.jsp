@@ -2,11 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:set var="pageTitle" value="homeMain"/>
-<c:set var="pageName" value="영수증반품"/>
-<%@include file="../common/PayCashTotalSalesHead.jsp" %>
+<c:set var="pageName" value="판매내역조회"/>
+<%@include file="../common/somePageHead.jsp" %>
 
-<section class="receipt-return-page">
-    <div class="receipt-return-top-part">
+<section class="sales-history-page">
+    <div class="sales-history-top-part">
         <div>
             <span>조회일자</span>
             <input type="date" class="beginDate">
@@ -47,15 +47,19 @@
         </div>
         <div>
             <div>
+                <button class="btn btn-outline">고객포인트</button>
+                <button class="btn btn-outline">국세청 현금연수증</button>
+            </div>
+            <div>
                 <button class="btn btn-outline w-28" id="lookUp">조회</button>
-                <button class="btn btn-outline w-28" id="return-btn">반품</button>
-                <button class="btn btn-outline w-28" id="printReceipt">임의 반품</button>
+                <button class="btn btn-outline w-28">결제변경</button>
+                <button class="btn btn-outline w-28" id="printReceipt">인쇄</button>
             </div>
         </div>
     </div>
-    <div class="receipt-return-bottom-part">
-        <div class="receipt-return-list">
-            <ul class="receipt-return-list-head">
+    <div class="sales-history-bottom-part">
+        <div class="sales-history-list">
+            <ul class="sales-history-list-head">
                 <li>NO</li>
                 <li>영업일자</li>
                 <li>영수증번호</li>
@@ -66,18 +70,20 @@
                 <li>현금매출</li>
                 <li>카드매출</li>
             </ul>
-            <ul class="receipt-return-list-body">
+            <ul class="sales-history-list-body">
                 <c:forEach var="paymentCartAndCash" items="${paymentCartAndCashList}" varStatus="status">
                     <c:set var="date" value="${paymentCartAndCash.regDate.split(' ')}"/>
                     <c:set var="time" value="${paymentCartAndCash.regDate.split(' ')}"/>
-                    <li class="list-item  ${paymentCartAndCash.isReturn == 1? "text-red-400" : ""} ${paymentCartAndCash.isReturn == 2? "text-blue-400" : ""}"
+                    <li class="list-item ${paymentCartAndCash.isReturn == 1? "text-red-400" : ""} ${paymentCartAndCash.isReturn == 2? "text-blue-400" : ""}"
                         data-value="${paymentCartAndCash.cart_id}"
                         id="itemId_${status.index + 1}" isreturn="${paymentCartAndCash.isReturn}">
                         <span>${status.index + 1}</span>
                         <span>${date[0].replaceAll("-", "")}</span>
                         <span>00000${status.index + 1}</span>
                         <span data-value="${paymentCartAndCash.floor}">0${paymentCartAndCash.floor}</span>
-                        <span data-value="${paymentCartAndCash.cartAmountPaid + paymentCartAndCash.cashAmountPaid}">${paymentCartAndCash.cartAmountPaid + paymentCartAndCash.cashAmountPaid}</span>
+                        <span data-value="${paymentCartAndCash.cartAmountPaid + paymentCartAndCash.cashAmountPaid}">
+                                ${paymentCartAndCash.totalAmount - paymentCartAndCash.discountAmount}
+                        </span>
                         <span>${time[1]}</span>
                         <span>${paymentCartAndCash.tabId}</span>
                         <span data-value="${paymentCartAndCash.sumCashAmountPaid}">${paymentCartAndCash.sumCashAmountPaid}</span>
@@ -116,8 +122,7 @@
                     <span>메뉴</span> <span>단가</span> <span>수량</span> <span>금액</span>
                 </div>
                 <div class="receipt-body-bar">
-                    <div><span>순살가라게</span> <span>24,000</span> <span>1</span> <span>24,000</span></div>
-                    <div><span>게란누룽지탕</span> <span>25,000</span> <span>1</span> <span>25,000</span></div>
+
                 </div>
                 <div class="receipt-footer-bar">
                     <span class="whitespace">부가세 과세 물품가액 :       54,000원</span>
@@ -136,44 +141,12 @@
         </div>
     </div>
 </section>
-<div class="home-msg-box receiptReturn-msg-box">
+<div class="home-msg-box sales-history-msg-box">
     <span class="material-symbols-outlined">volume_up</span>
     <span class="msg-tag w-full text-center "></span>
 </div>
 
-<div class="messagePage-msg-box">
-    <div class="num-recognition-bg"></div>
-    <div class="num-recognition">
-        <div class="num-recognition-page">
-            <div class="num-recognition-head">Easy POS &#183; 신용카드 번호 인식</div>
-            <div class="num-recognition-body">
-                <div class="num-recognition-body-top">
-                    <div>
-                        <button class="btn btn-outline w-28" id="recognize-btn">인식</button>
-                        <button class="btn btn-outline w-30">IC/EF 카드요청</button>
-                    </div>
-                    <div>
-                        <input type="number" id="cartNum-recognition-input">
-                    </div>
-                </div>
-            </div>
-            <div class="num-recognition-body-bottom">
-                <textarea name="" id="" placeholder="카드 정보 요청 중입니다."></textarea>
-            </div>
-            <div class="num-recognition-cancel-btn">
-                <button class="btn btn-info" id="num-recognition-cancel-btn">취소</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="messagePage-msg-box">
-    <div class="layer-bg"></div>
-    <div class="layer">
-        <div class="confirm-message"></div>
-        <button id="check-btn" value="true" class="btn btn-active btn-info  mt-2 confirm-button">확인</button>
-        <button id="cancel-btn" value="false" class="btn btn-active btn-ghost mt-2 cancel-button">취소</button>
-    </div>
-</div>
+
 <script>
 
     function PutComma() {
@@ -200,13 +173,13 @@
     });
 
     function scrollMoveUp() {
-        let listContainer = document.querySelector(".receipt-return-list-body")
+        let listContainer = document.querySelector(".sales-history-list-body")
         let selectedItem = listContainer.querySelector(".checked")
         scrollToSelectedItem(selectedItem);
     }
 
     function scrollMoveDown() {
-        let listContainer = document.querySelector(".receipt-return-list-body")
+        let listContainer = document.querySelector(".sales-history-list-body")
         let selectedItem = listContainer.querySelector(".checked")
         scrollToSelectedItem(selectedItem);
     }
@@ -220,7 +193,7 @@
     }
 
     function scrollToLower() {
-        let listContainer = document.querySelector(".receipt-return-list-body")
+        let listContainer = document.querySelector(".sales-history-list-body")
         listContainer.scrollTop = listContainer.scrollHeight;
     }
 
@@ -228,7 +201,7 @@
 
     let liIndex = 0;
     if (listLength != 0) {
-        let listItemLastItem = document.querySelector(`.receipt-return-list-body li:nth-child(\${listLength})`)
+        let listItemLastItem = document.querySelector(`.sales-history-list-body li:nth-child(\${listLength})`)
         let cart_id = listItemLastItem.dataset.value
         liIndex = listItemLastItem.id.substring(listItemLastItem.id.indexOf("_") + 1)
         setReceipt(cart_id, liIndex)
@@ -301,7 +274,7 @@
             let beforeLi = document.getElementById("itemId_" + liIndex)
             beforeLi.style.backgroundColor = "inherit"
             beforeLi.classList.remove("checked")
-            liIndex = parseInt(listLength - liIndex <= 12 ? listLength - liIndex : 12) + parseInt(liIndex)
+            liIndex = parseInt(listLength - liIndex <= 12 ? listLength - liIndex : 12) + parseInt(liIndex);
             let afterLi = document.getElementById("itemId_" + liIndex)
             afterLi.style.backgroundColor = "aqua"
             afterLi.classList.add("checked")
@@ -326,7 +299,7 @@
 
     document.querySelectorAll(".list-item").forEach((element, idx) => {
         let childIdx = ${paymentCartAndCashList.size()};
-        let listItemLastItem = document.querySelector(`.receipt-return-list-body li:nth-child(\${childIdx})`)
+        let listItemLastItem = document.querySelector(`.sales-history-list-body li:nth-child(\${childIdx})`)
         let cart_id = listItemLastItem.dataset.value
         let itemId = listItemLastItem.id.substring(listItemLastItem.id.indexOf("_") + 1)
         scrollToLower();
@@ -341,6 +314,7 @@
             element.classList.add("checked")
             cart_id = element.dataset.value
             setReceipt(cart_id, element.id.substring(element.id.indexOf("_") + 1))
+
             liIndex = element.id.substring(element.id.indexOf("_") + 1)
         })
 
@@ -349,7 +323,7 @@
 
     function setReceipt(cart_id, itemId) {
         if (cart_id != 0 && itemId != 0) {
-            $.get("/usr/home/getCartItemByCart_id", {
+            $.get("/usr/home-main/getCartItemByCart_id", {
                 cart_id: cart_id
             }, function (data) {
                 let cartItems = data.data1;
@@ -454,21 +428,7 @@
 
             }, "json")
         } else {
-            let receipt_main = `
-                        <span></span>
-                        <span></span>
-                        <br>
-                        <span class="receipt-table-floor"></span>
-                        <span class="receipt-date-POS-BILL"></span>
-                        <div class="receipt-head-bar">
-                            <span></span> <span></span> <span></span> <span></span>
-                        </div>
-                        <div class="receipt-body-bar"></div>
-                        <div class="receipt-footer-bar">
-                            <div class="receipt-payment-details"></div>
-                        </div>
-                    `
-            $(".sales-history-receipt").html(receipt_main)
+            $(".sales-history-receipt").empty();
         }
     }
 
@@ -477,7 +437,7 @@
         let endDate = $(".endDate")[0].value
         let floorId = $(".floorId")[0].value.replaceAll("0", "")
 
-        $.get("/usr/home/getPaymentCartList", {
+        $.get("/usr/home-main/getPaymentCartList", {
             beginDate: beginDate,
             endDate: endDate,
             floor: floorId
@@ -485,7 +445,7 @@
             let paymentCartAndCashList = data.data1
             if (paymentCartAndCashList.length != 0) {
 
-                let listContainer = document.querySelector('.receipt-return-list-body')
+                let listContainer = document.querySelector('.sales-history-list-body')
 
                 while (listContainer.firstChild) {
                     listContainer.removeChild(listContainer.firstChild);
@@ -495,13 +455,14 @@
 
                     let date = value.regDate.split(" ")[0].replaceAll("-", "")
                     let time = value.regDate.split(" ")[1]
-                    let listItem = document.createElement("li");
 
+                    let listItem = document.createElement("li");
                     if (value.isReturn == 1) {
                         listItem.classList.add("text-red-400");
                     } else if (value.isReturn == 2) {
                         listItem.classList.add("text-blue-400");
                     }
+
                     listItem.classList.add("list-item");
                     listItem.setAttribute("data-value", value.cart_id)
                     listItem.setAttribute("id", "itemId_" + (idx + 1))
@@ -525,7 +486,6 @@
 
                     let span5 = document.createElement('span');
                     span5.textContent = (value.sumCashAmountPaid + value.sumCartAmountPaid).toLocaleString();
-                    span5.setAttribute("data-value", value.sumCashAmountPaid + value.sumCartAmountPaid)
                     listItem.appendChild(span5);
 
                     let span6 = document.createElement('span');
@@ -538,17 +498,15 @@
 
                     let span8 = document.createElement('span');
                     span8.textContent = value.sumCashAmountPaid.toLocaleString();
-                    span8.setAttribute("data-value", value.sumCashAmountPaid)
                     listItem.appendChild(span8);
 
                     let span9 = document.createElement('span');
                     span9.textContent = value.sumCartAmountPaid.toLocaleString();
-                    span9.setAttribute("data-value", value.sumCartAmountPaid)
                     listItem.appendChild(span9);
 
-                    setTimeout(function () {
+                    setTimeout( function () {
                         listContainer.appendChild(listItem);
-                        let list = document.querySelectorAll(".receipt-return-list-body li")
+                        let list = document.querySelectorAll(".sales-history-list-body li")
                         list[idx].style.backgroundColor = "aqua"
                         list[idx].classList.add("checked")
                         if (idx != 0) {
@@ -571,13 +529,13 @@
                                 cart_id = element.dataset.value
                                 setReceipt(cart_id, element.id.substring(element.id.indexOf("_") + 1))
 
-                                listLength = $(".receipt-return-list-body .list-item").length
+                                listLength = $(".sales-history-list-body .list-item").length
                                 liIndex = element.id.substring(element.id.indexOf("_") + 1)
                             })
                         })
 
-                        listLength = $(".receipt-return-list-body .list-item").length
-                        liIndex = $(".receipt-return-list-body .checked")[0].id.substring($(".receipt-return-list-body .checked")[0].id.indexOf("_") + 1)
+                        listLength = $(".sales-history-list-body .list-item").length
+                        liIndex = $(".sales-history-list-body .checked")[0].id.substring($(".sales-history-list-body .checked")[0].id.indexOf("_") + 1)
                     }, (idx + 1) * 50)
                 })
             } else {
@@ -590,114 +548,12 @@
                         </li>
                     </c:forEach>
                 `
-                $(".receipt-return-list-body").html(str);
+                $(".sales-history-list-body").html(str);
                 setReceipt(0, 0)
-                $(".receiptReturn-msg-box .msg-tag").html("해당 내역이 존재하지 않습니다")
+                $(".sales-history-msg-box .msg-tag").html("해당 내역이 존재하지 않습니다");
             }
         }, "json")
     })
-
-    function showConfirmDialog(message) {
-        return new Promise((resolve, reject) => {
-            let confirmMessage = document.querySelector(".confirm-message");
-            let confirmButton = document.querySelector(".confirm-button");
-            let cancelButton = document.querySelector(".cancel-button");
-
-            confirmMessage.textContent = message;
-
-            confirmButton.onclick = function () {
-                closeMsgBox();
-                resolve("true");
-            };
-
-            cancelButton.onclick = function () {
-                closeMsgBox();
-                reject("false");
-            };
-
-            openMsgBox();
-        });
-    }
-
-    async function exampleFunction() {
-        try {
-            const result = await showConfirmDialog("영수증 반품 하시겠습니까?");
-            return result;
-        } catch (error) {
-            return error;
-        }
-    }
-
-    function openMsgBox() {
-        $('.layer-bg').show();
-        $('.layer').show();
-    }
-
-    function closeMsgBox() {
-        $('.layer').hide();
-        $('.layer-bg').hide();
-    }
-
-    function openNumRecognitionPage() {
-        $('.num-recognition-bg').show();
-        $('.num-recognition').show();
-    }
-
-    function closeNumRecognitionPage() {
-        $('.num-recognition').hide();
-        $('.num-recognition-bg').hide();
-    }
-
-    $("#return-btn").click(function () {
-        let selectedItem = document.querySelector(".receipt-return-list-body > .checked")
-        let sumSalePrice = selectedItem.children[4].dataset.value
-        let cashPayment = selectedItem.children[7].dataset.value
-        if (listLength != 0 && sumSalePrice != cashPayment) {
-            exampleFunction().then((result) => {
-                if (result == "true") {
-                    openNumRecognitionPage();
-                    setTimeout(function () {
-                        let cartNumber = getCreditCartNumbers();
-                        let cartId = document.querySelector(".receipt-return-list-body > .checked").dataset.value
-                        document.querySelector("#cartNum-recognition-input").value = cartNumber;
-                        document.querySelector(".num-recognition-body-bottom > textarea").innerHTML = cartNumber;
-                        try {
-                            $.get("/usr/home/productReturn", {
-                                cartId: cartId
-                            }, function (data) {
-
-                            }, "json")
-                        } catch (e) {
-                            console.log(e)
-                        }
-
-                        setTimeout(function () {
-                            document.querySelector("#cartNum-recognition-input").value = "";
-                            document.querySelector(".num-recognition-body-bottom > textarea").innerHTML = "";
-                            closeNumRecognitionPage();
-                        }, 800);
-                    }, 2500);
-                }
-            })
-        }
-    })
-
-    $("#num-recognition-cancel-btn").click(function () {
-        closeNumRecognitionPage();
-    })
-
-    function getCreditCartNumbers() {
-        let index = 0;
-        let charArr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-
-        let sb = new Array();
-
-        for (let i = 0; i < 16; i++) {
-            index = parseInt(charArr.length * Math.random());
-            sb.push(charArr[index])
-        }
-        return sb.toString().replaceAll(",", "");
-    }
 
 </script>
 <%@include file="../common/footer.jsp" %>
