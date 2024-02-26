@@ -46,22 +46,33 @@ public class HomeService {
 
     // ==============================================================//
 
-    public List<Integer> getPayedTotalAmount(String floor) {
-        return homeDao.getPayedTotalAmount(floor);
+    public List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate) {
+        return homeDao.getPayedTotalAmount(floor, beginDate, endDate);
     }
 
-    public List<Integer> getPayedTotalCnt(String floor) {
-        return homeDao.getPayedTotalCnt(floor);
+    public List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate) {
+        return homeDao.getPayedTotalCnt(floor, beginDate, endDate);
     }
 
-    public List<Integer> getPayedTotalDiscountAmount(String floor) {
-        return homeDao.getPayedTotalDiscountAmount(floor);
+    public List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate) {
+        return homeDao.getPayedTotalDiscountAmount(floor, beginDate, endDate);
     }
 
-    public int getOutstandingAmount(String floor) {
-        return homeDao.getOutstandingAmount(floor);
+    public int getOutstandingAmount(String floor, String beginDate, String endDate) {
+        return homeDao.getOutstandingAmount(floor, beginDate, endDate);
     }
 
+    public List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate) {
+        return homeDao.getNumberOfReturns(floor, beginDate, endDate);
+    }
+
+    public List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate) {
+        return homeDao.getAmountOfReturns(floor, beginDate, endDate);
+    }
+
+    public int getOutstandingTables(String floor) {
+        return homeDao.getOutstandingTables(floor);
+    }
     // ==============================================================//
 
     public List<CartItems> getCurrCartItem(int currTableNum, int floor) {
@@ -125,11 +136,4 @@ public class HomeService {
         return homeDao.getCartItemsList(tableId, floor);
     }
 
-    public List<Integer> getNumberOfReturns(String floor) {
-        return homeDao.getNumberOfReturns(floor);
-    }
-
-    public List<Integer> getAmountOfReturns(String floor) {
-        return homeDao.getAmountOfReturns(floor);
-    }
 }

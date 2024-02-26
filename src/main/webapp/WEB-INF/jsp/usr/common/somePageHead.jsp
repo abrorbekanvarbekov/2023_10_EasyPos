@@ -14,11 +14,11 @@
     <ul class="header-box-detail">
         <li>
             <a href="/?floor=" + ${rq.floor} >
-                <c:if test="${pageName == '메인메뉴'}">
+                <c:if test="${pageName == '메인메뉴' }">
                     <span class="material-symbols-outlined text-4xl">power_settings_new</span>
                 </c:if>
                 <c:if test="${pageName != '메인메뉴'}" >
-                    <span class="material-symbols-outlined text-4xl">close</span>
+                    <span class="material-symbols-outlined text-5xl">close</span>
                 </c:if>
             </a>
         </li>

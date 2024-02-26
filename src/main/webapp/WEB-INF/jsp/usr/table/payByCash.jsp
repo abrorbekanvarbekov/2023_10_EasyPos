@@ -195,12 +195,15 @@
                         amountToBeReceivedCash: ${amountToBeReceivedCash},
                         isPrintReceipt: result,
                     }, function (data) {
+                        console.log(data.msg)
                         if (changeAmount != 0) {
                             openChangeBox("거스름돈  : " + changeAmount.toLocaleString())
                             $("#change-check-btn").click(function () {
                                 closeChangeBox()
                                 location.replace(data.msg);
                             })
+                        }else {
+                            location.replace(data.msg);
                         }
                     }, "json")
 
@@ -256,6 +259,8 @@
                                     closeChangeBox()
                                     location.replace(data.msg);
                                 })
+                            }else {
+                                location.replace(data.msg);
                             }
                         }, "json")
                     })

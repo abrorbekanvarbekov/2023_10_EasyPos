@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.easypos.DAO.HomeDao">
+<mapper namespace="com.example.easypos.DAO.HomeMainDao">
     <select id="getPayedTotalAmount" resultType="int">
         select ifnull(sum(payCart.CartAmountPaid), 0)
         from paymentCreditCartAndCash as payCart
-        <if test="floor == '전체'">
-            where payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCart.floor = 1
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCart.floor = 2
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCart.floor = 3
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
@@ -31,24 +26,19 @@
         union all
         select ifnull(sum(payCash.CashAmountPaid), 0)
         from paymentCreditCartAndCash as payCash
-        <if test="floor == '전체'">
-            where payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCash.floor = 1
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCash.floor = 2
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCash.floor = 3
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
@@ -59,24 +49,19 @@
     <select id="getPayedTotalCnt" resultType="int">
         select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
         from paymentCreditCartAndCash as payCart
-        <if test="floor == '전체'">
-            where payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCart.floor = 1
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCart.floor = 2
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCart.floor = 3
             and payCart.isReturn = 0
             and payCart.regDate &gt; #{beginDate}
@@ -85,24 +70,19 @@
         union all
         select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as cashPaidAllCnt
         from paymentCreditCartAndCash as payCash
-        <if test="floor == '전체'">
-            where payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCash.floor = 1
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCash.floor = 2
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCash.floor = 3
             and payCash.isReturn = 0
             and payCash.regDate &gt; #{beginDate}
@@ -113,24 +93,19 @@
     <select id="getPayedTotalDiscountAmount" resultType="int">
         select ifnull(sum(payCartandCash.discountAmount), 0)
         from paymentCreditCartAndCash as payCartandCash
-        <if test="floor == '전체'">
-            where payCartandCash.isReturn = 0
-            and payCartandCash.regDate &gt; #{beginDate}
-            and payCartandCash.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCartandCash.floor = 1
             and payCartandCash.isReturn = 0
             and payCartandCash.regDate &gt; #{beginDate}
             and payCartandCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCartandCash.floor = 2
             and payCartandCash.isReturn = 0
             and payCartandCash.regDate &gt; #{beginDate}
             and payCartandCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCartandCash.floor = 3
             and payCartandCash.isReturn = 0
             and payCartandCash.regDate &gt; #{beginDate}
@@ -141,24 +116,19 @@
     <select id="getNumberOfReturns" resultType="int">
         select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as returnItemCnt
         from paymentCreditCartAndCash as payCart
-        <if test="floor == '전체'">
-            where payCart.isReturn = 1
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCart.isReturn = 1
             and payCart.floor = 1
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCart.isReturn = 1
             and payCart.floor = 2
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCart.isReturn = 1
             and payCart.floor = 3
             and payCart.regDate &gt; #{beginDate}
@@ -166,25 +136,20 @@
         </if>
         union all
         select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as returnItemCnt
-        from  paymentCreditCartAndCash as payCash
-        <if test="floor == '전체'">
-            where payCash.isReturn = 1
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        from paymentCreditCartAndCash as payCash
+        <if test="floor == 1">
             where payCash.isReturn = 1
             and payCash.floor = 1
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCash.isReturn = 1
             and payCash.floor = 2
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCash.isReturn = 1
             and payCash.floor = 3
             and payCash.regDate &gt; #{beginDate}
@@ -195,24 +160,19 @@
     <select id="getAmountOfReturns" resultType="int">
         select ifnull(sum(payCart.CartAmountPaid), 0)
         from paymentCreditCartAndCash as payCart
-        <if test="floor == '전체'">
-            where payCart.isReturn = 1
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCart.isReturn = 1
             and payCart.floor = 1
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCart.isReturn = 1
             and payCart.floor = 2
             and payCart.regDate &gt; #{beginDate}
             and payCart.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCart.isReturn = 1
             and payCart.floor = 3
             and payCart.regDate &gt; #{beginDate}
@@ -221,24 +181,19 @@
         union all
         select ifnull(sum(payCash.CashAmountPaid), 0)
         from paymentCreditCartAndCash as payCash
-        <if test="floor == '전체'">
-            where payCash.isReturn = 1
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
-        </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where payCash.isReturn = 1
             and payCash.floor = 1
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where payCash.isReturn = 1
             and payCash.floor = 2
             and payCash.regDate &gt; #{beginDate}
             and payCash.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where payCash.isReturn = 1
             and payCash.floor = 3
             and payCash.regDate &gt; #{beginDate}
@@ -254,24 +209,53 @@
             and CartItems.regDate &gt; #{beginDate}
             and CartItems.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '1층'">
+        <if test="floor == 1">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 1
             and CartItems.regDate &gt; #{beginDate}
             and CartItems.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '2층'">
+        <if test="floor == 2">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 2
             and CartItems.regDate &gt; #{beginDate}
             and CartItems.regDate &lt; #{endDate}
         </if>
-        <if test="floor == '3층'">
+        <if test="floor == 3">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 3
             and CartItems.regDate &gt; #{beginDate}
             and CartItems.regDate &lt; #{endDate}
         </if>
+    </select>
+
+
+    <!--     ======================== 기초정보 관리  ====================== -->
+
+    <select id="getBigClassification" resultType="productBigClassification">
+        select * from productBigClassification
+        <if test="classificationName != ''">
+            where bigClassificationName = #{classificationName}
+        </if>
+        order by id ASC
+    </select>
+
+    <select id="getMiddleClassification" resultType="productMiddleClassification">
+        select * from productMiddleClassification
+        where bigClassificationName = #{bigClassificationName}
+        <if test="classificationName != ''">
+            and middleClassificationName = #{classificationName}
+        </if>
+        order by id ASC
+    </select>
+
+    <select id="getSmallClassification" resultType="productSmallClassification">
+        select * from productSmallClassification
+        where middleClassificationName = #{middleClassificationName}
+        <if test="classificationName != ''">
+            and smallClassificationName = #{classificationName}
+        </if>
+        order by id ASC
     </select>
 </mapper>
 

@@ -47,7 +47,7 @@
                 </li>
                 <li>
                     <span>반품금액</span>
-                    <span>0</span>
+                    <span>${amountOfReturns.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
                 </li>
             </ul>
             <ul class="settlementDetails">
@@ -217,7 +217,7 @@
             </div>
             <hr>
             <div>
-                <button class="btn btn-outline bg-blue-500 text-white">마감</button>
+                <button class="btn btn-outline bg-blue-500 text-white" id="deadline-btn">마감</button>
                 <button class="btn btn-outline text-blue-400">이전내역 재발행</button>
                 <button class="btn btn-outline text-blue-400">마감 정산지 출력</button>
             </div>
@@ -228,9 +228,140 @@
         <span class="msg-tag"></span>
     </div>
 </div>
+<div class="messagePage-msg-box">
+    <div class="layer-bg"></div>
+    <div class="layer">
+        <div class="confirm-message"></div>
+        <button id="check-btn" value="true" class="btn btn-active btn-info  mt-2 confirm-button">확인</button>
+        <button id="cancel-btn" value="false" class="btn btn-active btn-ghost mt-2 cancel-button">취소</button>
+    </div>
+
+    <div class="layer-bg-1"></div>
+    <div class="layer-1">
+        <div class="confirm-message-1"></div>
+        <hr>
+        <button id="check-btn-1" class="btn btn-active btn-info  mt-2 confirm-button-1">확인</button>
+    </div>
+
+    <div class="program-exit-layer-bg">
+        <div class="program-exit-layer">
+            <div class="program-exit-message"></div>
+            <hr>
+            <span class="program-exit-timer">10</span>
+            <button id="program-exit-btn" class="btn btn-active btn-info  mt-2 confirm-button-1">확인</button>
+        </div>
+    </div>
+</div>
+
 
 <script>
+    function showConfirmDialog(message) {
+        return new Promise((resolve, reject) => {
+            let confirmMessage = document.querySelector(".confirm-message");
+            let confirmButton = document.querySelector(".confirm-button");
+            let cancelButton = document.querySelector(".cancel-button");
 
+            confirmMessage.textContent = message;
+
+            confirmButton.onclick = function () {
+                closeMsgBox();
+                resolve("true");
+            };
+
+            cancelButton.onclick = function () {
+                closeMsgBox();
+                reject("false");
+            };
+
+            openMsgBox();
+        });
+    }
+
+    function openMsgBox() {
+        $('.layer-bg').show();
+        $('.layer').show();
+    }
+
+    function closeMsgBox() {
+        $('.layer').hide();
+        $('.layer-bg').hide();
+    }
+
+    //  ============================================ //
+    function showMsgBoxOnlyCheckBtn(message) {
+        return new Promise((resolve, reject) => {
+            let programExitMsg = document.querySelector(".program-exit-message");
+            let programExitTimer = document.querySelector(".program-exit-timer");
+            let confirmButton = document.querySelector("#program-exit-btn");
+            let timer = 10
+            programExitMsg.textContent = message;
+
+
+            let interval = setInterval(function () {
+                programExitTimer.textContent = timer;
+                timer--;
+                if (timer <= -1) {
+                    closeMsgBoxOnlyCheckBtn();
+                    clearInterval(interval);
+                    resolve("true");
+                }
+            }, 1000)
+
+            confirmButton.onclick = function () {
+                closeMsgBoxOnlyCheckBtn();
+                resolve("true");
+            };
+
+            openMsgBoxOnlyCheckBtn();
+        });
+    }
+
+    function closeMsgBoxOnlyCheckBtn() {
+        $('.program-exit-layer').hide();
+        $('.program-exit-layer-bg').hide();
+    }
+
+    function openMsgBoxOnlyCheckBtn() {
+        $('.program-exit-layer').show();
+        $('.program-exit-layer-bg').show();
+    }
+
+    $("#deadline-btn").click(async function () {
+        let result = "true";
+        let outstandingTables = ${outstandingTables};
+        try {
+            if (outstandingTables > 0) {
+                result = await showConfirmDialog("미결제된 테이블이 ${outstandingTables}건 있습니다. 그대로 마감을 진행하시겠습니까?");
+            }
+
+            if (result == "true") {
+                const result2 = await showConfirmDialog("${businessDateToFormat} 영업을 마감하시겠습니까?");
+                if (result2 == "true") {
+                    const result3 = await showConfirmDialog("현금 시재 입력되지 않았습니다. 현금 시재를 입력하지 않은 채로 마감을 진행하시겠습니까?");
+                    if (result3 == "true") {
+                        $.get("/usr/home-main/setDeadlineSettlement", {
+                            businessDate: '${businessDate}',
+                            openingDate: '${openingTime}',
+                            employeeName: '${rq.getLoginedEmployee().getName()}',
+                            employeeCode: '${rq.getLoginedEmployee().getEmployeeCode()}',
+                            totalSales: ${payedTotalAmount},
+                            totalSalesCount: ${payedCartCnt},
+                            discountAmount: ${payedTotalDiscountAmount},
+                            VAT: ${VAT_Amount},
+                            NETSales: ${NETsaleAmount},
+                            amountOfReturns: ${amountOfReturns},
+                            paidByCash: ${payedCashSumAmount},
+                            paidByCart: ${payedCartSumAmount}
+                        }, async function (data) {
+                            const exit = await showMsgBoxOnlyCheckBtn("프로그램 종료합니다.")
+                            if (exit == "true") location.replace(data.msg);
+                        }, "json")
+                    }
+                }
+            }
+        } catch (error) {
+        }
+    });
 
 </script>
 

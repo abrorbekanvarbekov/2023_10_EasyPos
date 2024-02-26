@@ -18,5 +18,5 @@ server:
       timeout: 86400
 
 mybatis:
-  type-aliases-package: com.example.easypos.Vo
+  type-aliases-package: com.example.easypos.Vo, com.example.easypos.VoBasicInformation
   mapper-locations: mapper/**.xml

@@ -1,7 +1,11 @@
 package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.CartItems;
+import com.example.easypos.Vo.deadlineSettlement;
 import com.example.easypos.Vo.paymentCreditCartAndCash;
+import com.example.easypos.VoBasicInformation.productBigClassification;
+import com.example.easypos.VoBasicInformation.productMiddleClassification;
+import com.example.easypos.VoBasicInformation.productSmallClassification;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -71,4 +75,67 @@ public interface HomeMainDao {
             where cart_id = #{cartId}
             """)
     void cancelReturnPaymentCash(int cartId);
+
+    List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate);
+
+    List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate);
+
+    List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate);
+
+    List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate);
+
+    List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate);
+
+    int getOutstandingAmount(String floor, String beginDate, String endDate);
+
+    @Select("""
+            select count(*) from CartItems
+            where delStatus = 0;
+            """)
+    int getOutstandingTables(String floor);
+
+    @Insert("""
+            insert into deadlineSettlement
+            set businessDate = #{businessDate},
+                updateDate = now(),
+                openingDate = #{openingDate},
+                employeeName = #{employeeName},
+                employeeCode = #{employeeCode},
+                totalSales = #{totalSales},
+                totalSalesCount = #{totalSalesCount},
+                discountAmount = #{discountAmount},
+                VAT = #{VAT},
+                NETSales = #{NETSales},
+                amountOfReturns = #{amountOfReturns},
+                paidByCash = #{paidByCash},
+                paidByCart = #{paidByCart}
+            """)
+    void insertDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+                                  int discountAmount, int VAT, int  NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+
+    @Select("""
+            select * from deadlineSettlement
+            where businessDate = #{businessDate}
+            """)
+    deadlineSettlement getDeadlineSettlement(String businessDate);
+
+    @Update("""
+            update deadlineSettlement
+                set businessDate = #{businessDate},
+                    updateDate = now(),
+                    openingDate = #{openingDate},
+                    employeeName = #{employeeName},
+                    employeeCode = #{employeeCode},
+                    totalSales = #{totalSales},
+                    totalSalesCount = #{totalSalesCount},
+                    discountAmount = #{discountAmount},
+                    VAT = #{VAT},
+                    NETSales = #{NETSales},
+                    amountOfReturns = #{amountOfReturns},
+                    paidByCash = #{paidByCash},
+                    paidByCart = #{paidByCart}
+            """)
+    void updateDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+                                  int discountAmount, int VAT, int  NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+
 }

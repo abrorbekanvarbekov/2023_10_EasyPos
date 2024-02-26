@@ -104,15 +104,17 @@ public class HomeController {
     @RequestMapping("/usr/main/salesSummary")
     public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) {
 
-        List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor);
-        List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor);
-        List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor);
-        List<Integer> numberOfReturns = homeService.getNumberOfReturns(floor);
-        List<Integer> amountOfReturns = homeService.getAmountOfReturns(floor);
-        int outstandingAmount = homeService.getOutstandingAmount(floor);
-        int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String businessDate = businessFullDate[0];
+        String beginDate = businessDate + " 00:00:00";
+        String endDate = businessDate + " 23:59:59";
+        List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor, beginDate, endDate);
+        List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor, beginDate, endDate);
+        List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor, beginDate, endDate);
+        List<Integer> numberOfReturns = homeService.getNumberOfReturns(floor, beginDate, endDate);
+        List<Integer> amountOfReturns = homeService.getAmountOfReturns(floor, beginDate, endDate);
+        int outstandingAmount = homeService.getOutstandingAmount(floor, beginDate, endDate);
+        int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
 
         model.addAttribute("floor", floor);
         model.addAttribute("businessDate", businessDate);

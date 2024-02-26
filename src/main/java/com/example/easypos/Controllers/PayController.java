@@ -97,6 +97,7 @@ public class PayController {
             payService.removePaidCartItem(floor, tabId);
             payService.removeCart(floor, tabId);
             rq.leftAmount(0);
+
             return ResultDate.from("S-1", String.format("/?floor=%d", floor));
         } else {
             payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId());

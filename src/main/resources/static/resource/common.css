@@ -1228,7 +1228,9 @@ body .header-box li:hover, .header-box-detail li:hover {
 .messagePage-msg-box >
 .layer, .layer-1,
 .layer-bg, .layer-bg-1,
-.change-layer, .change-layer-bg {
+.change-layer, .change-layer-bg,
+.program-exit-layer-bg,
+.program-exit-layer {
     display: none;
 }
 
@@ -1247,8 +1249,22 @@ body .header-box li:hover, .header-box-detail li:hover {
     z-index: 2;
 }
 
+.program-exit-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgba(255, 255, 255);
+    color: white;
+    width: 47%;
+    height: 54%;
+    border-radius: 10px;
+    border: 8px solid darkgray;
+    z-index: 2;
+}
 
-.layer-bg, .layer-bg-1 {
+
+.layer-bg, .layer-bg-1, .program-exit-layer-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -1258,12 +1274,21 @@ body .header-box li:hover, .header-box-detail li:hover {
     z-index: 1;
 }
 
+.program-exit-layer > .program-exit-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: black;
+    margin: 100px;
+    padding: 1% 11%;
+}
+
 .layer > .confirm-message,
 .layer-1 > .confirm-message-1 {
     text-align: center;
     font-size: 1.2rem;
     color: black;
     margin: 100px;
+    padding: 1% 11%;
 }
 
 .change-layer > .change-confirm-message {
@@ -1273,13 +1298,23 @@ body .header-box li:hover, .header-box-detail li:hover {
     margin: 100px;
 }
 
-.change-layer > #change-check-btn {
+.change-layer > #change-check-btn,
+.program-exit-layer > #program-exit-btn {
     position: absolute;
     width: 30%;
     height: 1.5%;
     left: 35%;
     bottom: 16%;
     color: white;
+}
+
+.program-exit-layer > .program-exit-timer {
+    position: absolute;
+    color: black;
+    left: 7%;
+    bottom: 12%;
+    font-size: 3rem;
+
 }
 
 .layer > #check-btn {
@@ -2292,22 +2327,57 @@ body .header-box li:hover, .header-box-detail li:hover {
     padding: 1%;
 }
 
-.settlementDetails:not(:nth-child(3)) {
+.settlementDetails:not(:nth-child(n + 3)) {
     display: flex;
     flex-direction: column;
     width: 22%;
     height: 55%;
 }
 
-.settlementDetails:nth-child(3){
+.settlementDetails:nth-child(3) {
     display: flex;
     flex-direction: column;
     width: 22%;
     height: 62%;
 }
 
-.settlementDetails:nth-child(6){
-    margin-top: 4%;
+.settlementDetails:nth-child(4) {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    height: 62%;
+}
+
+.settlementDetails:nth-child(5) {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    height: 40%;
+}
+
+.settlementDetails:nth-child(5) li {
+    display: flex;
+    width: 100%;
+    height: 19.9%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-size: 0.8rem;
+}
+
+.settlementDetails:nth-child(6) {
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    height: 32%;
+    margin-top: -5%;
+    margin-left: 51%;
+}
+
+.settlementDetails:nth-child(6) li {
+    display: flex;
+    width: 100%;
+    height: 24.9%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-size: 0.8rem;
 }
 
 .settlementDetails > div {
@@ -2315,11 +2385,11 @@ body .header-box li:hover, .header-box-detail li:hover {
     justify-content: start;
     align-items: center;
     width: 100%;
-    height: 10%;
+    height: 12%;
     border-bottom: 1px solid rgba(169, 169, 169, .3);
 }
 
-.settlementDetails li {
+.settlementDetails:not(:nth-child(n + 5)) li {
     display: flex;
     width: 100%;
     height: 12.9%;
@@ -2409,5 +2479,321 @@ body .header-box li:hover, .header-box-detail li:hover {
     border: 1px solid #2B7ABB;
     margin-bottom: 4%;
     font-size: 1.1rem;
+}
+
+/* ==================================================================*/
+/* =========== 기초정보 =============================*/
+body, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.side-bar {
+    width: 17%;
+    height: 92%;
+    background-color: #575B6D;
+    position: fixed;
+    top: 8%;
+    left: -15%;
+    transition: left 0.5s, background-color 0.5s;
+}
+
+
+.side-bar > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+    width: 100%;
+    height: 5%;
+}
+
+.side-bar > .status-icons > div {
+    text-align: right;
+    padding: 6px;
+    color: white;
+}
+
+.side-bar:hover {
+    left: 0;
+    background-color: #575B6D;
+    transition: left 0.5s;
+    color: white;
+    z-index: 999;
+}
+
+.side-bar:hover .status-icons,
+.side-bar:hover .menu-box ul > li,
+.side-bar:hover div:nth-child(2) {
+    border-bottom: 2px solid gray;
+}
+
+
+.side-bar > .status-icons > div:last-child {
+    display: none;
+}
+
+.side-bar:hover > .status-icons > div:first-child {
+    display: none;
+}
+
+.side-bar:hover > .status-icons > div:last-child {
+    display: block;
+}
+
+
+.side-bar > .menu-box ul > li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: white;
+    z-index: 999;
+}
+
+.side-bar > .menu-box ul > li > a {
+    display: block;
+    padding: 2% 2%;
+    font-weight: bold;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.side-bar > .menu-box ul > li:hover {
+    background-color: #464A5B;
+    color: white;
+}
+
+.side-bar > .menu-box ul > li > ul > li:hover {
+    background-color: #464A5B;
+    color: #FBD3AD;
+}
+
+/*.side-bar > .menu-box ul > li > a:not(:only-child)::after {*/
+/*    content: "[+]"*/
+/*}*/
+
+/*.side-bar > .menu-box ul > li:hover > a:not(:only-child)::after {*/
+/*    content: "[-]"*/
+/*}*/
+
+.side-bar > .menu-box > ul ul {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 80%;
+    background-color: #575B6D;
+}
+
+.side-bar > .menu-box ul > li:hover > ul {
+    display: block;
+}
+
+
+.basicInformation-left {
+    display: none;
+    position: absolute;
+    width: 98%;
+    height: 92%;
+    left: 2%;
+    top: 8%;
+    transition: left 0.5s, background-color 0.5s;
+    background-color: #FFFFFF;
+}
+
+.side-bar:hover ~ .basicInformation-left {
+    left: 17%;
+    width: 83%;
+}
+
+
+/*  ==================== Product Classification ===========*/
+
+.productClassificationPage {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.classification-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 6%;
+    padding: 0.5% 1%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+}
+
+.classification-top > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.classification-top > div:nth-child(2) {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 40%;
+    height: 92%;
+}
+
+.classification-top > div:nth-child(2) > button {
+    width: 15%;
+    height: 100%;
+    background-color: #4D5460;
+    color: white;
+    border-right: 1px solid white;
+}
+
+.classification-middle {
+    width: 100%;
+    height: 15%;
+}
+
+.classification-middle > ul {
+    display: flex;
+    justify-content: space-around;
+    width: 96%;
+    height: 54%;
+    margin: 2%;
+    border-radius: 5px;
+    background-color: #F3F3F4;
+    border: 1px solid #DEDDE2;
+}
+
+.classification-middle > ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 1%;
+    width: 33%;
+}
+
+.classification-middle > ul li > input {
+    width: 64%;
+    height: 90%;
+    border: 1px solid #A6A6A9;
+    outline: none;
+}
+
+.classification-middle > ul li > button {
+    background-color: #EAECF0;
+    color: black;
+    width: 18%;
+}
+
+.classification-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 0% 2%;
+    width: 100%;
+    height: 76%;
+    overflow-y: scroll;
+}
+
+.classification-bottom > .classification-boxes {
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    height: 100%;
+}
+
+.classification-boxes > .remove-add-btn {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    height: 6%;
+    border-bottom: 2px solid red;
+}
+
+.classification-boxes > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 9%;
+    padding-left: 2%;
+    background-color: #E7E9EE;
+    border-bottom: 1px solid rgba(248, 248, 248, 1);
+}
+
+.classification-boxes > div:nth-child(2) > input {
+    width: 8%;
+    height: 100%;
+    accent-color: purple;
+}
+
+.classification-boxes > div:nth-child(2) > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34%;
+    height: 100%;
+    border-right: 1px solid #D9D9D9;
+}
+
+.classification-boxes > div:nth-child(2) > span:nth-child(3) {
+    width: 84%;
+    height: 100%;
+}
+
+.classification-boxes > ul:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+
+.classification-boxes > ul > .alertMsg {
+    display: flex;
+    width: 70%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-31%, -50%);
+}
+
+.classification-boxes > ul:nth-child(3) li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 7%;
+    padding-left: 2%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D9D9D9;
+    cursor: default;
+}
+
+.classification-boxes > ul:nth-child(3) li > input:first-child {
+    width: 8%;
+    height: 100%;
+}
+
+.classification-boxes > ul:nth-child(3) li > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34%;
+    height: 100%;
+    border-right: 1px solid #D9D9D9;
+}
+
+.classification-boxes > ul:nth-child(3) li > input:nth-child(3) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+    border-right: 1px solid #D9D9D9;
+    outline-color: red;
+    cursor: default;
 }
 

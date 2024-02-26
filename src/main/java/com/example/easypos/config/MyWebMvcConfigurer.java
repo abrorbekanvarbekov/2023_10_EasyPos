@@ -34,12 +34,22 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/usr/main/salesSummary")
                 .addPathPatterns("/usr/member/employeeListPage")
                 .addPathPatterns("/usr/tables/detail")
-                .addPathPatterns("/usr/home/homeMainPage");
+                .addPathPatterns("/usr/home/homeMainPage")
+                .addPathPatterns("/usr/home-main/receiptReturn")
+                .addPathPatterns("/usr/home-main/salesHistory")
+                .addPathPatterns("/usr/tables/orderPage/payByCreditCart")
+                .addPathPatterns("/usr/tables/orderPage/payByCash")
+                .addPathPatterns("/usr/home-main/deadlineSettlement");
         registry.addInterceptor(needEmployeeLoginInterceptor)
                 .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
                 .addPathPatterns("/usr/tables/detail")
-                .addPathPatterns("/usr/home/homeMainPage");
+                .addPathPatterns("/usr/home/homeMainPage")
+                .addPathPatterns("/usr/home-main/receiptReturn")
+                .addPathPatterns("/usr/home-main/salesHistory")
+                .addPathPatterns("/usr/tables/orderPage/payByCreditCart")
+                .addPathPatterns("/usr/tables/orderPage/payByCash")
+                .addPathPatterns("/usr/home-main/deadlineSettlement");
     }
 
 }

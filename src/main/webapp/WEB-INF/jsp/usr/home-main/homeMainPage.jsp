@@ -1,11 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<c:set var="pageTitle" value="homeMain"/>
+<c:set var="pageTitle" value="home-main"/>
 <c:set var="pageName" value="메인메뉴"/>
 <%@include file="../common/somePageHead.jsp" %>
 
 <section class="main-manu-container">
+    <div class="main-manu-head">
+        <c:forEach begin="1" end="20" varStatus="status">
+            <span></span>
+        </c:forEach>
+    </div>
     <div class="mainManu-top-part">
         <div class="mainMain-topPart-left">
             <a href="/?floor=1">
@@ -55,7 +60,7 @@
                 </div>
                 <span>기초정보수신</span>
             </div>
-            <div>
+            <div onclick="location.replace('/usr/home-main/salesInformationManagement')">
                 <div>
                     <span class="material-symbols-outlined text-white text-7xl">desktop_mac</span>
                 </div>
@@ -69,11 +74,7 @@
             </div>
         </div>
     </div>
-    <div class="main-manu-head">
-        <c:forEach begin="1" end="20" varStatus="status">
-            <span></span>
-        </c:forEach>
-    </div>
+
     <div class="mainManu-bottom-part">
         <div>
             <div>
@@ -130,9 +131,9 @@
             <span>간이영수증인쇄</span>
         </div>
         <div>
-           <div>
-               <span class="material-symbols-outlined">redeem</span>
-           </div>
+            <div>
+                <span class="material-symbols-outlined">redeem</span>
+            </div>
             <span>상품권판매</span>
         </div>
         <div>

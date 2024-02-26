@@ -67,18 +67,23 @@ public interface HomeDao {
 
 // ==============================================================//
 
-    List<Integer> getPayedTotalAmount(String floor);
+    List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate);
 
-    List<Integer> getPayedTotalCnt(String floor);
+    List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate);
 
-    List<Integer> getPayedTotalDiscountAmount(String floor);
+    List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate);
 
-    List<Integer> getNumberOfReturns(String floor);
+    List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate);
 
-    List<Integer> getAmountOfReturns(String floor);
+    List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate);
 
-    int getOutstandingAmount(String floor);
+    int getOutstandingAmount(String floor, String beginDate, String endDate);
 
+    @Select("""
+            select count(*) from CartItems
+            where delStatus = 0;
+            """)
+    int getOutstandingTables(String floor);
     // ==============================================================//
 
     @Select("""
