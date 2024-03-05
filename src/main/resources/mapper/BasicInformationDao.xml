@@ -6,8 +6,14 @@
 
     <select id="getBigClassification" resultType="productBigClassification">
         select * from productBigClassification
+        <if test="bigClassificationCode != ''">
+            where bigClassificationCode = #{bigClassificationCode}
+        </if>
         <if test="searchClassificationName != ''">
             where bigClassificationName LIKE CONCAT('%', #{searchClassificationName}, '%')
+        </if>
+        <if test="searchClassificationName != '' and bigClassificationCode != '' ">
+            and bigClassificationName LIKE CONCAT('%', #{searchClassificationName}, '%')
         </if>
         order by id ASC
     </select>
@@ -24,11 +30,58 @@
     <select id="getSmallClassification" resultType="productSmallClassification">
         select * from productSmallClassification
         where bigClassificationCode = #{bigClassificationCode}
-          and middleClassificationCode = #{middleClassificationCode}
+        and middleClassificationCode = #{middleClassificationCode}
         <if test="searchClassificationName != ''">
             and smallClassificationName LIKE CONCAT('%', #{searchClassificationName}, '%')
         </if>
         order by id ASC
+    </select>
+
+    <select id="getProductList" resultType="Product">
+        select p.id, p.productCode, p.productKorName, p.productEngName, p.price, p.costPrice,
+        pBC.bigClassificationName as bigClassificationName,
+        pBC.bigClassificationCode as bigClassificationCode,
+        pMC.middleClassificationName as middleClassificationName,
+        pMC.middleClassificationCode as middleClassificationCode,
+        pSC.smallClassificationName as smallClassificationName,
+        pSC.smallClassificationCode as smallClassificationCode
+        from product as p
+        inner join productBigClassification as pBC on p.bigClassificationCode = pBC.bigClassificationCode
+        inner join productMiddleClassification pMC on p.bigClassificationCode = pMC.bigClassificationCode
+                                                and p.middleClassificationCode = pMC.middleClassificationCode
+        inner join productSmallClassification pSC on p.bigClassificationCode = pSC.bigClassificationCode
+                                                and p.middleClassificationCode = pSC.middleClassificationCode
+                                                and p.smallClassificationCode = pSC.smallClassificationCode
+        <if test="bigClassificationCode != '' and bigClassificationCode != 'allBigClassification'">
+            where p.bigClassificationCode = #{bigClassificationCode}
+        </if>
+
+        <if test="middleClassificationCode != '' and middleClassificationCode != 'allMiddleClassification'">
+            and p.middleClassificationCode = #{middleClassificationCode}
+        </if>
+
+        <if test="smallClassificationCode != '' and smallClassificationCode != 'allSmallClassification'">
+            and p.smallClassificationCode = #{smallClassificationCode}
+        </if>
+
+        <if test="productName != '' ">
+            <choose>
+                <when test="searchCategory == '상품명' and bigClassificationCode == 'allBigClassification' ">
+                    where p.productKorName LIKE CONCAT('%', #{productName}, '%')
+                </when>
+                <when test="searchCategory == '상품명' and bigClassificationCode != 'allBigClassification' ">
+                    and p.productKorName LIKE CONCAT('%', #{productName}, '%')
+                </when>
+
+                <when test="searchCategory == '상품코드' and bigClassificationCode == 'allBigClassification' ">
+                    where p.productCode LIKE CONCAT('%', #{productName}, '%')
+                </when>
+                <when test="searchCategory == '상품코드' and bigClassificationCode != 'allBigClassification' ">
+                    and p.productCode LIKE CONCAT('%', #{productName}, '%')
+                </when>
+            </choose>
+        </if>
+        order by p.id ASC
     </select>
 </mapper>
 

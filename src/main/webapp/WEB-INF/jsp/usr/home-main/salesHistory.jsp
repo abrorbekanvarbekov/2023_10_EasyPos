@@ -90,7 +90,7 @@
                         <span data-value="${paymentCartAndCash.sumCartAmountPaid}">${paymentCartAndCash.sumCartAmountPaid}</span>
                     </li>
                 </c:forEach>
-                <c:if test="${paymentCartAndCashList.size() <= 12}">
+                <c:if test="${paymentCartAndCashList.size() <= 24}">
                     <c:forEach begin="${paymentCartAndCashList.size() + 1}" end="12" varStatus="asd">
                         <li>
                             <c:forEach begin="1" end="9" varStatus="dsa">

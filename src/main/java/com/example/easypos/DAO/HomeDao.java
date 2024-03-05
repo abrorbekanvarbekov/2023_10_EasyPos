@@ -29,7 +29,7 @@ public interface HomeDao {
     List<Table> getTableList(int floor);
 
     @Select("""
-            select c.*, p.name,
+            select c.*, p.productKorName,
                     sum(c.productSumPrice ) as priceSum
                 from CartItems as c
                          inner join product as p

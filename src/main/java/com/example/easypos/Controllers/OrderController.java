@@ -157,7 +157,7 @@ public class OrderController {
                         Product orderProduct = orderService.getProductName(productIdList.get(i));
                         System.out.println("     [주문서]     ");
                         System.out.println(String.format("[%d층]  %d번", floor, tabId));
-                        System.out.println(String.format("%s   " + "    %d", orderProduct.getName(), productCntList.get(i)));
+                        System.out.println(String.format("%s   " + "    %d", orderProduct.getProductKorName(), productCntList.get(i)));
                         System.out.println("        " + now.format(formatter));
                         System.out.println("고객수 :   0");
                         System.out.println("주문번호 :   0");

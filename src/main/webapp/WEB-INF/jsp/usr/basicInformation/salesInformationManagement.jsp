@@ -213,7 +213,7 @@
         $.get("/usr/basic-information/getBigClassification", {
             searchClassificationName: searchClassificationName
         }, function (data) {
-            let bigClassificationList = data.data1
+            let bigClassificationList = data
             let bigClassificationNode = document.querySelector(".productBigClassification");
 
             // ============== bigClassification ========= //
@@ -264,10 +264,10 @@
 
     function getMiddleClassificationList(searchClassificationName, bigClassificationCode) {
         $.get("/usr/basic-information/getMiddleClassification", {
-            classificationCode: bigClassificationCode,
+            bigClassificationCode: bigClassificationCode,
             searchClassificationName: searchClassificationName
         }, function (data) {
-            let middleClassificationList = data.data1
+            let middleClassificationList = data
             let middleClassificationNode = document.querySelector(".productMiddleClassification");
 
             // ========== middleClassification ============== //
@@ -325,7 +325,7 @@
             middleClassificationCode: middleClassificationCode,
             searchClassificationName: searchClassificationName
         }, function (data) {
-            let smallClassificationList = data.data1
+            let smallClassificationList = data
             let smallClassificationNode = document.querySelector(".productSmallClassification");
 
             // ========= smallClassification ============== //
@@ -408,9 +408,14 @@
                 let removeClassificationId = removeClassifications[i].id.substring(removeClassifications[i].id.indexOf("_") + 1);
                 let removeClassificationType = removeClassifications[i].id.substring(0, removeClassifications[i].id.indexOf("_"));
                 let checkedBigClassificationCode = $(".productBigClassification li.checked")[0].children[1].textContent;
-                let checkedMiddleClassificationCode = $(".productMiddleClassification li.checked")[0].children[1].textContent;
-                let result = confirm("삭제 하시겠습니까?");
+                let checkedMiddleClassificationCode = 0;
+                let checkedMiddleClassification = $(".productMiddleClassification li.checked")
 
+                if (checkedMiddleClassification.length != 0) {
+                    checkedMiddleClassificationCode = checkedMiddleClassification[0].children[1].textContent;
+                }
+
+                let result = confirm("삭제 하시겠습니까?");
                 if (result) {
                     $.get("/usr/basic-information/removeClassification", {
                         removeClassificationId: removeClassificationId,

@@ -1,6 +1,7 @@
 package com.example.easypos.Services;
 
 import com.example.easypos.DAO.BasicInformationDao;
+import com.example.easypos.Vo.Product;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -19,8 +20,11 @@ public class BasicInformationService {
         this.basicInformationDao = basicInformationDao;
     }
 
-    public List<productBigClassification> getBigClassification(String searchClassificationName) {
-        return basicInformationDao.getBigClassification(searchClassificationName);
+
+    //     ===================================== 상품분류관리 ======================= //
+
+    public List<productBigClassification> getBigClassification(String searchClassificationName, String bigClassificationCode) {
+        return basicInformationDao.getBigClassification(searchClassificationName, bigClassificationCode);
     }
 
     public List<productMiddleClassification> getMiddleClassifications(String searchClassificationName, String bigClassificationCode) {
@@ -87,5 +91,14 @@ public class BasicInformationService {
 
     public void removeSmallClassification(String removeClassificationId, String checkedBigClassificationCode, String checkedMiddleClassificationCode) {
         basicInformationDao.removeSmallClassification(removeClassificationId, checkedBigClassificationCode, checkedMiddleClassificationCode);
+    }
+
+
+    //     ===================================== 상품 조회 ======================= //
+
+    public List<Product> getProductList(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
+                                        String searchCategory, String productName) {
+        return basicInformationDao.
+                getProductList(bigClassificationCode, middleClassificationCode, smallClassificationCode, searchCategory, productName);
     }
 }

@@ -1,12 +1,11 @@
-@font-face {
-    font-family: 'GmarketSansMedium';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-    font-weight: normal;
+.roboto-bold {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
     font-style: normal;
 }
 
 html > body {
-    font-family: 'GmarketSansMedium', sans-serif;
+    font-family: "Roboto", sans-serif;
     text-underline-position: under;
 }
 
@@ -729,7 +728,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     color: dodgerblue;
 }
 
-.allProductInfo div:not(div:last-child) span, input {
+.allProductInfo div:not(div:last-child) span {
     display: flex;
     padding: 4px 10px 4px 13px;
     width: 50%;
@@ -2494,6 +2493,14 @@ a {
     color: inherit;
 }
 
+.basic-information-container {
+    width: 100%;
+    height: 92%;
+    position: relative;
+    top: 0%;
+    left: 0%;
+}
+
 .side-bar {
     width: 17%;
     height: 92%;
@@ -2595,33 +2602,37 @@ a {
 }
 
 
-.basicInformation-left {
+/*  ==================== Product Classification ===========*/
+.basicInformation-left,
+.product-lookUp-page,
+.add-product-page {
     display: none;
-    position: absolute;
+    position: relative;
     width: 98%;
     height: 92%;
     left: 2%;
-    top: 8%;
+    top: 0%;
     transition: left 0.5s, background-color 0.5s;
     background-color: #FFFFFF;
 }
 
-.side-bar:hover ~ .basicInformation-left {
+.side-bar:hover ~ .basicInformation-left,
+.side-bar:hover ~ .product-lookUp-page,
+.side-bar:hover ~ .add-product-page {
     left: 17%;
     width: 83%;
 }
 
-
-/*  ==================== Product Classification ===========*/
-
-.productClassificationPage {
+.productClassificationPage,
+.product-lookUp-container {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
 }
 
-.classification-top {
+.classification-top,
+.product-lookUp-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2637,7 +2648,8 @@ a {
     align-items: center;
 }
 
-.classification-top > div:nth-child(2) {
+.classification-top > div:nth-child(2),
+.product-lookUp-top > div:nth-child(2) {
     display: flex;
     justify-content: end;
     align-items: center;
@@ -2645,17 +2657,39 @@ a {
     height: 92%;
 }
 
-.classification-top > div:nth-child(2) > button {
-    width: 15%;
+.classification-top > div:nth-child(2) > button:not(:nth-child(1)),
+.product-lookUp-top > div:nth-child(2) > button:not(:nth-child(1)) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 16%;
     height: 100%;
-    background-color: #4D5460;
+    background-color: #626A78;
     color: white;
     border-right: 1px solid white;
+    font-size: clamp(0.7rem, 1vw, 2rem);
 }
 
-.classification-middle {
+.classification-top > div:nth-child(2) > button:nth-child(1),
+.product-lookUp-top > div:nth-child(2) > button:nth-child(1) {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    width: 16%;
+    height: 100%;
+    padding: 0;
+    background-color: #626A78;
+    color: white;
+    border-right: 1px solid white;
+    font-size: clamp(0.7rem, 1vw, 2rem);
+}
+
+.classification-middle,
+.product-lookUp-middle {
+    padding: 0% 1%;
     width: 100%;
-    height: 15%;
+    height: 13%;
+    border-bottom: 1px solid #DADADC;
 }
 
 .classification-middle > ul {
@@ -2668,6 +2702,47 @@ a {
     background-color: #F3F3F4;
     border: 1px solid #DEDDE2;
 }
+
+/*  ===== product-lookUp-middle =======*/
+.product-lookUp-middle > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    padding-left: 2%;
+    background-color: #ebebeb;
+}
+
+.product-lookUp-middle div > span {
+    width: 11%;
+    height: 100%;
+    text-align: center;
+    padding: 1.3% 2%;
+}
+
+.product-lookUp-middle > div:nth-child(1) > select {
+    width: 15%;
+    height: 32%;
+    text-align: center;
+    margin-right: 1%;
+}
+
+.product-lookUp-middle > div:nth-child(2) > select {
+    width: 10%;
+    height: 32%;
+    text-align: center;
+    margin-right: 1%;
+}
+
+.product-lookUp-middle > div:nth-child(2) > input {
+    width: 20%;
+    height: 50%;
+    text-align: center;
+    margin-right: 1%;
+    text-align: left;
+}
+
+/* =========================================*/
 
 .classification-middle > ul li {
     display: flex;
@@ -2699,6 +2774,187 @@ a {
     overflow-y: scroll;
 }
 
+.product-lookUp-container > .remove-add-btn {
+    width: 100%;
+    height: 3%;
+    text-align: right;
+    margin-top: .3%;
+}
+
+/* =========== product-LookUp-bottom =================*/
+
+.product-lookUp-bottom {
+    display: flex;
+    flex-direction: column;
+    padding: 0% 1%;
+    width: 100%;
+    height: 53%;
+    border-top: 2px solid red;
+    margin-top: 0.5%;
+    overflow-y: scroll;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles {
+    display: flex;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 8%;
+    flex-direction: row;
+    align-items: center;
+    background-color: #e6e6e6;
+    border-left: 1px solid #DEDDE2;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles > input {
+    width: 4%;
+    height: 62%;
+}
+
+.product-list-container li span:nth-child(1) > input {
+    width: 66%;
+    height: 70%;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-lookUp-bottom > .product-list-reg,
+.product-lookUp-bottom > .product-list-search{
+    display: none;
+}
+
+.product-list-container li > span:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+
+.product-lookUp-bottom > .product-lookUp-titles span:nth-child(2),
+.product-list-container li span:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    width: 4%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles
+span:not(:nth-child(7), :nth-child(2), :nth-child(8)),
+.product-list-container li
+span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
+    width: 10%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles span:nth-child(7),
+.product-list-container li span:nth-child(7) {
+    width: 15%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+.product-lookUp-bottom > .product-lookUp-titles span:nth-child(8),
+.product-list-container li span:nth-child(8) {
+    width: 15%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 92%;
+    border-left: 1px solid #DEDDE2;
+}
+
+.product-list-container > li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 7%;
+    font-size: .9rem;
+}
+
+
+.product-list-container li span:not(:nth-child(2), :nth-child(1)) {
+    padding-left: 0.4%;
+    cursor: default;
+    overflow: hidden;
+}
+
+.product-add-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1% 1%;
+    width: 100%;
+    height: 24%;
+}
+
+.product-add-container-curtain {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 76%;
+    right: 0%;
+    padding: 1% 1%;
+    width: 100%;
+    height: 23%;
+    background-color: rgba(230, 230, 230, .8);
+}
+
+.product-add-container > div {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #DEDDE2;
+}
+
+.product-add-container > div div:nth-child(2n+1) {
+    background-color: #e6e6e6;
+}
+
+.product-add-container > div div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 33.3%;
+    font-size: clamp(0.7rem, 1.1vw, 2rem);
+}
+
+.product-add-container > div div span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6%;
+}
+
+.product-add-container > div div:not(:nth-child(1)) input {
+    width: 16%;
+    height: 67%;
+    margin-right: 1%;
+    border: 2px solid #e6e6e6;
+    border-radius: 5px;
+    outline: none;
+    padding-left: 0.5%;
+    font-size: 0.8rem;
+}
+
+.product-add-container > div div:nth-child(1) select {
+    width: 16%;
+    height: 42%;
+    margin-right: 1%;
+}
+
+/* =================================================*/
 .classification-bottom > .classification-boxes {
     display: flex;
     flex-direction: column;
@@ -2727,7 +2983,6 @@ a {
 .classification-boxes > div:nth-child(2) > input {
     width: 8%;
     height: 100%;
-    accent-color: purple;
 }
 
 .classification-boxes > div:nth-child(2) > span {

@@ -242,7 +242,7 @@
                 str += `
                         <li class="flex product-box-list product-box-list_\${productIndex}" id="product_\${product.id}" productId="\${product.id}" >
                             <input type="submit" id="id_\${productIndex}" value="\${productIndex}">
-                            <input type="submit" id="product-name_\${productIndex}" value="\${product.name}" class="productList_\${product.id}">
+                            <input type="submit" id="product-name_\${productIndex}" value="\${product.productKorName}" class="productList_\${product.id}">
                             <input type="submit" id="product-count_\${productIndex}" value="\${product.quantity + 1}" class="productCount_\${productIndex}">
                             <input type="submit" data-value="\${product.price}" id="product-price_\${productIndex}" value="\${product.price}" class="productPrice_\${productIndex}">
                             <input type="submit" id="product-discount_\${productIndex}" value="0">
@@ -655,7 +655,7 @@
             <c:forEach var="product" items="${products}">
                 <li id="productItems" onclick="selectMenu(${product.id})"
                     class="flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
-                    <span class="h-3/5" name="productName">${product.name}</span>
+                    <span class="h-3/5" name="productName">${product.productKorName}</span>
                     <span class="text-red-400 pt-2 h-2/5 price" name="price">${product.price}원</span>
                 </li>
             </c:forEach>

@@ -37,39 +37,44 @@ public class BasicInformationController {
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     }
 
+    //     ========================== 상품분류관리 ============================//
+
     @RequestMapping("/usr/basic-information/getBigClassification")
     @ResponseBody
-    public ResultDate getBigClassification(String searchClassificationName) {
+    public ResponseEntity getBigClassification(@RequestParam(defaultValue = "") String searchClassificationName, @RequestParam(defaultValue = "") String bigClassificationCode) {
 
-        List<productBigClassification> bigClassificationList = basicInformationService.getBigClassification(searchClassificationName);
+        List<productBigClassification> bigClassificationList = basicInformationService.getBigClassification(searchClassificationName, bigClassificationCode);
         if (bigClassificationList.size() != 0) {
-            return ResultDate.from("S-1", "success", "bigClassificationList", bigClassificationList);
+            return ResponseEntity.ok(bigClassificationList);
         }
-        return ResultDate.from("F-1", "Fail");
+
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping("/usr/basic-information/getMiddleClassification")
     @ResponseBody
-    public ResultDate getMiddleClassification(String classificationCode, String searchClassificationName) {
+    public ResponseEntity getMiddleClassification(String bigClassificationCode, @RequestParam(defaultValue = "") String searchClassificationName) {
 
-        List<productMiddleClassification> middleClassificationList = basicInformationService.getMiddleClassifications(searchClassificationName, classificationCode);
+        List<productMiddleClassification> middleClassificationList = basicInformationService.getMiddleClassifications(searchClassificationName, bigClassificationCode);
         if (middleClassificationList.size() != 0) {
-            return ResultDate.from("S-1", "success", "middleClassificationList", middleClassificationList);
+            return ResponseEntity.ok(middleClassificationList);
         }
-        return ResultDate.from("F-1", "Fail");
+
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping("/usr/basic-information/getSmallClassification")
     @ResponseBody
-    public ResultDate getSmallClassification(String bigClassificationCode, String middleClassificationCode, String searchClassificationName) {
+    public ResponseEntity getSmallClassification(String bigClassificationCode, String middleClassificationCode, @RequestParam(defaultValue = "") String searchClassificationName) {
 
         List<productSmallClassification> smallClassificationList = basicInformationService.
                 getSmallClassification(bigClassificationCode, middleClassificationCode, searchClassificationName);
+
         if (smallClassificationList.size() != 0) {
-            return ResultDate.from("S-1", "success", "smallClassificationList", smallClassificationList);
+            return ResponseEntity.ok(smallClassificationList);
         }
 
-        return ResultDate.from("F-1", "Fail");
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -152,5 +157,22 @@ public class BasicInformationController {
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+
+    //     ========================== 상품 조회 ============================//
+    @RequestMapping("/usr/basic-information/productSearch")
+    @ResponseBody
+    public ResponseEntity productSearch(String bigClassificationCode, String middleClassificationCode,
+                                        String smallClassificationCode, String searchCategory, String productName) {
+
+        List<Product> productList = basicInformationService.
+                getProductList(bigClassificationCode, middleClassificationCode, smallClassificationCode, searchCategory, productName);
+
+        if (productList.size() != 0) {
+            return ResponseEntity.ok(productList);
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

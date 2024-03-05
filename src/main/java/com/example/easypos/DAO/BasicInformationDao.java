@@ -1,5 +1,6 @@
 package com.example.easypos.DAO;
 
+import com.example.easypos.Vo.Product;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -11,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface BasicInformationDao {
 
-    List<productBigClassification> getBigClassification(String searchClassificationName);
+    List<productBigClassification> getBigClassification(String searchClassificationName, String bigClassificationCode);
 
     List<productMiddleClassification> getMiddleClassifications(String searchClassificationName, String bigClassificationCode);
 
@@ -135,4 +136,7 @@ public interface BasicInformationDao {
             and smallClassificationCode = #{removeClassificationId};
             """)
     void removeSmallClassification(String removeClassificationId, String checkedBigClassificationCode, String checkedMiddleClassificationCode);
+
+    List<Product> getProductList(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
+                                 String searchCategory, String productName);
 }
