@@ -9,16 +9,17 @@
                 <span>기초정보관리 > 상품관리 > 상품등록</span>
             </div>
             <div>
-                <button class=" btn btn-active btn-sm flex flex-row justify-between" onclick="productSearchBtn('product-reg-page', 'product-list-reg');">
+                <button class=" btn btn-active btn-sm flex flex-row justify-between"
+                        onclick="productSearchBtn('product-reg-page', 'product-list-reg');">
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
-                <button class="btn btn-active btn-sm pl-2">저장</button>
-                <button class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="addProduct();" class="btn btn-active btn-sm pl-2">저장</button>
+                <button onclick="delProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
                 <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
         </div>
-        <div class="product-lookUp-middle product-reg-page" >
+        <div class="product-lookUp-middle product-reg-page">
             <div>
                 <span>상품분류</span>
                 <select id="bigClassification-box" class="select select-bordered select-sm w-full max-w-xs">
@@ -45,8 +46,8 @@
             </div>
         </div>
         <div class="remove-add-btn">
-            <span class="material-symbols-outlined btn btn-active btn-xs h-full ">add</span>
-            <span class="material-symbols-outlined btn btn-active btn-xs h-full ml-1">remove</span>
+            <span class="material-symbols-outlined btn btn-active btn-xs h-full " onclick="addProductLine();">add</span>
+            <span class="material-symbols-outlined btn btn-active btn-xs h-full ml-1" onclick="removeProductLine();">remove</span>
         </div>
         <div class="product-lookUp-bottom">
             <div class="product-lookUp-titles">
@@ -62,29 +63,13 @@
                 <span>원가</span>
                 <span>만지율</span>
             </div>
-            <ul class="product-list-container product-list-reg">
-                <c:forEach begin="1" end="16" varStatus="listIdx">
-                    <li class="productList" id="listItem_${listIdx.index}">
-                        <span><input type="checkbox"></span>
-                        <span>${listIdx.index}</span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </li>
-                </c:forEach>
-            </ul>
+            <ul class="product-list-container product-list-reg"></ul>
         </div>
         <div class="product-add-container">
             <div class="product-reg-page">
                 <div>
                     <span>대분류명</span>
-                    <select id="basic-i-bigC" class="select select-bordered select-sm w-full max-w-xs">
+                    <select name="location" id="basic-i-bigC" class="select select-bordered select-sm w-full max-w-xs">
                     </select>
                     <select id="basic-i-middleC" class="select select-bordered select-sm w-full max-w-xs">
                     </select>
@@ -112,5 +97,11 @@
 </div>
 
 <script>
+    $(".product-reg-page div > #basic-i-bigC").change((el) => updateBasicIBigC(el.target, ".product-reg-page", ".product-list-reg"));
+    $(".product-reg-page div > #basic-i-middleC").change((el) => updateBasicIMiddleC(el.target, ".product-reg-page", ".product-list-reg"));
+    $(".product-reg-page div > #basic-i-smallC").change((el) => updateBasicISmallC(el.target, ".product-reg-page", ".product-list-reg"));
 
+    $(".product-reg-page div > #basic-i-bigC").change((el) => updateProductId());
+    $(".product-reg-page div > #basic-i-middleC").change((el) => updateProductId());
+    $(".product-reg-page div > #basic-i-smallC").change((el) => updateProductId());
 </script>

@@ -101,4 +101,63 @@ public class BasicInformationService {
         return basicInformationDao.
                 getProductList(bigClassificationCode, middleClassificationCode, smallClassificationCode, searchCategory, productName);
     }
+
+    //     ===================================== 상품 등록 ======================= //
+
+    public int addProduct(List<String> bigClassificationCodeList, List<String> middleClassificationCodeList, List<String> smallClassificationCodeList, List<String> productKorNameList,
+                          List<String> productEngNameList, List<Integer> priceList, List<Integer> costPriceList) {
+        int result = 0;
+        for (int i = 0; i < bigClassificationCodeList.size(); i++) {
+            int productCode = basicInformationDao.getProductListSize();
+            String bigClassificationCode = bigClassificationCodeList.get(i);
+            String middleClassificationCode = middleClassificationCodeList.get(i);
+            String smallClassificationCode = smallClassificationCodeList.get(i);
+            String productKorName = productKorNameList.get(i);
+            String productEngName = productEngNameList.get(i);
+            int price = priceList.get(i);
+            int costPrice = costPriceList.get(i);
+            result = basicInformationDao.addProduct(productCode + 1, bigClassificationCode,
+                                                    middleClassificationCode, smallClassificationCode,
+                                                    productKorName, productEngName, price, costPrice);
+
+            if(result == 1){
+                basicInformationDao.updateSmallClassProductCnt(bigClassificationCode, middleClassificationCode,
+                        smallClassificationCode, 1);
+            }
+        }
+        return result;
+    }
+
+    //     ===================================== 상품 삭제 ======================= //
+
+    public int delProduct(List<String> delProductIds) {
+        int result = 0;
+        for (int i = 0; i < delProductIds.size(); i++) {
+            int productId = Integer.parseInt(delProductIds.get(i));
+            result = basicInformationDao.delProduct(productId);
+        }
+        return result;
+    }
+
+    public int modifyProduct(List<String> updateProductIdList, List<String> bigClassificationCodeList,
+                             List<String> middleClassificationCodeList, List<String> smallClassificationCodeList,
+                             List<String> productKorNameList, List<String> productEngNameList,
+                             List<Integer> priceList, List<Integer> costPriceList) {
+
+        int result = 0;
+        for (int i = 0; i < updateProductIdList.size(); i++) {
+            int productId = Integer.parseInt(updateProductIdList.get(i));
+            String bigClassificationCode = bigClassificationCodeList.get(i);
+            String middleClassificationCode = middleClassificationCodeList.get(i);
+            String smallClassificationCode = smallClassificationCodeList.get(i);
+            String productKorName = productKorNameList.get(i);
+            String productEngName = productEngNameList.get(i);
+            int price = priceList.get(i);
+            int costPrice = costPriceList.get(i);
+            result = basicInformationDao.modifyProduct(productId, bigClassificationCode, middleClassificationCode, smallClassificationCode,
+                    productKorName, productEngName, price, costPrice);
+        }
+
+        return result;
+    }
 }

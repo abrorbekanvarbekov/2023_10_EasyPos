@@ -57,23 +57,7 @@
                 <span>원가</span>
                 <span>만지율</span>
             </div>
-            <ul class="product-list-container product-list-search">
-                <c:forEach begin="1" end="16" varStatus="listIdx">
-                    <li class="productList" id="listItem_${listIdx.index}">
-                        <span><input type="checkbox"></span>
-                        <span>${listIdx.index}</span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </li>
-                </c:forEach>
-            </ul>
+            <ul class="product-list-container product-list-search"></ul>
         </div>
         <div class="product-add-container">
             <div class="product-search-page">

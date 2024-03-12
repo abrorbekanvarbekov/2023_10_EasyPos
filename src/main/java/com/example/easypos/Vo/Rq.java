@@ -69,6 +69,7 @@ public class Rq {
             loginedEmployee = memberService.getEmployee(loginedEmployeeCode);
         }
 
+
         this.businessDate = businessDate;
         this.loginedEmployeeCode = loginedEmployeeCode;
         this.loginedEmployee = loginedEmployee;

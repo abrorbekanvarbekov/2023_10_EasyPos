@@ -72,7 +72,8 @@ public interface BasicInformationDao {
                                                         middleClassificationName, smallClassificationCnt)
                 select now(), now(), #{bigClassificationCode}, #{classificationCode}, #{classificationName}, count(small.id)
                 from productSmallClassification as small
-                where small.middleClassificationCode = #{classificationCode};
+                where small.bigClassificationCode = #{bigClassificationCode}
+                and small.middleClassificationCode = #{classificationCode};
             """)
     void insertMiddleClassification(String classificationCode, String classificationName, String bigClassificationCode);
 
@@ -139,4 +140,60 @@ public interface BasicInformationDao {
 
     List<Product> getProductList(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
                                  String searchCategory, String productName);
+
+
+    @Insert("""
+            insert into product
+            set regDate                  = now(),
+                updateDate               = now(),
+                productCode              = lpad(#{productCode}, '6', '0'),
+                bigClassificationCode    = #{bigClassificationCode},
+                middleClassificationCode = #{middleClassificationCode},
+                smallClassificationCode  = #{smallClassificationCode},
+                productKorName           = #{productKorName},
+                productEngName           = #{productEngName},
+                price                    = #{price},
+                costPrice                = #{costPrice};
+            """)
+    int addProduct(int productCode, String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
+                   String productKorName, String productEngName, int price, int costPrice);
+
+
+    @Select("""
+            select max(id) from product;
+            """)
+    int getProductListSize();
+
+    @Update("""
+            update product
+                set updateDate            = now(),
+                    bigClassificationCode = #{bigClassificationCode},
+                    middleClassificationCode = #{middleClassificationCode},
+                    smallClassificationCode = #{smallClassificationCode},
+                    productKorName = #{productKorName},
+                    productEngName = #{productEngName},
+                    price = #{price},
+                    costPrice = #{costPrice}
+                where id = #{productId}
+            """)
+    int modifyProduct(int productId, String bigClassificationCode, String middleClassificationCode,
+                      String smallClassificationCode, String productKorName, String productEngName, int price, int costPrice);
+
+
+    @Delete("""
+            delete from product
+            where id = #{productId};
+            """)
+    int delProduct(int productId);
+
+    @Update("""
+            update productSmallClassification
+                set updateDate             = now(),
+                    productCnt  = productCnt + #{productCnt}
+                where bigClassificationCode = #{bigClassificationCode}
+                    and middleClassificationCode = #{middleClassificationCode}
+                    and smallClassificationCode = #{smallClassificationCode};
+            """)
+    void updateSmallClassProductCnt(String bigClassificationCode, String middleClassificationCode,
+                                    String smallClassificationCode, int productCnt);
 }

@@ -59,7 +59,7 @@
                 </div>
                 <div>
                     <span>총매출액</span>
-                    <input type="submit" value="" class="ProductsTotalSumPrice">
+                    <input type="submit" value="" class="ProductsTotalSumPrice w-3/6">
                 </div>
                 <div>
                     <span>할인총액</span>
@@ -360,10 +360,13 @@
                     let discountPrice = checkedProduct[i].children[4].value
 
                     if (discountPrice != 0) {
+                        cancelPrice = cancelPrice + discountPrice
                         let discountAmount = $(".discountAmount").html()
                         $(".discountAmount").html(discountAmount - discountPrice)
+                        getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
+                    } else {
+                        getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
                     }
-                    getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
 
                     let selectManuListLastChild = document.querySelector("#selectedManuList-1 li:last-child")
                     if (selectManuListLastChild != null) {
@@ -665,8 +668,8 @@
 
 
 <script>
-    function PutComma(){
-        document.querySelectorAll(".price").forEach( (el)=>{
+    function PutComma() {
+        document.querySelectorAll(".price").forEach((el) => {
             let num = el.innerHTML.replace("원", "")
             el.innerHTML = Number(num).toLocaleString();
         })

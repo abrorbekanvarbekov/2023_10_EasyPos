@@ -42,8 +42,8 @@ public class BasicInformationController {
     @RequestMapping("/usr/basic-information/getBigClassification")
     @ResponseBody
     public ResponseEntity getBigClassification(@RequestParam(defaultValue = "") String searchClassificationName, @RequestParam(defaultValue = "") String bigClassificationCode) {
-
         List<productBigClassification> bigClassificationList = basicInformationService.getBigClassification(searchClassificationName, bigClassificationCode);
+
         if (bigClassificationList.size() != 0) {
             return ResponseEntity.ok(bigClassificationList);
         }
@@ -174,5 +174,60 @@ public class BasicInformationController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    //     ========================== 상품 등록 ============================//
+    @RequestMapping("/usr/basic-information/addProduct")
+    @ResponseBody
+    public ResponseEntity addProduct(@RequestParam(defaultValue = " ") List<String> bigClassificationCodeList,
+                                     @RequestParam(defaultValue = " ") List<String> middleClassificationCodeList,
+                                     @RequestParam(defaultValue = " ") List<String> smallClassificationCodeList,
+                                     @RequestParam(defaultValue = " ") List<String> productKorNameList,
+                                     @RequestParam(defaultValue = " ") List<String> productEngNameList,
+                                     @RequestParam List<Integer> priceList, @RequestParam List<Integer> costPriceList) {
+
+        int result = basicInformationService.addProduct(bigClassificationCodeList, middleClassificationCodeList,
+                smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
+
+        if (result == 1) {
+            return ResponseEntity.ok().body("성공");
+        } else {
+            return ResponseEntity.ok().body("실패");
+        }
+    }
+
+    //     ========================== 상품 삭제 ============================//
+    @RequestMapping("/usr/basic-information/delProduct")
+    @ResponseBody
+    public ResultDate delProduct(@RequestParam List<String> delProductIds) {
+
+        int result = basicInformationService.delProduct(delProductIds);
+        if (result == 1) {
+            return ResultDate.from("S-1", "성공");
+        } else {
+            return ResultDate.from("F-1", "실패");
+        }
+    }
+
+    //     ========================== 상품 수정 ============================//
+    @RequestMapping("/usr/basic-information/modifyProduct")
+    @ResponseBody
+    public ResultDate modifyProduct(@RequestParam(defaultValue = " ") List<String> updateProductIdList,
+                                    @RequestParam(defaultValue = " ") List<String> bigClassificationCodeList,
+                                    @RequestParam(defaultValue = " ") List<String> middleClassificationCodeList,
+                                    @RequestParam(defaultValue = " ") List<String> smallClassificationCodeList,
+                                    @RequestParam(defaultValue = " ") List<String> productKorNameList,
+                                    @RequestParam(defaultValue = " ") List<String> productEngNameList,
+                                    @RequestParam List<Integer> priceList, @RequestParam List<Integer> costPriceList) {
+
+        int result = basicInformationService.modifyProduct(updateProductIdList, bigClassificationCodeList, middleClassificationCodeList,
+                smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
+
+        if (result == 1) {
+            return ResultDate.from("S-1", "성공");
+        } else {
+            return ResultDate.from("F-1", "실패");
+        }
     }
 }
