@@ -11,5 +11,9 @@ public class ProductType {
     private int id;
     private String regDate;
     private String updateDate;
-    private String name;
+    private String code;
+    private String korName;
+    private String engName;
+    private String authDivision;
+    private String color;
 }

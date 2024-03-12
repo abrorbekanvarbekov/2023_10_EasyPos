@@ -1,6 +1,7 @@
 package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.Product;
+import com.example.easypos.Vo.ProductType;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -196,4 +197,9 @@ public interface BasicInformationDao {
             """)
     void updateSmallClassProductCnt(String bigClassificationCode, String middleClassificationCode,
                                     String smallClassificationCode, int productCnt);
+
+    @Select("""
+            select * from productType;
+            """)
+    List<ProductType> getProductTypeList();
 }

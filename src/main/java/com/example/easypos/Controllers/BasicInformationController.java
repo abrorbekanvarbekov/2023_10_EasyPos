@@ -230,4 +230,12 @@ public class BasicInformationController {
             return ResultDate.from("F-1", "실패");
         }
     }
+
+    // ========================= 터치키 상품 등록 ======================//
+    @RequestMapping("/usr/basic-information/touchKeyManagement/addProductType")
+    @ResponseBody
+    public ResponseEntity addProductType() {
+        List<ProductType> productTypeList = basicInformationService.getProductTypeList();
+        return ResponseEntity.ok().body(productTypeList);
+    }
 }

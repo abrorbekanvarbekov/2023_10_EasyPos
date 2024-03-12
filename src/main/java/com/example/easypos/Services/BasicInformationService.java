@@ -2,6 +2,7 @@ package com.example.easypos.Services;
 
 import com.example.easypos.DAO.BasicInformationDao;
 import com.example.easypos.Vo.Product;
+import com.example.easypos.Vo.ProductType;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -117,10 +118,10 @@ public class BasicInformationService {
             int price = priceList.get(i);
             int costPrice = costPriceList.get(i);
             result = basicInformationDao.addProduct(productCode + 1, bigClassificationCode,
-                                                    middleClassificationCode, smallClassificationCode,
-                                                    productKorName, productEngName, price, costPrice);
+                    middleClassificationCode, smallClassificationCode,
+                    productKorName, productEngName, price, costPrice);
 
-            if(result == 1){
+            if (result == 1) {
                 basicInformationDao.updateSmallClassProductCnt(bigClassificationCode, middleClassificationCode,
                         smallClassificationCode, 1);
             }
@@ -159,5 +160,9 @@ public class BasicInformationService {
         }
 
         return result;
+    }
+
+    public List<ProductType> getProductTypeList() {
+        return basicInformationDao.getProductTypeList();
     }
 }
