@@ -13,13 +13,12 @@ public class Product {
     private String updateDate;
     private String productCode;
     private String bigClassificationCode;
-    private String bigClassificationName;
     private String middleClassificationCode;
-    private String middleClassificationName;
     private String smallClassificationCode;
-    private String smallClassificationName;
+    private String productType;
     private String productKorName;
     private String productEngName;
+    private String color;
     private int price;
     private int costPrice;
     private int quantity;

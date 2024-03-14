@@ -48,10 +48,10 @@
         from product as p
         inner join productBigClassification as pBC on p.bigClassificationCode = pBC.bigClassificationCode
         inner join productMiddleClassification pMC on p.bigClassificationCode = pMC.bigClassificationCode
-                                                and p.middleClassificationCode = pMC.middleClassificationCode
+        and p.middleClassificationCode = pMC.middleClassificationCode
         inner join productSmallClassification pSC on p.bigClassificationCode = pSC.bigClassificationCode
-                                                and p.middleClassificationCode = pSC.middleClassificationCode
-                                                and p.smallClassificationCode = pSC.smallClassificationCode
+        and p.middleClassificationCode = pSC.middleClassificationCode
+        and p.smallClassificationCode = pSC.smallClassificationCode
         <if test="bigClassificationCode != '' and bigClassificationCode != 'allBigClassification'">
             where p.bigClassificationCode = #{bigClassificationCode}
         </if>
@@ -82,6 +82,17 @@
             </choose>
         </if>
         order by p.id ASC
+    </select>
+
+    <select id="getProductTypeList" resultType="productType">
+        select id, `code`, korName, engName, authDivision,
+        color, json_array(colorList) as colorList
+        from productType
+        <if test="searchKeyword != ''">
+            where korName LIKE CONCAT('%', #{searchKeyword}, '%')
+            or engName LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        order by id ASC
     </select>
 </mapper>
 

@@ -198,8 +198,11 @@ public interface BasicInformationDao {
     void updateSmallClassProductCnt(String bigClassificationCode, String middleClassificationCode,
                                     String smallClassificationCode, int productCnt);
 
+    List<ProductType> getProductTypeList(String searchKeyword);
+
     @Select("""
-            select * from productType;
+            select * from product
+            where productType = #{productTypeId};
             """)
-    List<ProductType> getProductTypeList();
+    List<Product> getProducts(String productTypeId);
 }

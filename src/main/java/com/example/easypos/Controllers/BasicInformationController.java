@@ -234,8 +234,16 @@ public class BasicInformationController {
     // ========================= 터치키 상품 등록 ======================//
     @RequestMapping("/usr/basic-information/touchKeyManagement/addProductType")
     @ResponseBody
-    public ResponseEntity addProductType() {
-        List<ProductType> productTypeList = basicInformationService.getProductTypeList();
+    public ResponseEntity addProductType(String searchKeyword) {
+        List<ProductType> productTypeList = basicInformationService.getProductTypeList(searchKeyword);
+        return ResponseEntity.ok().body(productTypeList);
+    }
+
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/getProducts")
+    @ResponseBody
+    public ResponseEntity getProducts(String productTypeId) {
+        List<Product> productTypeList = basicInformationService.getProducts(productTypeId);
         return ResponseEntity.ok().body(productTypeList);
     }
 }

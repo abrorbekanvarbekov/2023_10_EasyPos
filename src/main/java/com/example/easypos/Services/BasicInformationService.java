@@ -162,7 +162,11 @@ public class BasicInformationService {
         return result;
     }
 
-    public List<ProductType> getProductTypeList() {
-        return basicInformationDao.getProductTypeList();
+    public List<ProductType> getProductTypeList(String searchKeyword) {
+        return basicInformationDao.getProductTypeList(searchKeyword);
+    }
+
+    public List<Product> getProducts(String productTypeId) {
+        return basicInformationDao.getProducts(productTypeId);
     }
 }

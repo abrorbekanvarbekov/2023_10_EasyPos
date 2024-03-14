@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +20,5 @@ public class ProductType {
     private String engName;
     private String authDivision;
     private String color;
+    private ArrayList<String> colorList;
 }
