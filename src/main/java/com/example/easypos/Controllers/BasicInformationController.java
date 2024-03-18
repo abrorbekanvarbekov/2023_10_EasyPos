@@ -225,11 +225,11 @@ public class BasicInformationController {
     }
 
 
-    @RequestMapping("/usr/basic-information/touchKeyManagement/addProductType")
+    @RequestMapping("/usr/basic-information/touchKeyManagement/addProductTypes")
     @ResponseBody
-    public ResponseEntity addProductType(@RequestParam(defaultValue = " ") List<String> productTypeKorNameList,
-                                         @RequestParam(defaultValue = " ") List<String> productTypeEngNameList,
-                                         @RequestParam(defaultValue = " ") List<String> productTypeColorList) {
+    public ResponseEntity addProductTypes(@RequestParam(defaultValue = " ") List<String> productTypeKorNameList,
+                                          @RequestParam(defaultValue = " ") List<String> productTypeEngNameList,
+                                          @RequestParam(defaultValue = " ") List<String> productTypeColorList) {
 
         int result = basicInformationService.addProductType(productTypeKorNameList, productTypeEngNameList, productTypeColorList);
 
@@ -240,6 +240,34 @@ public class BasicInformationController {
         }
     }
 
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/updateProductTypes")
+    @ResponseBody
+    public ResponseEntity updateProductTypes(@RequestParam(defaultValue = " ") List<String> updateProTypeIdList,
+                                             @RequestParam(defaultValue = " ") List<String> updateProTypeKorNameList,
+                                             @RequestParam(defaultValue = " ") List<String> updateProTypeEngNameList,
+                                             @RequestParam(defaultValue = " ") List<String> updateProTypeColorList) {
+
+        int result = basicInformationService.updateProductType(updateProTypeIdList, updateProTypeKorNameList, updateProTypeEngNameList, updateProTypeColorList);
+
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/delProductTypes")
+    @ResponseBody
+    public ResponseEntity delProductTypes(@RequestParam List<String> delProTypeIdList) {
+        int result = basicInformationService.delProductTypes(delProTypeIdList);
+
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/getProducts")
     @ResponseBody
@@ -256,6 +284,31 @@ public class BasicInformationController {
             return ResultDate.from("S-1", "성공");
         } else {
             return ResultDate.from("F-1", "실패");
+        }
+    }
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/updateProducts")
+    @ResponseBody
+    public ResponseEntity updateProducts(@RequestParam List<String> updateProductIdList,
+                                         @RequestParam List<String> updateProductColorList) {
+        int result = basicInformationService.updateProducts(updateProductIdList, updateProductColorList);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/delTypeForProducts")
+    @ResponseBody
+    public ResponseEntity delTypeForProducts(@RequestParam List<String> delProductIdList) {
+        System.out.println(delProductIdList);
+        int result = basicInformationService.delTypeForProducts(delProductIdList);
+        System.out.println(result);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

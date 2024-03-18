@@ -85,9 +85,9 @@
     </div>
 
     <%-- ====================== 상품관리  ======================== --%>
-<%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-<%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-<%--    <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
+<%--        <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
 
     <%-- ====================== 터치키상품 관리  ======================== --%>
     <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>
@@ -338,7 +338,7 @@
                     pageName == "product-reg-page" ?
                         productListItem += `
                     <li class="productList \${idx+1 == 1 ? 'checked' : ''}" id="listId_\${value.id}" data-value="listItem_\${idx+1}">
-                        <span><input type="checkbox" id="checkbox-product-id" value="\${value.id}"></span>
+                        <span><input type="checkbox" id="checkbox-product-id" value="\${value.id}" \${value.productType != ''? 'disabled' : ''}></span>
                         <span>\${idx + 1}</span>
                         <span>\${value.productCode}</span>
                         <span data-value="\${value.bigClassificationCode}">\${value.bigClassificationName}</span>
@@ -833,13 +833,10 @@
             $.post("/usr/basic-information/delProduct", {
                 delProductIds: values.join(","),
             }, function (data) {
-                console.log(data)
                 if (data.success) {
                     let productListFirstChild = document.querySelector(".product-list-reg li:first-child");
                     productSearchBtn('product-reg-page', 'product-list-reg');
                     scrollToSelectedItem(productListFirstChild);
-                } else if (data.success == false) {
-                    console.log(123)
                 }
             }, "json")
         }

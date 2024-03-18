@@ -217,6 +217,22 @@ public interface BasicInformationDao {
             """)
     int addProductType(int productTypeCode, String productTypeKorName, String productTypeEngName, String productTypeColor);
 
+    @Update("""
+            update productType
+                set updateDate = now(),
+                    korName    = #{updateProTypeKorName},
+                    engName    = #{updateProTypeEngName},
+                    color      = #{updateProTypeColor}
+                where id = #{productTypeId};
+            """)
+    int updateProductType(int productTypeId, String updateProTypeKorName, String updateProTypeEngName, String updateProTypeColor);
+
+    @Delete("""
+            delete from productType
+                where id = #{delProductTypeId};             
+            """)
+    int delProductTypes(int delProductTypeId);
+
     @Select("""
             select * from product
             where productType = #{productTypeId};
@@ -239,5 +255,17 @@ public interface BasicInformationDao {
             """)
     int addTypeForProduct(int productId, String productTypeId, String productTypeColor);
 
+    @Update("""
+            update product
+            set updateDate = now(),
+                color = #{productNewColor}
+            where id = #{productId}
+            """)
+    int updateProducts(int productId, String productNewColor);
 
+    @Delete("""
+            delete from product
+            where id = #{delProductId};
+            """)
+    int delTypeForProducts(int delProductId);
 }

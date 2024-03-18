@@ -177,8 +177,29 @@ public class BasicInformationService {
         return result;
     }
 
+    public int updateProductType(List<String> updateProTypeIdList, List<String> updateProTypeKorNameList, List<String> updateProTypeEngNameList, List<String> updateProTypeColorList) {
+        int result = 0;
+        for (int i = 0; i < updateProTypeKorNameList.size(); i++) {
+            int productTypeId = Integer.parseInt(updateProTypeIdList.get(i));
+            String updateProTypeKorName = updateProTypeKorNameList.get(i);
+            String updateProTypeEngName = updateProTypeEngNameList.get(i);
+            String updateProTypeColor = updateProTypeColorList.get(i);
+            result = basicInformationDao.updateProductType(productTypeId, updateProTypeKorName, updateProTypeEngName, updateProTypeColor);
+        }
+        return result;
+    }
+
     public List<Product> getProducts(String productTypeId) {
         return basicInformationDao.getProducts(productTypeId);
+    }
+
+    public int delProductTypes(List<String> delProTypeIdList) {
+        int result = 0;
+        for (int i = 0; i < delProTypeIdList.size(); i++) {
+            int delProductTypeId = Integer.parseInt(delProTypeIdList.get(i));
+            result = basicInformationDao.delProductTypes(delProductTypeId);
+        }
+        return result;
     }
 
     public int addTypeForProducts(List<String> productIdList, String productTypeId, String productTypeColor) {
@@ -194,5 +215,29 @@ public class BasicInformationService {
         }
         return result;
     }
+
+
+    public int updateProducts(List<String> updateProductIdList, List<String> updateProductColorList) {
+        int result = 0;
+        if (updateProductIdList.size() != 0) {
+            for (int i = 0; i < updateProductIdList.size(); i++) {
+                int productId = Integer.parseInt(updateProductIdList.get(i));
+                String productNewColor = updateProductColorList.get(i);
+                result = basicInformationDao.updateProducts(productId, productNewColor);
+            }
+        }
+
+        return result;
+    }
+
+    public int delTypeForProducts(List<String> delProductIdList) {
+        int result = 0;
+        for (int i = 0; i < delProductIdList.size(); i++) {
+            int delProductId = Integer.parseInt(delProductIdList.get(i));
+            result = basicInformationDao.delTypeForProducts(delProductId);
+        }
+        return result;
+    }
+
 
 }

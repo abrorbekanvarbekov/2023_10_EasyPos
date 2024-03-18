@@ -14,8 +14,8 @@
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
-                <button onclick="addProductType();" class="btn btn-active btn-sm pl-2">저장</button>
-                <button class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="saveProductType();" class="btn btn-active btn-sm pl-2">저장</button>
+                <button onclick="delProductType();" class="btn btn-active btn-sm pl-2">삭제</button>
                 <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
         </div>
@@ -143,26 +143,29 @@
                     let productTypeLi = "";
                     $.each(data, (idx, value) => {
                         productTypeLi += `
-                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}">
-                                <span><input type="checkbox"></span>
-                                <span>\${idx + 1}</span>
+                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}" id="productType_\${value.id}">
+                                <span><input type="checkbox" id="product-type-checkbox" value="\${value.id}"></span>
+                                <span>\${value.id}</span>
                                 <span>\${value.code}</span>
                                 <span>
-                                    <input type="text" value="\${value.korName}">
+                                    <input id="proTypeKorName_\${value.id}" type="text" value="\${value.korName}"
+                                            onclick="mine()" onchange="updateProductType(this.id)">
                                 </span>
                                 <span>
-                                    <input type="text" value="\${value.engName}">
+                                    <input id="proTypeEngName_\${value.id}" type="text" value="\${value.engName}"
+                                            onclick="mine()" onchange="updateProductType(this.id)">
                                 </span>
                                 <span>\${value.authDivision}</span>
                                 <span style="background-color: \${value.color}">
-                                    <select id="productType-color-box" class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
+                                    <select id="proTypeColorBox_\${value.id}" onchange="updateProductType(this.id)"
+                                        class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
                                       <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
                                       <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
                                       <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
                                       <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
                                       <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
                                       <option value="salmon" \${value.color == 'salmon' ? 'selected' : ''}>살구</option>
-                                      <option value="lightyellow" \${value.color == 'lightyellow' ? 'selected' : ''}>연노랑</option>
+                                      <option value="yellow" \${value.color == 'yellow' ? 'selected' : ''}>연노랑</option>
                                     </select>
                                 </span>
                             </li>
@@ -220,71 +223,12 @@
         }
     }
 
-    function addProductType() {
-        let newProTypeLen = $(".productType-list-con-left > .newProType").length;
-
-        if (newProTypeLen != 0) {
-            let newProTypeKorNameList = [];
-            let newProTypeEngNameList = [];
-            let newProTypeColorList = [];
-            for (let i = 0; i < newProTypeLen; i++) {
-                const newProTypeKorName = $(".productType-list-con-left > .newProType")[i].children[3].children[0].value;
-                newProTypeKorNameList.push(newProTypeKorName);
-                const newProTypeEngName = $(".productType-list-con-left > .newProType")[i].children[4].children[0].value;
-                newProTypeEngNameList.push(newProTypeEngName);
-                const newProTypeColorBox = $(".productType-list-con-left > .newProType")[i].children[6].children[0];
-                const newProTypeColor = newProTypeColorBox.options[newProTypeColorBox.selectedIndex].value;
-                newProTypeColorList.push(newProTypeColor);
-            }
-
-            $.ajax({
-                url: "/usr/basic-information/touchKeyManagement/addProductType",
-                data: {
-                    productTypeKorNameList: newProTypeKorNameList.join(","),
-                    productTypeEngNameList: newProTypeEngNameList.join(","),
-                    productTypeColorList: newProTypeColorList.join(",")
-                },
-                method: "POST",
-                success: function (data) {
-                    alert("정상적으로 처리 되었습니다.");
-                    getProductTypeList();
-                },
-                error: function (request, status, error,) {
-                    alert("정상적으로 처리 되지 않았습니다.\n 다시 시도해보세요.");
-                    getProductTypeList();
-                },
-                complete: function () {
-                    getProductTypeList();
-                }
-            })
-
-        } else {
-            alert("터치키은(는) 변경된 사항이 없습니다.");
+    function updateProductType(el) {
+        if (el) {
+            let listId = "#productType_".concat(el.substring(el.indexOf("_") + 1));
+            let selectedLi = document.querySelector(listId);
+            selectedLi.classList.add("update-proType-item");
         }
-    };
-
-    function clickEventForProType(areaName, elName) {
-        let listItemLastItem = $(`.\${areaName} .\${elName}.checked`)[0]
-        listItemLastItem.style.backgroundColor = "rgb(243, 243, 243)"
-        listItemLastItem.style.color = "red"
-        listItemLastItem.classList.add("checked")
-
-        $(`.\${areaName} .\${elName}`).each((idx, element) => {
-            element.addEventListener("click", function () {
-                let lastCheckedEl = document.querySelector(`.\${areaName} .\${elName}.checked`);
-                lastCheckedEl.style.backgroundColor = "inherit";
-                lastCheckedEl.style.color = "black";
-                lastCheckedEl.classList.remove("checked");
-                lastCheckedEl.classList.remove("selected");
-
-                element.style.backgroundColor = "rgb(243, 243, 243)";
-                element.style.color = "red";
-                element.classList.add("checked");
-                element.classList.add("selected");
-
-                areaName == "productType-list-con-left" ? getProductList(element) : "";
-            })
-        })
     }
 
     function getProductList(productType) {
@@ -297,15 +241,16 @@
                 $.each(data, (idx, value) => {
                     let ordinalNum = (idx + 1).toString();
                     productLi += `
-                    <li class="product \${idx+1 == 1 ? 'checked' : ''}">
-                        <span><input type="checkbox"></span>
+                    <li class="product \${idx+1 == 1 ? 'checked' : ''}" id="product_\${value.id}">
+                        <span><input type="checkbox" id="product-checkbox" value="\${value.id}"></span>
                         <span>\${ordinalNum.padStart(3, "0")}</span>
                         <span>\${value.productCode}</span>
                         <span>\${value.productKorName}</span>
                         <span>\${value.price}</span>
                         <span>매장</span>
                         <span style="background-color: \${value.color}">
-                            <select class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
+                            <select id="productColorBox_\${value.id}" class="select select-bordered select-sm w-full max-w-xs"
+                                style="background-color: \${value.color}" onchange="updateProduct(this.id)">
                               <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
                               <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
                               <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
@@ -331,12 +276,216 @@
         }, "json")
     }
 
+    function updateProduct(el) {
+        if (el) {
+            let listId = "#product_".concat(el.substring(el.indexOf("_") + 1));
+            let selectedLi = document.querySelector(listId);
+            selectedLi.classList.add("update-pro-item");
+        }
+    }
+
+    function clickEventForProType(areaName, elName) {
+        let listItemLastItem = $(`.\${areaName} .\${elName}.checked`)[0]
+        listItemLastItem.style.backgroundColor = "rgb(243, 243, 243)"
+        listItemLastItem.style.color = "red"
+        listItemLastItem.classList.add("checked")
+
+        $(`.\${areaName} .\${elName}`).each((idx, element) => {
+            element.addEventListener("click", function () {
+                let lastCheckedEl = document.querySelector(`.\${areaName} .\${elName}.checked`);
+                lastCheckedEl.style.backgroundColor = "inherit";
+                lastCheckedEl.style.color = "black";
+                lastCheckedEl.classList.remove("checked");
+                lastCheckedEl.classList.remove("selected");
+
+                element.style.backgroundColor = "rgb(243, 243, 243)";
+                element.style.color = "red";
+                element.classList.add("checked");
+                element.classList.add("selected");
+
+                areaName == "productType-list-con-left" ? getProductList(element) : "";
+            })
+        })
+    }
+
+    function saveProductType() {
+        let newProTypeLen = $(".productType-list-con-left > .newProType").length;
+        let updateProTypeLen = $(".productType-list-con-left > .update-proType-item").length;
+        let updateProLen = $(".productType-list-con-right > .update-pro-item").length;
+
+        if (newProTypeLen == 0 && updateProTypeLen == 0 && updateProLen == 0) {
+            alert("터치키은(는) 변경된 사항이 없습니다.");
+        }
+
+        if (newProTypeLen != 0) {
+            let newProTypeKorNameList = [];
+            let newProTypeEngNameList = [];
+            let newProTypeColorList = [];
+
+            $(".productType-list-con-left > .newProType").each((idx, el) => {
+                const newProTypeKorName = el.children[3].children[0].value;
+                newProTypeKorNameList.push(newProTypeKorName);
+                const newProTypeEngName = el.children[4].children[0].value;
+                newProTypeEngNameList.push(newProTypeEngName);
+                const newProTypeColorBox = el.children[6].children[0];
+                const newProTypeColor = newProTypeColorBox.options[newProTypeColorBox.selectedIndex].value;
+                newProTypeColorList.push(newProTypeColor);
+            })
+
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/addProductTypes",
+                data: {
+                    productTypeKorNameList: newProTypeKorNameList.join(","),
+                    productTypeEngNameList: newProTypeEngNameList.join(","),
+                    productTypeColorList: newProTypeColorList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductTypeList();
+                },
+                error: function (request, status, error,) {
+                    alert("정상적으로 처리 되지 않았습니다.\n 다시 시도해보세요.");
+                    getProductTypeList();
+                },
+                complete: function () {
+                    getProductTypeList();
+                }
+            })
+
+        }
+
+        if (updateProTypeLen != 0) {
+            let updateProductTypeIdList = [];
+            let updateProTypeKorNameList = [];
+            let updateProTypeEngNameList = [];
+            let updateProTypeColorList = [];
+            $(".productType-list-con-left > .update-proType-item").each((idx, el) => {
+                const updateProTypeId = el.id.substring(el.id.indexOf("_") + 1);
+                updateProductTypeIdList.push(updateProTypeId);
+                const updateProTypeKorName = el.children[3].children[0].value;
+                updateProTypeKorNameList.push(updateProTypeKorName);
+                const updateProTypeEngName = el.children[4].children[0].value;
+                updateProTypeEngNameList.push(updateProTypeEngName);
+                const updateProTypeColorBox = el.children[6].children[0];
+                const updateProTypeColor = updateProTypeColorBox.options[updateProTypeColorBox.selectedIndex].value;
+                updateProTypeColorList.push(updateProTypeColor);
+            })
+
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/updateProductTypes",
+                data: {
+                    updateProTypeIdList: updateProductTypeIdList.join(","),
+                    updateProTypeKorNameList: updateProTypeKorNameList.join(","),
+                    updateProTypeEngNameList: updateProTypeEngNameList.join(","),
+                    updateProTypeColorList: updateProTypeColorList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductTypeList();
+                },
+                error: function (request, status, error,) {
+                    alert("정상적으로 처리 되지 않았습니다.\n 다시 시도해보세요.");
+                    getProductTypeList();
+                },
+                complete: function () {
+                    getProductTypeList();
+                }
+            })
+
+        }
+
+        if (updateProLen != 0) {
+            let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
+            let updateProductIdList = [];
+            let updateProductColorList = [];
+
+            $(".productType-list-con-right > .update-pro-item").each((idx, el) => {
+                const updateProductId = el.id.substring(el.id.indexOf("_") + 1);
+                updateProductIdList.push(updateProductId);
+                const updateProColorBox = el.children[6].children[0];
+                const updateProColor = updateProColorBox.options[updateProColorBox.selectedIndex].value;
+                updateProductColorList.push(updateProColor);
+            })
+
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/updateProducts",
+                data: {
+                    updateProductIdList: updateProductIdList.join(","),
+                    updateProductColorList: updateProductColorList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductList(selectProTypeItem);
+                },
+                error: function (request, status, error,) {
+                    alert("정상적으로 처리 되지 않았습니다.\n 다시 시도해보세요.");
+                    getProductList(selectProTypeItem);
+                },
+                complete: function () {
+                    getProductList(selectProTypeItem);
+                }
+            })
+        }
+
+    }
+
+    function delProductType() {
+        const delProTypeIdList = $('#product-type-checkbox:checked').map((index, el) => el.value).toArray();
+        const delProductIdList = $('#product-checkbox:checked').map((index, el) => el.value).toArray();
+        if (delProTypeIdList != 0) {
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/delProductTypes",
+                data: {
+                    delProTypeIdList: delProTypeIdList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductTypeList();
+                },
+                error: function (request, status, error) {
+                    alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                    getProductTypeList();
+                },
+                complete: function () {
+                    getProductTypeList();
+                }
+            })
+        }
+
+        if (delProductIdList != 0) {
+            let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
+                data: {
+                    delProductIdList: delProductIdList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductList(selectProTypeItem);
+                },
+                error: function (request, status, error) {
+                    alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                    getProductList(selectProTypeItem);
+                },
+                complete: function () {
+                    getProductList(selectProTypeItem);
+                }
+            })
+        }
+    }
+
     function openMsgBox() {
         let selectedProTypeLen = $(".productType.selected").length
         if (selectedProTypeLen != 0) {
             $('.product-search-box').show();
             $('.pro-search-main').show();
             $('.pro-search-bg').show();
+
         } else if (selectedProTypeLen == 0) {
             alert("상품을 추가할 분류정보를 선택하세요. \n(신규 분류일 경우 저장 후 상품추가.)")
         }
@@ -346,6 +495,8 @@
         $('.product-search-box').hide();
         $('.pro-search-main').hide();
         $('.pro-search-bg').hide();
+
+        $('.search-pro-list-container').css("display", "none");
     }
 
     function getProductByProType() {
@@ -358,7 +509,7 @@
         let smallClassificationCode = smallClassificationSelect.options[smallClassificationSelect.selectedIndex].value;
         let searchCategory = searchCategorySelect.options[searchCategorySelect.selectedIndex].textContent;
         let searchDivision = document.querySelector(`.productCl-box div > .product-nameOrCode-input`).value;
-
+        $('.search-pro-list-container').css("display", "flex");
         $.get("/usr/basic-information/productSearch", {
             bigClassificationCode: bigClassificationCode,
             middleClassificationCode: middleClassificationCode,
