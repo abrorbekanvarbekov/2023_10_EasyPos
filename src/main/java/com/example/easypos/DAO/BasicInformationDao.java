@@ -161,7 +161,7 @@ public interface BasicInformationDao {
 
 
     @Select("""
-            select max(id) from product;
+            select ifnull(max(id), 0) from product;
             """)
     int getProductListSize();
 
@@ -201,8 +201,43 @@ public interface BasicInformationDao {
     List<ProductType> getProductTypeList(String searchKeyword);
 
     @Select("""
+            select ifnull(max(id), 0) from productType;
+            """)
+    int getProductTypeListSize();
+
+    @Insert("""
+            insert into productType
+            set regDate      = now(),
+                updateDate   = now(),
+                `code`       = lpad(#{productTypeCode}, '3', '0'),
+                korName      = #{productTypeKorName},
+                engName      = #{productTypeEngName},
+                authDivision = '매장',
+                color        = #{productTypeColor};
+            """)
+    int addProductType(int productTypeCode, String productTypeKorName, String productTypeEngName, String productTypeColor);
+
+    @Select("""
             select * from product
             where productType = #{productTypeId};
             """)
     List<Product> getProducts(String productTypeId);
+
+    @Select("""
+            select * from product
+                where id = #{productId}
+                and productType = #{productTypeId};
+            """)
+    Product getDuplicatePro(int productId, String productTypeId);
+
+    @Update("""
+            update product
+                set updateDate = now(),
+                    productType = #{productTypeId},
+                    color = #{productTypeColor}
+                where id = #{productId}
+            """)
+    int addTypeForProduct(int productId, String productTypeId, String productTypeColor);
+
+
 }

@@ -144,7 +144,6 @@ public class BasicInformationService {
                              List<String> middleClassificationCodeList, List<String> smallClassificationCodeList,
                              List<String> productKorNameList, List<String> productEngNameList,
                              List<Integer> priceList, List<Integer> costPriceList) {
-
         int result = 0;
         for (int i = 0; i < updateProductIdList.size(); i++) {
             int productId = Integer.parseInt(updateProductIdList.get(i));
@@ -166,7 +165,34 @@ public class BasicInformationService {
         return basicInformationDao.getProductTypeList(searchKeyword);
     }
 
+    public int addProductType(List<String> productTypeKorNameList, List<String> productTypeEngNameList, List<String> productTypeColorList) {
+        int result = 0;
+        for (int i = 0; i < productTypeKorNameList.size(); i++) {
+            int productTypeCode = basicInformationDao.getProductTypeListSize();
+            String productTypeKorName = productTypeKorNameList.get(i);
+            String productTypeEngName = productTypeEngNameList.get(i);
+            String productTypeColor = productTypeColorList.get(i);
+            result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName, productTypeColor);
+        }
+        return result;
+    }
+
     public List<Product> getProducts(String productTypeId) {
         return basicInformationDao.getProducts(productTypeId);
     }
+
+    public int addTypeForProducts(List<String> productIdList, String productTypeId, String productTypeColor) {
+        int result = 0;
+        if (productIdList.size() != 0) {
+            for (int i = 0; i < productIdList.size(); i++) {
+                int productId = Integer.parseInt(productIdList.get(i));
+                Product isDuplicatePro = basicInformationDao.getDuplicatePro(productId, productTypeId);
+                if (isDuplicatePro == null) {
+                    result = basicInformationDao.addTypeForProduct(productId, productTypeId, productTypeColor);
+                }
+            }
+        }
+        return result;
+    }
+
 }

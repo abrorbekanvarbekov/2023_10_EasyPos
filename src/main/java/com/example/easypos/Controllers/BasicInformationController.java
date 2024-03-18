@@ -67,8 +67,7 @@ public class BasicInformationController {
     @ResponseBody
     public ResponseEntity getSmallClassification(String bigClassificationCode, String middleClassificationCode, @RequestParam(defaultValue = "") String searchClassificationName) {
 
-        List<productSmallClassification> smallClassificationList = basicInformationService.
-                getSmallClassification(bigClassificationCode, middleClassificationCode, searchClassificationName);
+        List<productSmallClassification> smallClassificationList = basicInformationService.getSmallClassification(bigClassificationCode, middleClassificationCode, searchClassificationName);
 
         if (smallClassificationList.size() != 0) {
             return ResponseEntity.ok(smallClassificationList);
@@ -99,33 +98,24 @@ public class BasicInformationController {
                 productMiddleClassification middleClassification = basicInformationService.getMiddleClassificationByName(classificationCodeList.get(i), bigClassificationCode);
                 if (middleClassification == null) {
                     // ======== insert ============ //
-                    basicInformationService.
-                            insertMiddleClassification(classificationCodeList.get(i), classificationNameList.get(i), bigClassificationCode);
+                    basicInformationService.insertMiddleClassification(classificationCodeList.get(i), classificationNameList.get(i), bigClassificationCode);
                     // ========= bigClassificationUpdate =======//
-                    basicInformationService.
-                            updateBigClassificationCnt(bigClassificationCode, classificationCodeList.get(i), "1");
+                    basicInformationService.updateBigClassificationCnt(bigClassificationCode, classificationCodeList.get(i), "1");
                 } else {
                     // ======== update ============ //
-                    basicInformationService.
-                            updateMiddleClassification(bigClassificationCode, classificationCodeList.get(i), classificationNameList.get(i));
+                    basicInformationService.updateMiddleClassification(bigClassificationCode, classificationCodeList.get(i), classificationNameList.get(i));
                 }
 
             } else if (classificationName.equals("productSmallClassification")) {
-                productSmallClassification smallClassification = basicInformationService.
-                        getSmallClassificationByName(classificationCodeList.get(i), bigClassificationCode, middleClassificationCode);
+                productSmallClassification smallClassification = basicInformationService.getSmallClassificationByName(classificationCodeList.get(i), bigClassificationCode, middleClassificationCode);
                 if (smallClassification == null) {
                     // ======== insert ============ //
-                    basicInformationService.
-                            insertSmallClassification(
-                                    classificationCodeList.get(i), classificationNameList.get(i), bigClassificationCode, middleClassificationCode);
+                    basicInformationService.insertSmallClassification(classificationCodeList.get(i), classificationNameList.get(i), bigClassificationCode, middleClassificationCode);
                     // ========= middleClassificationUpdate =======//
-                    basicInformationService.
-                            updateMiddleClassificationCnt(bigClassificationCode, middleClassificationCode, "1");
+                    basicInformationService.updateMiddleClassificationCnt(bigClassificationCode, middleClassificationCode, "1");
                 } else {
                     // ======== update ============ //
-                    basicInformationService.
-                            updateSmallClassification(
-                                    bigClassificationCode, middleClassificationCode, classificationCodeList.get(i), classificationNameList.get(i));
+                    basicInformationService.updateSmallClassification(bigClassificationCode, middleClassificationCode, classificationCodeList.get(i), classificationNameList.get(i));
                 }
 
             }
@@ -137,21 +127,18 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/removeClassification")
     @ResponseBody
-    public ResponseEntity removeClassification(String removeClassificationId, String removeClassificationType,
-                                               String checkedBigClassificationCode, String checkedMiddleClassificationCode) {
+    public ResponseEntity removeClassification(String removeClassificationId, String removeClassificationType, String checkedBigClassificationCode, String checkedMiddleClassificationCode) {
 
 
         if (removeClassificationType.equals("big")) {
             basicInformationService.removeBigClassification(removeClassificationId);
             return ResponseEntity.ok().build();
         } else if (removeClassificationType.equals("middle")) {
-            basicInformationService.
-                    updateBigClassificationCnt(checkedBigClassificationCode, removeClassificationId, "-1");
+            basicInformationService.updateBigClassificationCnt(checkedBigClassificationCode, removeClassificationId, "-1");
             basicInformationService.removeMiddleClassification(removeClassificationId, checkedBigClassificationCode);
             return ResponseEntity.ok().build();
         } else if (removeClassificationType.equals("small")) {
-            basicInformationService.
-                    updateMiddleClassificationCnt(checkedBigClassificationCode, checkedMiddleClassificationCode, "-1");
+            basicInformationService.updateMiddleClassificationCnt(checkedBigClassificationCode, checkedMiddleClassificationCode, "-1");
             basicInformationService.removeSmallClassification(removeClassificationId, checkedBigClassificationCode, checkedMiddleClassificationCode);
             return ResponseEntity.ok().build();
         }
@@ -163,11 +150,9 @@ public class BasicInformationController {
     //     ========================== 상품 조회 ============================//
     @RequestMapping("/usr/basic-information/productSearch")
     @ResponseBody
-    public ResponseEntity productSearch(String bigClassificationCode, String middleClassificationCode,
-                                        String smallClassificationCode, String searchCategory, String productName) {
+    public ResponseEntity productSearch(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode, String searchCategory, String productName) {
 
-        List<Product> productList = basicInformationService.
-                getProductList(bigClassificationCode, middleClassificationCode, smallClassificationCode, searchCategory, productName);
+        List<Product> productList = basicInformationService.getProductList(bigClassificationCode, middleClassificationCode, smallClassificationCode, searchCategory, productName);
 
         if (productList.size() != 0) {
             return ResponseEntity.ok(productList);
@@ -185,10 +170,10 @@ public class BasicInformationController {
                                      @RequestParam(defaultValue = " ") List<String> smallClassificationCodeList,
                                      @RequestParam(defaultValue = " ") List<String> productKorNameList,
                                      @RequestParam(defaultValue = " ") List<String> productEngNameList,
-                                     @RequestParam List<Integer> priceList, @RequestParam List<Integer> costPriceList) {
+                                     @RequestParam List<Integer> priceList,
+                                     @RequestParam List<Integer> costPriceList) {
 
-        int result = basicInformationService.addProduct(bigClassificationCodeList, middleClassificationCodeList,
-                smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
+        int result = basicInformationService.addProduct(bigClassificationCodeList, middleClassificationCodeList, smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
 
         if (result == 1) {
             return ResponseEntity.ok().body("성공");
@@ -219,10 +204,10 @@ public class BasicInformationController {
                                     @RequestParam(defaultValue = " ") List<String> smallClassificationCodeList,
                                     @RequestParam(defaultValue = " ") List<String> productKorNameList,
                                     @RequestParam(defaultValue = " ") List<String> productEngNameList,
-                                    @RequestParam List<Integer> priceList, @RequestParam List<Integer> costPriceList) {
+                                    @RequestParam List<Integer> priceList,
+                                    @RequestParam List<Integer> costPriceList) {
 
-        int result = basicInformationService.modifyProduct(updateProductIdList, bigClassificationCodeList, middleClassificationCodeList,
-                smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
+        int result = basicInformationService.modifyProduct(updateProductIdList, bigClassificationCodeList, middleClassificationCodeList, smallClassificationCodeList, productKorNameList, productEngNameList, priceList, costPriceList);
 
         if (result == 1) {
             return ResultDate.from("S-1", "성공");
@@ -232,18 +217,45 @@ public class BasicInformationController {
     }
 
     // ========================= 터치키 상품 등록 ======================//
-    @RequestMapping("/usr/basic-information/touchKeyManagement/addProductType")
+    @RequestMapping("/usr/basic-information/touchKeyManagement/getProductType")
     @ResponseBody
-    public ResponseEntity addProductType(String searchKeyword) {
+    public ResponseEntity getProductType(String searchKeyword) {
         List<ProductType> productTypeList = basicInformationService.getProductTypeList(searchKeyword);
         return ResponseEntity.ok().body(productTypeList);
+    }
+
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/addProductType")
+    @ResponseBody
+    public ResponseEntity addProductType(@RequestParam(defaultValue = " ") List<String> productTypeKorNameList,
+                                         @RequestParam(defaultValue = " ") List<String> productTypeEngNameList,
+                                         @RequestParam(defaultValue = " ") List<String> productTypeColorList) {
+
+        int result = basicInformationService.addProductType(productTypeKorNameList, productTypeEngNameList, productTypeColorList);
+
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/getProducts")
     @ResponseBody
     public ResponseEntity getProducts(String productTypeId) {
-        List<Product> productTypeList = basicInformationService.getProducts(productTypeId);
-        return ResponseEntity.ok().body(productTypeList);
+        List<Product> productList = basicInformationService.getProducts(productTypeId);
+        return ResponseEntity.ok().body(productList);
+    }
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/addTypeForProducts")
+    @ResponseBody
+    public ResultDate addTypeForProducts(@RequestParam List<String> productIdList, String productTypeId, String productTypeColor) {
+        int result = basicInformationService.addTypeForProducts(productIdList, productTypeId, productTypeColor);
+        if (result == 1) {
+            return ResultDate.from("S-1", "성공");
+        } else {
+            return ResultDate.from("F-1", "실패");
+        }
     }
 }

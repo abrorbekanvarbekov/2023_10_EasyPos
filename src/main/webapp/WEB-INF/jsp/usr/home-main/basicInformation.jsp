@@ -40,7 +40,7 @@
                     <span class="material-symbols-outlined">article</span>
                     <a href="#">터치키관리</a>
                     <ul>
-                        <li>
+                        <li onclick="touchKeyRegistration();" id="touchKeyRegistration">
                             <span class="material-symbols-outlined">subdirectory_arrow_right</span>
                             <a href="#">터치키상품등록</a>
                         </li>
@@ -94,15 +94,25 @@
 </div>
 
 <script>
+
+    <%--    ===============상품 관리 ================--%>
+
     function classificationManagement() {
         $("#classificationManagement").css("color", "#FBD3AD");
         $(".basicInformation-left").css("display", "flex");
 
         $("#productLookUp").css("color", "#FFFFFF");
-        $(".product-lookUp-page").css("display", "none")
+        $(".product-lookUp-page").css("display", "none");
 
         $("#addProductPage").css("color", "#FFFFFF");
         $(".add-product-page").css("display", "none");
+        //
+        $("#touchKeyRegistration").css("color", "#FFFFFF");
+        $(".touch-product-reg").css("display", "none");
+
+        $(".touch-product-reg").load(location.href + ' .touch-product-reg');
+        $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
+        $(".add-product-page").load(location.href + ' .add-product-page');
 
         $(".basicInformation-left").unwrap();
     }
@@ -112,7 +122,10 @@
         $("#classificationManagement").css("color", "#FFFFFF");
 
         $("#addProductPage").css("color", "#FFFFFF");
-        $(".add-product-page").css("display", "none")
+        $(".add-product-page").css("display", "none");
+
+        $("#touchKeyRegistration").css("color", "#FFFFFF");
+        $(".touch-product-reg").css("display", "none");
 
         $("#productLookUp").css("color", "#FBD3AD");
         $(".product-lookUp-page").css("display", "flex")
@@ -126,6 +139,7 @@
 
         $(".add-product-page").load(location.href + ' .add-product-page');
         $(".basicInformation-left").load(location.href + ' .basicInformation-left');
+        $(".touch-product-reg").load(location.href + ' .touch-product-reg');
 
         $(".product-lookUp-page").unwrap();
 
@@ -137,6 +151,9 @@
 
         $("#productLookUp").css("color", "#FFFFFF")
         $(".product-lookUp-page").css("display", "none");
+
+        $("#touchKeyRegistration").css("color", "#FFFFFF")
+        $(".touch-product-reg").css("display", "none");
 
         $("#addProductPage").css("color", "#FBD3AD");
         $(".add-product-page").css("display", "flex")
@@ -150,11 +167,42 @@
 
         $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
         $(".basicInformation-left").load(location.href + ' .basicInformation-left');
+        $(".touch-product-reg").load(location.href + ' .touch-product-reg');
 
         $(".add-product-page").unwrap();
     }
 
-    //  ====================================== //
+    // ===================== 터치키상품 관리 =======================//
+    let clickCnt = 0; // 고민중!!
+
+    function touchKeyRegistration() {
+        clickCnt++;
+        $(".basicInformation-left").css("display", "none")
+        $("#classificationManagement").css("color", "#FFFFFF");
+
+        $("#productLookUp").css("color", "#FFFFFF")
+        $(".product-lookUp-page").css("display", "none");
+
+        $("#addProductPage").css("color", "#FFFFFF");
+        $(".add-product-page").css("display", "none");
+
+        $("#touchKeyRegistration").css("color", "#FBD3AD");
+        $(".touch-product-reg").css("display", "flex");
+
+        if (clickCnt == 1) {
+            getBigClassifications(".productCl-box");
+        }
+
+        $(".basicInformation-left").load(location.href + ' .basicInformation-left');
+        $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
+        $(".add-product-page").load(location.href + ' .add-product-page');
+
+        $(".touch-product-reg").unwrap();
+    }
+
+    // ==============================================================//
+
+
     function mine() {
         $(event.target).select();
     }
@@ -785,10 +833,13 @@
             $.post("/usr/basic-information/delProduct", {
                 delProductIds: values.join(","),
             }, function (data) {
+                console.log(data)
                 if (data.success) {
                     let productListFirstChild = document.querySelector(".product-list-reg li:first-child");
                     productSearchBtn('product-reg-page', 'product-list-reg');
                     scrollToSelectedItem(productListFirstChild);
+                } else if (data.success == false) {
+                    console.log(123)
                 }
             }, "json")
         }

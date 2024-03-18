@@ -2635,13 +2635,15 @@ a {
 
 .side-bar:hover ~ .basicInformation-left,
 .side-bar:hover ~ .product-lookUp-page,
-.side-bar:hover ~ .add-product-page {
+.side-bar:hover ~ .add-product-page,
+.side-bar:hover ~ .touch-product-reg {
     left: 17%;
     width: 83%;
 }
 
 .productClassificationPage,
-.product-lookUp-container {
+.product-lookUp-container,
+.touch-product-reg-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -2649,7 +2651,8 @@ a {
 }
 
 .classification-top,
-.product-lookUp-top {
+.product-lookUp-top,
+.touch-product-reg-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2667,7 +2670,8 @@ a {
 }
 
 .classification-top > div:nth-child(2),
-.product-lookUp-top > div:nth-child(2) {
+.product-lookUp-top > div:nth-child(2),
+.touch-product-reg-top > div:nth-child(2) {
     display: flex;
     justify-content: end;
     align-items: center;
@@ -2676,7 +2680,8 @@ a {
 }
 
 .classification-top > div:nth-child(2) > button:not(:nth-child(1)),
-.product-lookUp-top > div:nth-child(2) > button:not(:nth-child(1)) {
+.product-lookUp-top > div:nth-child(2) > button:not(:nth-child(1)),
+.touch-product-reg-top > div:nth-child(2) > button:not(:nth-child(1)) {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
@@ -2689,7 +2694,8 @@ a {
 }
 
 .classification-top > div:nth-child(2) > button:nth-child(1),
-.product-lookUp-top > div:nth-child(2) > button:nth-child(1) {
+.product-lookUp-top > div:nth-child(2) > button:nth-child(1),
+.touch-product-reg-top > div:nth-child(2) > button:nth-child(1) {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: nowrap;
@@ -2874,7 +2880,15 @@ a {
     font-size: clamp(0.7rem, 1.1vw, 2rem);
 }
 
+.productType-main-right > div:not(:last-child),
+.productType-main-left > div:not(:last-child) {
+    position: sticky;
+    top: 0;
+}
+
 .productType-main-right > div:nth-child(2) {
+    position: sticky;
+    top: 0;
     display: flex;
     align-items: center;
     width: 100%;
@@ -2882,6 +2896,7 @@ a {
     border: 1px solid #DEDDE2;
     font-size: clamp(1rem, .9vw, 1.5rem);
 }
+
 
 .productType-main-right > div:nth-child(2) span:nth-child(1) {
     margin-left: 2%;
@@ -2969,12 +2984,11 @@ a {
 .product-lookUp-bottom > .product-list-search,
 .productType-main-left > .productType-list-container,
 .productType-main-right > .productType-list-container {
-    display: flex;
+    display: none;
 }
 
 
 .productType-list-container {
-    display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
@@ -3112,7 +3126,7 @@ a {
     border: 1px solid #BFBFBF;
     color: white;
     padding: 1% 5%;
-    background-color:  rgba(75, 85, 99, 1);
+    background-color: rgba(75, 85, 99, 1);
 }
 
 .pro-search-main > #select-btn {
@@ -3203,10 +3217,15 @@ a {
     flex-direction: column;
     padding: 0% 1%;
     width: 100%;
-    height: 100%;
+    min-height: 66%;
+    max-height: 66%;
+    overflow-y: scroll;
+    border-bottom: 1px solid #BFBFBF;
 }
 
 .pro-search-product-list-box > div:nth-child(1) {
+    position: sticky;
+    top: 0;
     display: flex;
     align-items: center;
     width: 100%;
@@ -3218,31 +3237,53 @@ a {
 
 .pro-search-product-list-box > div:nth-child(1) > input {
     width: 4%;
-    height: 50%;
+    height: 72%;
 }
 
-.pro-search-product-list-box > div:nth-child(1) span:nth-child(1) {
-    margin-left: 2%;
-    width: 10%;
-    height: 50%;
-}
-
-.pro-search-product-list-box > div:nth-child(1) span:not(:nth-child(1)) {
+.pro-search-product-list-box > div:nth-child(1) span,
+.search-pro-list-container li > span {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24%;
-    height: 100%;
     border-left: 1px solid #DEDDE2;
+    border-bottom: 1px solid #DEDDE2;
     font-size: clamp(0.7rem, 0.9vw, 1.3rem);
+    overflow: hidden;
 }
 
+.search-pro-list-container li > span:nth-child(6) {
+    border-right: 1px solid #DEDDE2;
+}
+
+.pro-search-product-list-box > div:nth-child(1) span:nth-child(2),
+.pro-search-product-list-box > div:nth-child(1) span:nth-child(6),
+.search-pro-list-container li > span:nth-child(2),
+.search-pro-list-container li > span:nth-child(6) {
+    width: 20%;
+    height: 100%;
+}
+
+.pro-search-product-list-box > div:nth-child(1) span:nth-child(3),
+.pro-search-product-list-box > div:nth-child(1) span:nth-child(5),
+.search-pro-list-container li > span:nth-child(3),
+.search-pro-list-container li > span:nth-child(5) {
+    width: 15%;
+    height: 100%;
+}
+
+.pro-search-product-list-box > div:nth-child(1) span:nth-child(4),
+.search-pro-list-container li > span:nth-child(4) {
+    width: 50%;
+    height: 100%;
+}
 
 .search-pro-list-container {
     display: flex;
+    flex-direction: column;
+    color: black;
+    cursor: default;
     width: 100%;
-    height: 82%;
-    border-bottom: 1px solid #BFBFBF;
+    height: 100%;
 }
 
 .search-pro-list-container li {
@@ -3257,54 +3298,18 @@ a {
 
 
 .search-pro-list-container li > span:nth-child(1) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 4.2%;
     height: 100%;
-    border: 1px solid #DEDDE2;
 }
 
 .search-pro-list-container li span:nth-child(1) > input {
-    width: 60%;
+    width: 68%;
     height: 75%;
-}
-
-.search-pro-list-container li > span:nth-child(2) {
-    display: flex;
-    justify-content: center;
-    width: 24%;
-    height: 100%;
-    border: 1px solid #DEDDE2;
 }
 
 .search-pro-list-container li > span input {
     outline: none;
     width: 95%;
-}
-
-.search-pro-list-container li > span:nth-child(3) {
-    display: flex;
-    justify-content: center;
-    width: 24%;
-    height: 100%;
-    border: 1px solid #DEDDE2;
-}
-
-.search-pro-list-container li > span:nth-child(4) {
-    display: flex;
-    justify-content: center;
-    width: 24%;
-    height: 100%;
-    border: 1px solid #DEDDE2;
-}
-
-.search-pro-list-container li > span:nth-child(5) {
-    display: flex;
-    justify-content: center;
-    width: 24%;
-    height: 100%;
-    border: 1px solid #DEDDE2;
 }
 
 /* ======================================*/

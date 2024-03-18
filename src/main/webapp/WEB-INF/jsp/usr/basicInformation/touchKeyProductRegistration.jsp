@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<div class="add-product-page touch-product-reg">
-    <div class="product-lookUp-container">
-        <div class="product-lookUp-top">
+<div class="touch-product-reg">
+    <div class="touch-product-reg-container">
+        <div class="touch-product-reg-top">
             <div>
                 <span class="material-symbols-outlined pr-2 text-red-400">arrow_circle_right</span>
                 <span>기초정보관리 > 터치키상품관리 > 터치키상품등록</span>
@@ -14,9 +14,9 @@
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
-                <button class="btn btn-active btn-sm pl-2">저장</button>
+                <button onclick="addProductType();" class="btn btn-active btn-sm pl-2">저장</button>
                 <button class="btn btn-active btn-sm pl-2">삭제</button>
-                <button class="btn btn-active btn-sm pl-2" >엑셀</button>
+                <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
         </div>
         <div class="touch-classification-name">
@@ -34,7 +34,8 @@
                     <button class="btn btn-active btn-xs">맨아래로</button>
                     <button class="btn btn-active btn-xs">순번정렬</button>
                     <button class="btn btn-active btn-xs">소분류+</button>
-                    <span class="material-symbols-outlined btn btn-active btn-xs ml-1 ">add</span>
+                    <span onclick="addProductTypeLi();"
+                          class="material-symbols-outlined btn btn-active btn-xs ml-1 ">add</span>
                 </div>
                 <div class="productType-lookUp-titles">
                     <input type="checkbox" disabled>
@@ -54,7 +55,8 @@
                     <button class="btn btn-active btn-xs">아래로</button>
                     <button class="btn btn-active btn-xs">맨아래로</button>
                     <button class="btn btn-active btn-xs">순번정렬</button>
-                    <span class="material-symbols-outlined btn btn-active btn-xs ml-1 " onclick="openMsgBox12();">add</span>
+                    <span class="material-symbols-outlined btn btn-active btn-xs ml-1 "
+                          onclick="openMsgBox();">add</span>
                 </div>
                 <div>
                     <span>순번</span>
@@ -93,7 +95,7 @@
                 <select id="smallClassification-box" class="select select-bordered select-xs w-full max-w-xs">
                     <option value="allSmallClassification">[ 소분류 전체 ]</option>
                 </select>
-                <button class=" btn btn-active btn-sm ">
+                <button onclick="getProductByProType();" class=" btn btn-active btn-sm ">
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
@@ -114,39 +116,26 @@
                 <span>상품코드</span>
                 <span>상품명</span>
                 <span>판매가</span>
+                <span>바코드</span>
             </div>
-            <ul class="search-pro-list-container">
-                <li class="">
-                    <span><input type="checkbox"></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </li>
-            </ul>
+            <ul class="search-pro-list-container"></ul>
         </div>
-        <button id="select-btn" value="true" class="btn btn-active btn-sm btn-info confirm-button">선택</button>
-        <button id="close-btn" onclick="closeMsgBox();" value="false" class="btn btn-active btn-sm btn-ghost cancel-button">닫기</button>
+        <button id="select-btn" onclick="selectProduct();" value="true"
+                class="btn btn-active btn-sm btn-info confirm-button">선택
+        </button>
+        <button id="close-btn" onclick="closeMsgBox();" value="false"
+                class="btn btn-active btn-sm btn-ghost cancel-button">닫기
+        </button>
     </div>
 </div>
 <script>
 
 
-    function openMsgBox12() {
-        $('.product-search-box').show();
-        $('.pro-search-main').show();
-        $('.pro-search-bg').show();
-    }
-
-    function closeMsgBox() {
-        $('.product-search-box').hide();
-        $('.pro-search-main').hide();
-        $('.pro-search-bg').hide();
-    }
-
     function getProductTypeList() {
+        $(".productType-list-container").css("display", "flex");
+
         let searchKeyword = $(".touch-classification-name > div > input")[0].value
-        $.get("/usr/basic-information/touchKeyManagement/addProductType", {
+        $.get("/usr/basic-information/touchKeyManagement/getProductType", {
                 searchKeyword: searchKeyword
             },
             function (data) {
@@ -166,20 +155,21 @@
                                 </span>
                                 <span>\${value.authDivision}</span>
                                 <span style="background-color: \${value.color}">
-                                    <select class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
-                                      <option selected>오랜지</option>
-                                      <option>연파랑</option>
-                                      <option>연녹</option>
-                                      <option>핑크</option>
-                                      <option>연빨강</option>
-                                      <option>살구</option>
+                                    <select id="productType-color-box" class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
+                                      <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
+                                      <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
+                                      <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
+                                      <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
+                                      <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
+                                      <option value="salmon" \${value.color == 'salmon' ? 'selected' : ''}>살구</option>
+                                      <option value="lightyellow" \${value.color == 'lightyellow' ? 'selected' : ''}>연노랑</option>
                                     </select>
                                 </span>
                             </li>
                         `
                     })
                     $(".productType-list-con-left").html(productTypeLi);
-                    clickEventForProType("productType-list-con-left");
+                    clickEventForProType("productType-list-con-left", "productType");
                 } else {
                     let msgBox = `
                         <div class="is-empty-msg">
@@ -191,21 +181,106 @@
             }, "json")
     }
 
-    function clickEventForProType(areaName) {
-        let listItemLastItem = $(`.\${areaName} .productType.checked`)[0]
+    function addProductTypeLi() {
+        let display = $(".productType-main-left .productType-list-container").css("display");
+        let productTypeLen = $(".productType-list-con-left li").length
+
+        if (display == "flex") {
+            let productTypeLi = `
+                <li class="productType newProType">
+                    <span><input type="checkbox"></span>
+                    <span>\${productTypeLen + 1}</span>
+                    <span></span>
+                    <span>
+                        <input type="text">
+                    </span>
+                    <span>
+                        <input type="text">
+                    </span>
+                    <span>매장</span>
+                    <span style="background-color: orange">
+                        <select id="new-productType-color-box" class="select select-bordered select-sm w-full max-w-xs" style="background-color: orange">
+                          <option value="orange" selected>오랜지</option>
+                          <option value="lightblue">연파랑</option>
+                          <option value="lightgreen">연녹</option>
+                          <option value="lightpink">핑크</option>
+                          <option value="orangered">연빨강</option>
+                          <option value="salmon">살구</option>
+                        </select>
+                    </span>
+                </li>
+            `
+            if (productTypeLen != 0) {
+                $(".productType-list-con-left").append(productTypeLi);
+            } else {
+                $(".productType-list-con-left").html(productTypeLi);
+            }
+        } else if (display == "none") {
+            alert("조회 후 추가하세요.");
+        }
+    }
+
+    function addProductType() {
+        let newProTypeLen = $(".productType-list-con-left > .newProType").length;
+
+        if (newProTypeLen != 0) {
+            let newProTypeKorNameList = [];
+            let newProTypeEngNameList = [];
+            let newProTypeColorList = [];
+            for (let i = 0; i < newProTypeLen; i++) {
+                const newProTypeKorName = $(".productType-list-con-left > .newProType")[i].children[3].children[0].value;
+                newProTypeKorNameList.push(newProTypeKorName);
+                const newProTypeEngName = $(".productType-list-con-left > .newProType")[i].children[4].children[0].value;
+                newProTypeEngNameList.push(newProTypeEngName);
+                const newProTypeColorBox = $(".productType-list-con-left > .newProType")[i].children[6].children[0];
+                const newProTypeColor = newProTypeColorBox.options[newProTypeColorBox.selectedIndex].value;
+                newProTypeColorList.push(newProTypeColor);
+            }
+
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/addProductType",
+                data: {
+                    productTypeKorNameList: newProTypeKorNameList.join(","),
+                    productTypeEngNameList: newProTypeEngNameList.join(","),
+                    productTypeColorList: newProTypeColorList.join(",")
+                },
+                method: "POST",
+                success: function (data) {
+                    alert("정상적으로 처리 되었습니다.");
+                    getProductTypeList();
+                },
+                error: function (request, status, error,) {
+                    alert("정상적으로 처리 되지 않았습니다.\n 다시 시도해보세요.");
+                    getProductTypeList();
+                },
+                complete: function () {
+                    getProductTypeList();
+                }
+            })
+
+        } else {
+            alert("터치키은(는) 변경된 사항이 없습니다.");
+        }
+    };
+
+    function clickEventForProType(areaName, elName) {
+        let listItemLastItem = $(`.\${areaName} .\${elName}.checked`)[0]
         listItemLastItem.style.backgroundColor = "rgb(243, 243, 243)"
         listItemLastItem.style.color = "red"
         listItemLastItem.classList.add("checked")
 
-        $(`.\${areaName} .productType`).each((idx, element) => {
+        $(`.\${areaName} .\${elName}`).each((idx, element) => {
             element.addEventListener("click", function () {
-                let lastCheckedEl = document.querySelector(`.\${areaName} .productType.checked`);
+                let lastCheckedEl = document.querySelector(`.\${areaName} .\${elName}.checked`);
                 lastCheckedEl.style.backgroundColor = "inherit";
                 lastCheckedEl.style.color = "black";
                 lastCheckedEl.classList.remove("checked");
+                lastCheckedEl.classList.remove("selected");
+
                 element.style.backgroundColor = "rgb(243, 243, 243)";
                 element.style.color = "red";
                 element.classList.add("checked");
+                element.classList.add("selected");
 
                 areaName == "productType-list-con-left" ? getProductList(element) : "";
             })
@@ -222,7 +297,7 @@
                 $.each(data, (idx, value) => {
                     let ordinalNum = (idx + 1).toString();
                     productLi += `
-                    <li class="productType \${idx+1 == 1 ? 'checked' : ''}">
+                    <li class="product \${idx+1 == 1 ? 'checked' : ''}">
                         <span><input type="checkbox"></span>
                         <span>\${ordinalNum.padStart(3, "0")}</span>
                         <span>\${value.productCode}</span>
@@ -231,19 +306,20 @@
                         <span>매장</span>
                         <span style="background-color: \${value.color}">
                             <select class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
-                              <option \${value.color == '오랜지' ? 'selected' : ''}>오랜지</option>
-                              <option \${value.color == '연파랑' ? 'selected' : ''}>연파랑</option>
-                              <option \${value.color == '연녹' ? 'selected' : ''}>연녹</option>
-                              <option \${value.color == '핑크' ? 'selected' : ''}>핑크</option>
-                              <option \${value.color == '연빨강' ? 'selected' : ''}>연빨강</option>
-                              <option \${value.color == '살구' ? 'selected' : ''}>살구</option>
+                              <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
+                              <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
+                              <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
+                              <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
+                              <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
+                              <option value="salmon" \${value.color == 'salmon' ? 'selected' : ''}>살구</option>
+                              <option value="yellow" \${value.color == 'yellow' ? 'selected' : ''}>연노랑</option>
                             </select>
                         </span>
                     </li>
                     `
                 })
                 $(".productType-list-con-right").html(productLi);
-                clickEventForProType("productType-list-con-right");
+                clickEventForProType("productType-list-con-right", "product");
             } else {
                 let msgBox = `
                         <div class="is-empty-msg">
@@ -255,7 +331,99 @@
         }, "json")
     }
 
-    function searchProductList() {
-        openMsgBox();
+    function openMsgBox() {
+        let selectedProTypeLen = $(".productType.selected").length
+        if (selectedProTypeLen != 0) {
+            $('.product-search-box').show();
+            $('.pro-search-main').show();
+            $('.pro-search-bg').show();
+        } else if (selectedProTypeLen == 0) {
+            alert("상품을 추가할 분류정보를 선택하세요. \n(신규 분류일 경우 저장 후 상품추가.)")
+        }
+    }
+
+    function closeMsgBox() {
+        $('.product-search-box').hide();
+        $('.pro-search-main').hide();
+        $('.pro-search-bg').hide();
+    }
+
+    function getProductByProType() {
+        let bigClassificationSelect = document.querySelector(`.productCl-box div > #bigClassification-box`);
+        let middleClassificationSelect = document.querySelector(`.productCl-box div > #middleClassification-box`);
+        let smallClassificationSelect = document.querySelector(`.productCl-box div > #smallClassification-box`);
+        let searchCategorySelect = document.querySelector(`.productCl-box div > #searchCategory-box`);
+        let bigClassificationCode = bigClassificationSelect.options[bigClassificationSelect.selectedIndex].value
+        let middleClassificationCode = middleClassificationSelect.options[middleClassificationSelect.selectedIndex].value;
+        let smallClassificationCode = smallClassificationSelect.options[smallClassificationSelect.selectedIndex].value;
+        let searchCategory = searchCategorySelect.options[searchCategorySelect.selectedIndex].textContent;
+        let searchDivision = document.querySelector(`.productCl-box div > .product-nameOrCode-input`).value;
+
+        $.get("/usr/basic-information/productSearch", {
+            bigClassificationCode: bigClassificationCode,
+            middleClassificationCode: middleClassificationCode,
+            smallClassificationCode: smallClassificationCode,
+            searchCategory: searchCategory,
+            productName: searchDivision
+        }, function (data) {
+            if (data != null) {
+                let productListItem = "";
+                $.each(data, (idx, value) => {
+                    productListItem += `
+                    <li class="product \${idx+1 == 1 ? 'checked' : ''}">
+                        <span><input type="checkbox" value="\${value.id}"></span>
+                        <span>\${value.smallClassificationName}</span>
+                        <span>\${value.productCode}</span>
+                        <span>\${value.productKorName}</span>
+                        <span data-value="\${value.price}">\${value.price.toLocaleString()}</span>
+                        <span></span>
+                    </li>
+                    `
+                })
+
+                $(`.search-pro-list-container`).html(productListItem);
+
+                clickEventForProType("search-pro-list-container", "product");
+                let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
+
+                scrollToSelectedItem(listItemFirstItem)
+            } else {
+                let msgBox = `
+                    <div class="is-empty-msg">
+                        <span>검색하신 정보가 존재하지 않습니다.</span>
+                    </div>
+                `
+                $(`.search-pro-list-container`).html(msgBox);
+            }
+        }, "json")
+    }
+
+    function selectProduct() {
+        let productListLength = $(".search-pro-list-container li").length
+
+        if (productListLength != 0) {
+            let selectProductItem = $(".search-pro-list-container li span:nth-child(1) > input:checked").map((index, el) => el.value).toArray();
+            let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
+            let selectProTypeItemCode = selectProTypeItem.children[2].textContent;
+            let selectProTypeColorBox = selectProTypeItem.children[6].children[0];
+            let selectProTypeColor = selectProTypeColorBox.options[selectProTypeColorBox.selectedIndex].value;
+
+            if (selectProductItem.length != 0 && productListLength > 0) {
+                $.post("/usr/basic-information/touchKeyManagement/addTypeForProducts", {
+                    productIdList: selectProductItem.join(","),
+                    productTypeId: selectProTypeItemCode,
+                    productTypeColor: selectProTypeColor
+                }, function (data) {
+                    if (data.success) {
+                        getProductList(selectProTypeItem);
+                        closeMsgBox();
+                    } else if (data.success == false) {
+                        closeMsgBox();
+                    }
+                }, "json");
+            } else {
+                alert("상품을 선택해주세요.");
+            }
+        }
     }
 </script>
