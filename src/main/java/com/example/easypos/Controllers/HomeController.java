@@ -30,22 +30,25 @@ public class HomeController {
 
     @RequestMapping("/")
     public String Tables(Model model, @RequestParam(defaultValue = "1") int floor) {
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String businessDate = businessFullDate[0];
+        String beginDate = businessDate + " 00:00:00";
+        String endDate = businessDate + " 23:59:59";
 
         if (floor <= 0 || floor > 3) {
             return rq.jsReturnOnView("잘못 된 번호 입력");
         }
 
         rq.floor(floor);
-        List<CartItems> cartItems = homeService.getCartItems(floor);
+        List<CartItems> cartItems = homeService.getCartItems(floor, beginDate, endDate);
         List<Table> tables = homeService.getTableLIst(floor);
-        List<CartItems> priceSumList = homeService.getPriceSumList(floor);
+        List<CartItems> priceSumList = homeService.getPriceSumList(floor, beginDate, endDate);
         List<TableGroup> tableGroups = homeService.getTableGroups();
         int orderTablesCnt = 0;
         for (int i = 1; i <= 3; i++) {
-            List<CartItems> orderTablesList = homeService.getOrderTablesList(i);
+            List<CartItems> orderTablesList = homeService.getOrderTablesList(i, beginDate, endDate);
             orderTablesCnt += orderTablesList.size();
         }
-
 
         model.addAttribute("loginedEmployeeName", rq.getLoginedEmployee().getName());
         model.addAttribute("businessDate", rq.getBusinessDate());

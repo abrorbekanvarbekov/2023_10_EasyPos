@@ -3,6 +3,7 @@ package com.example.easypos.Controllers;
 import com.example.easypos.Services.HomeMainService;
 import com.example.easypos.Vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,13 +97,15 @@ public class HomeMainController {
         String openingTime = businessFullDate[1];
         String beginDate = businessDate + " 00:00:00";
         String endDate = businessDate + " 23:59:59";
+
+
         List<Integer> payedTotalAmount = homeMainService.getPayedTotalAmount(floor, beginDate, endDate);
         List<Integer> payedTotalCnt = homeMainService.getPayedTotalCnt(floor, beginDate, endDate);
         List<Integer> payedTotalDiscountAmount = homeMainService.getPayedTotalDiscountAmount(floor, beginDate, endDate);
         List<Integer> numberOfReturns = homeMainService.getNumberOfReturns(floor, beginDate, endDate);
         List<Integer> amountOfReturns = homeMainService.getAmountOfReturns(floor, beginDate, endDate);
         int outstandingAmount = homeMainService.getOutstandingAmount(floor, beginDate, endDate);
-        int outstandingTables = homeMainService.getOutstandingTables(floor);
+        int outstandingTables = homeMainService.getOutstandingTables(floor, beginDate, endDate);
         int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
 
         StringBuffer businessDateToFormat = new StringBuffer(businessDate.replaceAll("-", ""));
@@ -136,7 +139,6 @@ public class HomeMainController {
                                                     int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales,
                                                     int amountOfReturns, int paidByCash, int paidByCart) {
         deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(businessDate);
-        System.out.println(deadlineSettlement);
         if (deadlineSettlement == null) {
             homeMainService.insertDeadlineSettlement(businessDate, openingDate, employeeName, employeeCode, totalSales, totalSalesCount,
                     discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
@@ -146,9 +148,20 @@ public class HomeMainController {
         }
 
         rq.logout();
+        rq.logoutToEmployee();
         return ResultDate.from("S-1", "/usr/member/loginPage");
     }
 
+    @RequestMapping("/usr/home-main/getDeadlineSettlement")
+    @ResponseBody
+    public ResponseEntity getDeadlineSettlement(String businessDate) {
+        deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(businessDate);
+        if (deadlineSettlement != null) {
+            return ResponseEntity.ok().body(deadlineSettlement);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
     @RequestMapping("/usr/home-main/salesInformationManagement")
     public String SalesInformationManagement() {

@@ -13,11 +13,11 @@
     </a>
     <ul class="header-box-detail">
         <li>
-            <a href="/?floor=" + ${rq.floor} >
+            <a href="${pageName == '개점처리' ? 'loginPage' : '/?floor=1'}">
                 <c:if test="${pageName == '메인메뉴' }">
                     <span class="material-symbols-outlined text-4xl">power_settings_new</span>
                 </c:if>
-                <c:if test="${pageName != '메인메뉴'}" >
+                <c:if test="${pageName != '메인메뉴'}">
                     <span class="material-symbols-outlined text-5xl">close</span>
                 </c:if>
             </a>

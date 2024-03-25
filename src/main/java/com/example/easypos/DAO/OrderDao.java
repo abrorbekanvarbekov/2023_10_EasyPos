@@ -14,8 +14,9 @@ public interface OrderDao {
 
     @Select("""
             select * from product
+            where productType = #{productTypeCode};
             """)
-    List<Product> getProductList();
+    List<Product> getProductList(String productTypeCode, String productTypeName);
 
     @Select("""
             select p.id, c.*
@@ -25,9 +26,11 @@ public interface OrderDao {
                 where c.table_id = #{tableId}
                   and c.floor_id = #{floor}
                   and c.delStatus = 0
+                  and c.regDate > #{beginDate}
+                  and c.regDate < #{endDate}
                 order by regDate
             """)
-    List<CartItems> getCartItemsList(int tableId, int floor);
+    List<CartItems> getCartItemsList(int tableId, int floor, String beginDate, String endDate);
 
     @Select("""
             select ifnull(sum(CartItems.productSailPrice), 0) from CartItems
@@ -44,24 +47,31 @@ public interface OrderDao {
             where product_id = #{productId}
             and table_id = #{tabId}
             and floor_id = #{floor}
+            and productName = #{productName}
             and delStatus = 0
+            limit 1
             """)
-    CartItems getCartItem(int productId, int tabId, int floor);
+    CartItems getCartItem(int productId, String productName, int tabId, int floor);
 
     @Delete("""
             delete from CartItems
             where product_id = #{productId}
             and table_id = #{tabId}
             and floor_id = #{floor}
+            and productName = #{productName}
+            and delStatus = 0
+            limit 1
             """)
-    void cancelProduct(int productId, int tabId, int floor);
+    void cancelProduct(int productId, String productName, int tabId, int floor);
 
     @Select("""
             select * from Cart
-                       where tabId = #{tabId}
-                       and floor = #{floor}
+                where tabId = #{tabId}
+                and floor = #{floor}
+                and regDate > #{beginDate}
+                and regDate < #{endDate}
             """)
-    Cart getCart(int floor, int tabId);
+    Cart getCart(int floor, int tabId, String beginDate, String endDate);
 
     @Insert("""
             insert into Cart (regDate, updateDate, tabId, floor)
@@ -82,11 +92,11 @@ public interface OrderDao {
                     productSailPrice,
                     floor_id,
                     cart_id)
-                select now(), now(), #{productId}, #{productName}, #{tabId}, #{productCnt}, p.price, #{productPrices}, #{productSailPrice}, #{floor}, #{cart_id}
+                select concat(#{businessDate}, curtime()), concat(#{businessDate}, curtime()), #{productId}, #{productName}, #{tabId}, #{productCnt}, p.price, #{productPrices}, #{productSailPrice}, #{floor}, #{cart_id}
                 from product as p
                 where p.id = #{productId}
             """)
-    void insertCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id);
+    void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id);
 
     @Select("""
             select * from product
@@ -96,7 +106,7 @@ public interface OrderDao {
 
     @Update("""
             update CartItems
-                 set updateDate = now(),
+                 set updateDate = concat(#{businessDate}, curtime()),
                      quantity = #{productCnt},
                      productSailPrice = #{productSailPrice},
                      productSumPrice = #{productPrices},
@@ -106,7 +116,7 @@ public interface OrderDao {
                  and floor_id = #{floor}
                  and delStatus = 0
             """)
-    int updateCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor);
+    int updateCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor);
 
     // ==============================================================//
 

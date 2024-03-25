@@ -59,12 +59,18 @@
         </li>
         <li>
             <form action="/usr/tables/insertProduct" method="post" name="do-insert-product-form">
-                <input type="hidden" name="productPrices" value=""/>
-                <input type="hidden" name="productNames" value=""/>
-                <input type="hidden" name="productSailPrices" value=""/>
-                <input type="hidden" name="productIds" value=""/>
-                <input type="hidden" name="productCnts" value=""/>
-                <input type="hidden" name="delProductIds" value=""/>
+                <input type="hidden" name="productPricesList" value=""/>
+                <input type="hidden" name="productNamesList" value=""/>
+                <input type="hidden" name="productSailPriceList" value=""/>
+                <input type="hidden" name="productIdList" value=""/>
+                <input type="hidden" name="productCntList" value=""/>
+                <input type="hidden" name="updateProIdList" value=""/>
+                <input type="hidden" name="updateProNameList" value=""/>
+                <input type="hidden" name="updateProCntList" value=""/>
+                <input type="hidden" name="updateProPriceList" value=""/>
+                <input type="hidden" name="updateProSailPriceList" value=""/>
+                <input type="hidden" name="delProductList" value=""/>
+                <input type="hidden" name="delProductNameList" value=""/>
                 <input type="hidden" name="isPrintControl" value="true"/>
                 <input type="hidden" name="floor" value="${param.floor}"/>
                 <input type="hidden" name="tabId" value="${param.tabId}"/>
@@ -78,7 +84,7 @@
 
 
     $(".payByCreditCartBtn").click(function () {
-        let cartItemsList = $(".product-box-list")
+        let cartItemsList = $(".tbody li")
         if (cartItemsList.length == 0) {
             $(".payByCreditCartBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
@@ -103,11 +109,9 @@
 
         }
     })
-
-
     //  ==================================================================================== //
     $(".payByCashBtn").click(function () {
-        let cartItemsList = $(".product-box-list")
+        let cartItemsList = $(".tbody li")
         if (cartItemsList.length == 0) {
             $(".payByCreditCartBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
@@ -145,18 +149,29 @@
 
 
     $(".order-btn").click(function () {
-        const productIds = $('.product-box-list').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
-        const productCnts = $('.product-box-list').map((index, el) => el.children[2].value).toArray();
-        const productSailPrices = $('.product-box-list').map((index, el) => el.children[4].value).toArray();
-        const productPrices = $('.product-box-list').map((index, el) => el.children[3].value).toArray();
-        const productNames = $('.product-box-list').map((index, el) => el.children[1].value).toArray();
+        const productIds = $('.tbody li.newProduct').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
+        const productCnts = $('.tbody li.newProduct').map((index, el) => el.children[2].value).toArray();
+        const productSailPrices = $('.tbody li.newProduct').map((index, el) => el.children[4].value).toArray();
+        const productPrices = $('.tbody li.newProduct').map((index, el) => el.children[3].value).toArray();
+        const productNames = $('.tbody li.newProduct').map((index, el) => el.children[1].value).toArray();
 
+        const updateProductIds = $('.tbody li.updateProduct').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
+        const updateProductNames = $('.tbody li.updateProduct').map((index, el) => el.children[1].value).toArray();
+        const updateProductCnts = $('.tbody li.updateProduct').map((index, el) => el.children[2].value).toArray();
+        const updateProductPrices = $('.tbody li.updateProduct').map((index, el) => el.children[3].value).toArray();
+        const updateProductSailPrices = $('.tbody li.updateProduct').map((index, el) => el.children[4].value).toArray();
 
-        $('input[name=productNames]').val(productNames.join(","))
-        $('input[name=productPrices]').val(productPrices.join(","))
-        $('input[name=productSailPrices]').val(productSailPrices.join(","))
-        $('input[name=productIds]').val(productIds.join(","))
-        $('input[name=productCnts]').val(productCnts.join(","))
+        $('input[name=productIdList]').val(productIds.join(","))
+        $('input[name=productCntList]').val(productCnts.join(","))
+        $('input[name=productSailPriceList]').val(productSailPrices.join(","))
+        $('input[name=productPricesList]').val(productPrices.join(","))
+        $('input[name=productNamesList]').val(productNames.join(","))
+
+        $('input[name=updateProIdList]').val(updateProductIds.join(","))
+        $('input[name=updateProNameList]').val(updateProductNames.join(","))
+        $('input[name=updateProCntList]').val(updateProductCnts.join(","))
+        $('input[name=updateProPriceList]').val(updateProductPrices.join(","))
+        $('input[name=updateProSailPriceList]').val(updateProductSailPrices.join(","))
 
         $('form[name=do-insert-product-form]').submit();
     })
@@ -170,18 +185,18 @@
             let isExistCartItem = data.dataName
 
             if (isExistCartItem !== "true") {
-                const productIds = $('.product-box-list').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
-                const productCnts = $('.product-box-list').map((index, el) => el.children[2].value).toArray();
-                const productSailPrices = $('.product-box-list').map((index, el) => el.children[4].value).toArray();
-                const productPrices = $('.product-box-list').map((index, el) => el.children[3].value).toArray();
-                const productNames = $('.product-box-list').map((index, el) => el.children[1].value).toArray();
+                const productIds = $('.tbody li.newProduct').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
+                const productCnts = $('.tbody li.newProduct').map((index, el) => el.children[2].value).toArray();
+                const productSailPrices = $('.tbody li.newProduct').map((index, el) => el.children[4].value).toArray();
+                const productPrices = $('.tbody li.newProduct').map((index, el) => el.children[3].value).toArray();
+                const productNames = $('.tbody li.newProduct').map((index, el) => el.children[1].value).toArray();
 
                 $.get("/usr/tables/insertProduct", {
-                    productIds: productIds.join(","),
-                    productCnts: productCnts.join(","),
-                    productSailPrices: productSailPrices.join(","),
-                    productPrices: productPrices.join(","),
-                    productNames: productNames.join(","),
+                    productIdList: productIds.join(","),
+                    productCntList: productCnts.join(","),
+                    productSailPriceList: productSailPrices.join(","),
+                    productPricesList: productPrices.join(","),
+                    productNamesList: productNames.join(","),
                     floor: ${rq.floor},
                     tabId: ${param.tabId},
                     isPrintControl: "true"

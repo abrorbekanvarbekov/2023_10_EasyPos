@@ -20,46 +20,38 @@ public class OrderService {
         return orderDao.getProductTypes();
     }
 
-    public List<Product> getProductList() {
-        return orderDao.getProductList();
+    public List<Product> getProductList(String productTypeCode, String productTypeName) {
+        return orderDao.getProductList(productTypeCode, productTypeName);
     }
 
-    public List<CartItems> getCartItemsList(int tableId, int floor) {
-        return orderDao.getCartItemsList(tableId, floor);
-    }
-
-    public int getDiscountSumAmount(int tabNum, int floor) {
-        return orderDao.getDiscountSumAmount(tabNum, floor);
+    public List<CartItems> getCartItemsList(int tableId, int floor, String beginDate, String endDate) {
+        return orderDao.getCartItemsList(tableId, floor, beginDate, endDate);
     }
 
     // ==============================================================//
 
-    public CartItems getCartItem(int productId, int tabId, int floor) {
-        return orderDao.getCartItem(productId, tabId, floor);
+    public CartItems getCartItem(int productId, String productName, int tabId, int floor) {
+        return orderDao.getCartItem(productId, productName, tabId, floor);
     }
 
-    public void cancelProduct(int productId, int tabId, int floor) {
-        orderDao.cancelProduct(productId, tabId, floor);
+    public void cancelProduct(int productId, String productName, int tabId, int floor) {
+        orderDao.cancelProduct(productId, productName, tabId, floor);
     }
 
-    public Cart getCart(int floor, int tabId) {
-        return orderDao.getCart(floor, tabId);
+    public Cart getCart(int floor, int tabId, String beginDate, String endDate) {
+        return orderDao.getCart(floor, tabId, beginDate, endDate);
     }
 
     public void createCart(int floor, int tabId) {
         orderDao.createCart(floor, tabId);
     }
 
-    public void insertCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id) {
-        orderDao.insertCartItems(productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id);
+    public void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id) {
+        orderDao.insertCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id);
     }
 
-    public Product getProductName(int productId) {
-        return orderDao.getProductName(productId);
-    }
-
-    public int updateCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor) {
-        return orderDao.updateCartItems(productId, productCnt, productSailPrice, productPrices, productName, tabId, floor);
+    public int updateCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor) {
+        return orderDao.updateCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor);
     }
 
     // ==============================================================//
@@ -93,6 +85,7 @@ public class OrderService {
     public List<paymentCreditCart> getPaymentCartList(int tabNum, int floor, int cart_id) {
         return orderDao.getPaymentCartList(tabNum, floor, cart_id);
     }
+
 
     // ==============================================================//
 

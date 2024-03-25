@@ -67,9 +67,9 @@ body .header-box li:hover, .header-box-detail li:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
-    top: 25px;
+    width: 17%;
+    height: 32%;
+    top: 18px;
     right: 27px;
     border-radius: 100%;
     position: absolute;
@@ -84,6 +84,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 3%;
     background-color: white;
     border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-size: clamp(.7rem, 1vw, 1.5rem);
 }
 
 
@@ -513,7 +514,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 67px;
+    height: 9%;
 }
 
 .footerFeed > ul {
@@ -521,7 +522,6 @@ body .header-box li:hover, .header-box-detail li:hover {
     width: 100%;
     height: 100%;
     align-items: center;
-    font-size: 18px;
     font-weight: bold;
     color: white;
 }
@@ -532,6 +532,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: rgb(75 85 99);
     border-right: 1px solid rgba(255, 255, 255, .5);
     cursor: pointer;
+    font-size: clamp(.7rem, .9vw, 1.3rem);
 }
 
 .footerFeed > ul li a {
@@ -574,7 +575,7 @@ body .header-box li:hover, .header-box-detail li:hover {
 .manuPage {
     display: flex;
     width: 100%;
-    height: 79%;
+    height: 80%;
 }
 
 .manuPage > .manuPageLeft {
@@ -583,6 +584,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 100%;
     position: relative;
     border-left: 1px solid grey;
+    font-size: clamp(0.7rem, .93vw, 1.5rem);
 }
 
 .order-msg-box {
@@ -591,7 +593,6 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 5%;
     width: 100%;
     border: 1px solid rgba(169, 169, 169, .3);
-    margin-top: 7%;
 }
 
 .order-msg-box > span:first-child {
@@ -604,14 +605,14 @@ body .header-box li:hover, .header-box-detail li:hover {
 .order-msg-box > .msg-tag {
     padding-left: 30%;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: clamp(.7rem, 1vw, 1.5rem);
 }
 
 .selectedManuList {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 34%;
+    height: 42%;
     overflow: auto;
 }
 
@@ -626,20 +627,24 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: white;
 }
 
-.selectedManuList > ul li {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 30px;
-    border: 1px solid darkgray;
-    cursor: pointer;
-}
 
 .selectedManuList > ul {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 270px;
+    max-height: 90%;
+    min-height: 90%;
+    font-size: clamp(.7rem, .85vw, 1.5rem);
+}
+
+.selectedManuList > ul li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 11%;
+    min-height: 11%;
+    max-height: 11%;
+    cursor: pointer;
 }
 
 .selectedManuList > .thead span, .selectedManuList > ul li input {
@@ -647,28 +652,34 @@ body .header-box li:hover, .header-box-detail li:hover {
     align-items: center;
     justify-content: center;
     height: 30px;
-    border: 1px solid darkgray;
+    border-bottom: 1px solid darkgray;
+    border-left: 1px solid darkgray;
     border-top: none;
 }
 
 .selectedManuList > .thead span:nth-child(1), .selectedManuList > ul li input:nth-child(1) {
-    width: 35px;
+    width: 8%;
+    height: 100%;
 }
 
 .selectedManuList > .thead span:nth-child(2), .selectedManuList > ul li input:nth-child(2) {
-    width: 310px;
+    width: 70%;
+    height: 100%;
 }
 
 .selectedManuList > .thead span:nth-child(3), .selectedManuList > ul li input:nth-child(3) {
-    width: 65px;
+    width: 15%;
+    height: 100%;
 }
 
 .selectedManuList > .thead span:nth-child(4), .selectedManuList > ul li input:nth-child(4) {
-    width: 159px;
+    width: 20%;
+    height: 100%;
 }
 
 .selectedManuList > .thead span:nth-child(5), .selectedManuList > ul li input:nth-child(5) {
-    width: 140px;
+    width: 20%;
+    height: 100%;
 }
 
 .manuPage .buttons {
@@ -710,7 +721,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     display: flex;
     flex-direction: column;
     width: 42%;
-    height: 114%;
+    height: 100%;
     padding: 5px;
 }
 
@@ -722,6 +733,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     border: 1px solid rgba(169, 169, 169, .3);
     font-weight: bold;
     cursor: pointer;
+    font-size: clamp(.7rem, .8vw, 1.4rem);
 }
 
 .allProductInfo div:not(div:last-child) span:first-child {
@@ -731,7 +743,7 @@ body .header-box li:hover, .header-box-detail li:hover {
 
 .allProductInfo div:not(div:last-child) span {
     display: flex;
-    padding: 4px 10px 4px 13px;
+    padding: .7%;
     width: 50%;
     height: 100%;
     justify-content: center;
@@ -750,8 +762,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     display: flex;
     justify-content: space-between;
     width: 58%;
-    height: 112%;
-    padding: 5px;
+    height: 100%;
     border: 2px solid rgba(169, 169, 169, .3);
 }
 
@@ -759,8 +770,8 @@ body .header-box li:hover, .header-box-detail li:hover {
     direction: rtl;
     width: 100%;
     font-weight: bold;
-    font-size: 1.1rem;
-    height: 45px;
+    font-size: clamp(.7rem, 1vw, 1.4rem);
+    height: 14%;
     border: 1px solid black;
     padding: 5px;
 }
@@ -774,7 +785,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 16%;
+    height: 17%;
 }
 
 .calculator > .numberFeed div:not(div:first-child) span {
@@ -782,9 +793,11 @@ body .header-box li:hover, .header-box-detail li:hover {
     justify-content: center;
     align-items: center;
     width: 33%;
-    font-size: 1.1rem;
+    height: 100%;
+    font-size: clamp(.7rem, 1vw, 1.4rem);
     font-weight: bold;
     border: 1px solid rgba(169, 169, 169, .3);
+    padding: 0;
 }
 
 .calculator > .buttonsFeed {
@@ -807,11 +820,13 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: rgba(75, 85, 99, .9);
     color: white;
     border: 1px solid rgba(169, 169, 169, .3);
+    padding: 0;
+    font-size: clamp(.7rem, .8vw, 1.4rem);
 }
 
 /*Detail ManuPage RightFeed*/
 .manuPage > .manuPageRight {
-    width: 1300px;
+    width: 60%;
     height: 100%;
     position: relative;
     border-left: 1px solid grey;
@@ -819,17 +834,22 @@ body .header-box li:hover, .header-box-detail li:hover {
 
 .manuPage > .manuPageRight > .productType-box {
     display: flex;
+    align-content: baseline;
     flex-wrap: wrap;
     border: 1px solid darkgray;
+    width: 100%;
+    height: 27%;
+    max-height: 27%;
 }
 
 .manuPage > .manuPageRight > .productType-box li {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 100px;
+    width: 15%;
+    height: 50%;
     border: 1px solid darkgray;
+    font-size: clamp(0.7rem, 1vw, 1.5rem);
 }
 
 .productType-box li > button {
@@ -848,18 +868,23 @@ body .header-box li:hover, .header-box-detail li:hover {
 
 .manuPage > .manuPageRight > .product-box {
     display: flex;
+    align-content: baseline;
     flex-wrap: wrap;
     margin-top: 10px;
+    width: 100%;
+    height: 70%;
+    max-height: 70%;
 }
 
 .manuPage > .manuPageRight > .product-box li {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 100px;
+    width: 14%;
+    height: 25%;
     background-color: aqua;
     border: 1px solid darkgray;
+    font-size: clamp(0.7rem, 1vw, 1.3rem);
 }
 
 .product-box li {
@@ -2610,7 +2635,7 @@ a {
 .product-lookUp-page,
 .add-product-page,
 .touch-product-reg {
-    display: flex;
+    display: none;
     position: relative;
     width: 98%;
     height: 92%;
@@ -2877,7 +2902,7 @@ a {
     align-items: center;
     background-color: #e6e6e6;
     border-left: 1px solid #DEDDE2;
-    font-size: clamp(0.7rem, 1.1vw, 2rem);
+    font-size: clamp(0.7rem, 1vw, 2rem);
 }
 
 .productType-main-right > div:not(:last-child),
@@ -3001,7 +3026,7 @@ a {
     height: 5%;
     min-height: 5%;
     max-height: 5%;
-    font-size: clamp(0.7rem, 1vw, 2rem);
+    font-size: clamp(0.6rem, .85vw, 1.3rem);
 }
 
 
@@ -3079,7 +3104,7 @@ a {
     line-height: 1rem;
     padding-left: 0.75rem;
     padding-right: 2rem;
-    font-size: 0.875rem;
+    font-size: clamp(0.6rem, 0.8vw, 1.3rem);
     color: black;
 }
 
@@ -3327,7 +3352,7 @@ a {
     align-items: center;
     width: 100%;
     height: 6%;
-    font-size: clamp(0.7rem, 1vw, 2rem);
+    font-size: clamp(0.7rem, .8vw, 1rem);
 }
 
 
@@ -3400,7 +3425,7 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     padding: 6%;
     width: 100%;
     height: 70%;
-    font-size: clamp(0.7rem, 1.3vw, 2rem);
+    font-size: clamp(0.7rem, 1vw, 2rem);
     color: red;
 }
 
@@ -3417,11 +3442,11 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 77%;
+    top: 79%;
     right: 0%;
     padding: 1% 1%;
     width: 100%;
-    height: 23%;
+    height: 21%;
     background-color: rgba(230, 230, 230, .8);
 }
 
@@ -3440,7 +3465,7 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     align-items: center;
     width: 100%;
     height: 33.3%;
-    font-size: clamp(0.7rem, 1.1vw, 2rem);
+    font-size: clamp(0.7rem, .9vw, 1.5rem);
 }
 
 .product-add-container > div div span {
