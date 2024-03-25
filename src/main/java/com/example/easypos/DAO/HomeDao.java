@@ -18,11 +18,9 @@ public interface HomeDao {
                      c.productSumPrice
               from CartItems as c
               where c.floor_id = #{floor}
-                    and c.delStatus = 0
-                    and c.regDate > #{beginDate}
-                    and c.regDate < #{endDate}
+                    and c.delStatus = 0;
             """)
-    List<CartItems> getCartItems(int floor, String beginDate, String endDate);
+    List<CartItems> getCartItems(int floor);
 
     @Select("""
             select * from `table`
@@ -37,12 +35,10 @@ public interface HomeDao {
                          inner join product as p
                                     on c.product_id = p.id
                 where c.floor_id = #{floor}
-                and c.regDate > #{beginDate}
-                and c.regDate < #{endDate}
                 and c.delStatus = 0
                 group by c.table_id;
             """)
-    List<CartItems> getPriceSumList(int floor, String beginDate, String endDate);
+    List<CartItems> getPriceSumList(int floor);
 
     @Select("""
             select * from tableGroup
@@ -53,13 +49,12 @@ public interface HomeDao {
             select * from CartItems
                 where CartItems.floor_id = #{i}
                   and delStatus = 0
-                  and regDate > #{beginDate}
-                  and regDate < #{endDate}
                 group by table_id;
             """)
-    List<CartItems> getOrderTablesList(int i, String beginDate, String endDate);
+    List<CartItems> getOrderTablesList(int i);
 
 // ==============================================================//
+
     @Update("""
             update `table`
             set updateDate = now(),
@@ -71,6 +66,7 @@ public interface HomeDao {
     void updateTablePos(int elPosX, int elPosY, int number, int floor);
 
 // ==============================================================//
+
     List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate);
 
     List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate);

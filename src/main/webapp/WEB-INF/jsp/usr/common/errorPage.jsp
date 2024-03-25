@@ -5,5 +5,5 @@
     if (msg) {
         alert(msg);
     }
-    history.back();
+    location.back();
 </script>

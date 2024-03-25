@@ -13,30 +13,29 @@ import java.util.List;
 @Service
 public class HomeService {
     private HomeDao homeDao;
-
     @Autowired
     public HomeService(HomeDao homeDao) {
         this.homeDao = homeDao;
     }
 
-    public List<CartItems> getCartItems(int floor, String beginDate, String endDate) {
-        return homeDao.getCartItems(floor, beginDate, endDate);
+    public List<CartItems> getCartItems(int floor) {
+        return homeDao.getCartItems(floor);
     }
 
     public List<Table> getTableLIst(int floor) {
         return homeDao.getTableList(floor);
     }
 
-    public List<CartItems> getPriceSumList(int floor, String beginDate, String endDate) {
-        return homeDao.getPriceSumList(floor, beginDate, endDate);
+    public List<CartItems> getPriceSumList(int floor) {
+        return homeDao.getPriceSumList(floor);
     }
 
     public List<TableGroup> getTableGroups() {
         return homeDao.getTableGroups();
     }
 
-    public List<CartItems> getOrderTablesList(int i, String beginDate, String endDate) {
-        return homeDao.getOrderTablesList(i, beginDate, endDate);
+    public List<CartItems> getOrderTablesList(int i) {
+        return homeDao.getOrderTablesList(i);
     }
 
     // ==============================================================//
@@ -94,7 +93,7 @@ public class HomeService {
 
     public void toMoveCartItems(int product_id, String productName, int table_id, int quantity, int productPrice,
                                 int productSumPrice, int productSailPrice, int floor_id, int cart_id) {
-        homeDao.toMoveCartItems(product_id, productName, table_id, quantity, productPrice, productSumPrice, productSailPrice, floor_id, cart_id);
+        homeDao.toMoveCartItems(product_id, productName, table_id, quantity, productPrice,productSumPrice,productSailPrice,floor_id,cart_id);
     }
 
     public void toMoveUpdateCartItems(int afterTableNum, int floor, int productId, int quantity, int productSailPrice, int productSumPrice, int cart_id) {

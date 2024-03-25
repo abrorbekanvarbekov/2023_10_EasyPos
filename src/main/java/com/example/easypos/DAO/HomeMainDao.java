@@ -3,6 +3,9 @@ package com.example.easypos.DAO;
 import com.example.easypos.Vo.CartItems;
 import com.example.easypos.Vo.deadlineSettlement;
 import com.example.easypos.Vo.paymentCreditCartAndCash;
+import com.example.easypos.VoBasicInformation.productBigClassification;
+import com.example.easypos.VoBasicInformation.productMiddleClassification;
+import com.example.easypos.VoBasicInformation.productSmallClassification;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -86,12 +89,10 @@ public interface HomeMainDao {
     int getOutstandingAmount(String floor, String beginDate, String endDate);
 
     @Select("""
-            select count(distinct table_id) from CartItems
-                where delStatus = 0
-                and regDate > #{beginDate}
-                and regDate < #{endDate};
+            select count(*) from CartItems
+            where delStatus = 0;
             """)
-    int getOutstandingTables(String floor, String beginDate, String endDate);
+    int getOutstandingTables(String floor);
 
     @Insert("""
             insert into deadlineSettlement
@@ -110,12 +111,11 @@ public interface HomeMainDao {
                 paidByCart = #{paidByCart}
             """)
     void insertDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
-                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+                                  int discountAmount, int VAT, int  NETSales, int amountOfReturns, int paidByCash, int paidByCart);
 
     @Select("""
             select * from deadlineSettlement
             where businessDate = #{businessDate}
-            limit 1
             """)
     deadlineSettlement getDeadlineSettlement(String businessDate);
 
@@ -134,9 +134,8 @@ public interface HomeMainDao {
                     amountOfReturns = #{amountOfReturns},
                     paidByCash = #{paidByCash},
                     paidByCart = #{paidByCart}
-                where businessDate = #{businessDate}
             """)
     void updateDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
-                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+                                  int discountAmount, int VAT, int  NETSales, int amountOfReturns, int paidByCash, int paidByCart);
 
 }

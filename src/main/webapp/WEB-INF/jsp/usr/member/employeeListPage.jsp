@@ -4,6 +4,7 @@
 <c:set var="pageName" value="개점처리"/>
 <%@include file="../common/somePageHead.jsp" %>
 <c:set var="pageTitle" value="employeeListPage"/>
+
 <section class="employeePage">
     <div class="employeePage-top-part">
         <div class="top-part-left">
@@ -11,7 +12,7 @@
                 <li>
                     <span>영업일자</span>
                     <span>
-                        <input type="date" class="business-date" onchange="changeDate();" value="${todayDate}">
+                        <input type="date" class="business-date" value="${todayDate}">
                     </span>
                 </li>
                 <li>
@@ -82,51 +83,9 @@
         <span class="material-symbols-outlined">volume_up</span>
         <span class="msg-tag text-red-600"></span>
     </div>
-    <div class="messagePage-msg-box">
-        <div class="layer-bg"></div>
-        <div class="layer">
-            <div class="confirm-message"></div>
-            <button id="check-btn" value="true" class="btn btn-active btn-info  mt-2 confirm-button">확인</button>
-            <button id="cancel-btn" value="false" class="btn btn-active btn-ghost mt-2 cancel-button">취소</button>
-        </div>
-    </div>
 </section>
 
 <script>
-
-    function showConfirmDialog(message) {
-        return new Promise((resolve, reject) => {
-            let confirmMessage = document.querySelector(".confirm-message");
-            let confirmButton = document.querySelector(".confirm-button");
-            let cancelButton = document.querySelector(".cancel-button");
-
-            confirmMessage.textContent = message;
-
-            confirmButton.onclick = function () {
-                closeMsgBox();
-                resolve("true");
-            };
-
-            cancelButton.onclick = function () {
-                closeMsgBox();
-                reject("false");
-            };
-
-            openMsgBox();
-        });
-    }
-
-    function openMsgBox() {
-        $('.layer-bg').show();
-        $('.layer').show();
-    }
-
-    function closeMsgBox() {
-        $('.layer').hide();
-        $('.layer-bg').hide();
-    }
-
-
     document.querySelectorAll(".employeeList-box li").forEach((element) => {
 
         if (element.id != "") {
@@ -139,40 +98,20 @@
                 let employeePw = document.querySelector(".employeePw")
                 employeePw.type = "password"
                 employeePw.focus();
-
-                // ==================================       //
+                //     ==================================       //
                 $("#open-btn").click(() => {
-                    $.get("/usr/home-main/getDeadlineSettlement", {
-                        businessDate: businessDate
-                    }, async function (data) {
-                        if (data != null) {
-                            let result = await showConfirmDialog("이미 마감정산 된 날짜 입니다. 장사를 이어서 하시겠습니까?");
-                            if (result == "true") {
-                                $.get("/usr/member/doLoginEmployee", {
-                                    businessDate: businessDate,
-                                    employeeCode: employeeCode.value,
-                                    employeePw: employeePw.value
-                                }, async function (data) {
-                                    if (data.success == true) {
-                                        location.replace(data.msg)
-                                    } else if (data.success == false) {
-                                        $(".openStore-msg-box > .msg-tag").html(data.msg)
-                                    }
-                                }, "json")
-                            }
+                    $.get("/usr/member/getEmployee", {
+                        businessDate: businessDate,
+                        employeeCode: employeeCode.value,
+                        employeePw: employeePw.value
+                    }, function (data) {
+
+                        if (data.resultCode === "S-1") {
+                            location.replace(data.msg)
                         } else {
-                            $.get("/usr/member/doLoginEmployee", {
-                                businessDate: businessDate,
-                                employeeCode: employeeCode.value,
-                                employeePw: employeePw.value
-                            }, async function (data) {
-                                if (data.success == true) {
-                                    location.replace(data.msg)
-                                } else if (data.success == false) {
-                                    $(".openStore-msg-box > .msg-tag").html(data.msg)
-                                }
-                            }, "json")
+                            $(".openStore-msg-box > .msg-tag").html(data.msg)
                         }
+
                     }, "json")
                 })
 
@@ -187,13 +126,6 @@
             })
         }
     })
-
-    function changeDate() {
-        let employeeCode = document.querySelector(".employeeCode")
-        let employeeName = document.querySelector(".employeeName")
-        employeeCode.value = "";
-        employeeName.value = "";
-    }
 
     function clearEmployeePw() {
         let employeePw = document.querySelector(".employeePw")

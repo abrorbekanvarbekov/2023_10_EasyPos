@@ -534,7 +534,7 @@
 
                 $(`.search-pro-list-container`).html(productListItem);
 
-                clickEventForProType("search-pro-list-container", "product");z``
+                clickEventForProType("search-pro-list-container", "product");
                 let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
 
                 scrollToSelectedItem(listItemFirstItem)

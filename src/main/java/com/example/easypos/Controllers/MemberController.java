@@ -1,9 +1,11 @@
 package com.example.easypos.Controllers;
 
-import com.example.easypos.Services.HomeMainService;
 import com.example.easypos.Services.MemberService;
 import com.example.easypos.Util.Util;
-import com.example.easypos.Vo.*;
+import com.example.easypos.Vo.Employee;
+import com.example.easypos.Vo.Members;
+import com.example.easypos.Vo.ResultDate;
+import com.example.easypos.Vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,6 @@ import java.util.List;
 @Controller
 public class MemberController {
     private MemberService memberService;
-    private HomeMainService homeMainService;
     private Rq rq;
     private LocalTime now;
     private Date dateNow;
@@ -28,9 +29,8 @@ public class MemberController {
     private SimpleDateFormat dateFormatter;
 
     @Autowired
-    public MemberController(MemberService memberService, Rq rq, HomeMainService homeMainService) {
+    public MemberController(MemberService memberService, Rq rq) {
         this.memberService = memberService;
-        this.homeMainService = homeMainService;
         this.rq = rq;
         this.now = LocalTime.now();
         this.dateNow = new Date();
@@ -40,7 +40,7 @@ public class MemberController {
 
     @RequestMapping("/usr/member/loginPage")
     public String loginPage() {
-        rq.logout();
+
         return "/usr/member/loginPage";
     }
 
@@ -101,7 +101,7 @@ public class MemberController {
         return "/usr/member/employeeListPage";
     }
 
-    @RequestMapping("/usr/member/doLoginEmployee")
+    @RequestMapping("/usr/member/getEmployee")
     @ResponseBody
     public ResultDate getEmployee(int employeeCode, String employeePw, String businessDate) {
 
@@ -129,7 +129,7 @@ public class MemberController {
         String currentTime = formatter.format(now);
 
         if (businessDate.length() != 0) {
-            rq.setBusinessDate(businessDate + " " + currentTime);
+            rq.setBusinessDate(businessDate + " "+ currentTime);
         }
         return ResultDate.from("S-1", "/?floor=1");
     }
