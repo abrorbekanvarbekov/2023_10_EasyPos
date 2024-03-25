@@ -23,7 +23,6 @@ public class Util {
         if (msg == null) {
             msg = "";
         }
-
         return String.format("""
                    <script>
                      const msg = '%s'.trim();

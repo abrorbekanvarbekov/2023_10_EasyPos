@@ -23,7 +23,7 @@
             </li>
             <ul class="tbody flex flex-col ">
                 <c:forEach var="cartItem" items="${cartItemsList}" varStatus="status">
-                    <li class="flex product-box-list product-box-list_${status.count}" id="product_${cartItem.id}"
+                    <li class="flex oldProduct " id="oldProduct_${cartItem.id}"
                         productId="${cartItem.id}">
                         <input type="submit" id="id_${status.count}" value="${status.count}">
                         <input type="submit" id="product-name_${status.count}" value="${cartItem.productName}"
@@ -39,27 +39,27 @@
             </ul>
         </ul>
         <div class="buttons">
-            <button onclick="productListAllSelect();" class="btn btn-sm">전체선택</button>
-            <button onclick="CancelProduct();" class="btn btn-sm">취소</button>
-            <button onclick="addProduct();" class="btn btn-sm text-blue-500 text-2l"><span
+            <button onclick="productListAllSelect();" class="btn btn-xs">전체선택</button>
+            <button onclick="CancelProduct();" class="btn btn-xs">취소</button>
+            <button onclick="addProduct();" class="btn btn-xs text-blue-500 text-2l"><span
                     class="material-symbols-outlined">add</span></button>
-            <button onclick="removeProduct();" class="btn btn-sm text-blue-500 text-2l"><span
+            <button onclick="removeProduct();" class="btn btn-xs text-blue-500 text-2l"><span
                     class="material-symbols-outlined">remove</span>
             </button>
-            <button class="btn btn-sm text-blue-500 text-2l"><span class="material-symbols-outlined">expand_less</span>
+            <button class="btn btn-xs text-blue-500 text-2l"><span class="material-symbols-outlined">expand_less</span>
             </button>
-            <button class="btn btn-sm text-blue-500 text-2l"><span class="material-symbols-outlined">expand_more</span>
+            <button class="btn btn-xs text-blue-500 text-2l"><span class="material-symbols-outlined">expand_more</span>
             </button>
         </div>
         <div class="calculatePage">
             <div class="allProductInfo">
                 <div>
                     <span>총수량</span>
-                    <span class="ProductTotalQuantity"></span>
+                    <span class="ProductTotalQuantity">${totalQuantity}</span>
                 </div>
                 <div>
                     <span>총매출액</span>
-                    <input type="submit" value="" class="ProductsTotalSumPrice w-3/6">
+                    <input type="submit" value="${totalPrice}" class="ProductsTotalSumPrice w-3/6">
                 </div>
                 <div>
                     <span>할인총액</span>
@@ -67,7 +67,7 @@
                 </div>
                 <div>
                     <span>받을금액</span>
-                    <span class="amountToPay">0</span>
+                    <span class="amountToPay">${receiveAmount - rq.leftAmount}</span>
                 </div>
                 <div>
                     <span>받은금액</span>
@@ -92,48 +92,49 @@
                 <div class="numberFeed">
                     <input type="number" value="">
                     <div>
-                        <span onclick="clearInput();" class="btn w-full text-base">Clear</span>
-                        <span onclick="arrow_back();" class="material-symbols-outlined btn text-4xl">arrow_back</span>
+                        <span onclick="clearInput();" class="btn btn-xs w-full text-base">Clear</span>
+                        <span onclick="arrow_back();"
+                              class="material-symbols-outlined btn btn-xs text-4xl">arrow_back</span>
                     </div>
                     <div>
-                        <span class="btn">7</span>
-                        <span class="btn">8</span>
-                        <span class="btn">9</span>
+                        <span class="btn btn-xs">7</span>
+                        <span class="btn btn-xs">8</span>
+                        <span class="btn btn-xs">9</span>
                     </div>
                     <div>
-                        <span class="btn">4</span>
-                        <span class="btn">5</span>
-                        <span class="btn">6</span>
+                        <span class="btn btn-xs">4</span>
+                        <span class="btn btn-xs">5</span>
+                        <span class="btn btn-xs">6</span>
                     </div>
                     <div>
-                        <span class="btn">1</span>
-                        <span class="btn">2</span>
-                        <span class="btn">3</span>
+                        <span class="btn btn-xs">1</span>
+                        <span class="btn btn-xs">2</span>
+                        <span class="btn btn-xs">3</span>
                     </div>
                     <div>
-                        <span class="btn">0</span>
-                        <span class="btn">00</span>
-                        <span class="btn">000</span>
+                        <span class="btn btn-xs">0</span>
+                        <span class="btn btn-xs">00</span>
+                        <span class="btn btn-xs">000</span>
                     </div>
                 </div>
                 <div class="buttonsFeed">
                     <div>
-                        <span class="btn">상품조회</span>
+                        <span class="btn btn-xs">상품조회</span>
                     </div>
                     <div>
-                        <span onclick="amountDiscountFunc();" class="btn">금액할인</span>
+                        <span onclick="amountDiscountFunc();" class="btn btn-xs">금액할인</span>
                     </div>
                     <div>
-                        <span onclick="calSailFunc();" class="btn">% 할인</span>
+                        <span onclick="calSailFunc();" class="btn btn-xs">% 할인</span>
                     </div>
                     <div>
-                        <span onclick="changeAmount();" class="btn">금액변경</span>
+                        <span onclick="changeAmount();" class="btn btn-xs">금액변경</span>
                     </div>
                     <div>
-                        <span onclick="changeQuantity();" class="btn">수량변경</span>
+                        <span onclick="changeQuantity();" class="btn btn-xs">수량변경</span>
                     </div>
                     <div>
-                        <span class="btn">Enter</span>
+                        <span class="btn btn-xs">Enter</span>
                     </div>
                 </div>
             </div>
@@ -147,6 +148,10 @@
 
         <%--  ========= 등록된 상품 있으면 order-msg-box 에서 수량 보여주기 ===============--%>
         if (${cartItemsList.size() != 0}) {
+            clickEvent();
+            let productLastChild = $(".tbody li:last-child")
+            productLastChild.css("border-bottom", "1px solid red")
+
             $(".msg-tag").html(`상품 총 수량 \${${cartItemsList.size()}}개`)
         }
 
@@ -156,171 +161,119 @@
             if (leftAmount != 0) {
                 $(".msg-tag").html("결제를 모두 마쳐주세요!")
             } else if (leftAmount == 0) {
-                $.get("/usr/tables/getCartItemSumPrice", {
-                    tabId: ${param.tabId},
-                    floor: ${rq.floor}
-                }, function (data) {
-                    let getCartItemSumPrice = data.data1
-                    let productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
-                    let discountAmount = document.querySelector(".discountAmount").innerHTML
+                let getCartItemSumPrice = ${receiveAmount};
+                let amountToPay = document.querySelector(".amountToPay").textContent
 
-                    if (getCartItemSumPrice != (parseInt(productsTotalSumPrice) - parseInt(discountAmount))) {
-                        exampleFunction().then((result) => {
-                            if (result == "true") {
-                                $('form[name=do-insert-product-form]').submit();
-                                location.replace("/?floor=" + ${rq.floor});
-                            } else {
-                                closeMsgBox();
-                            }
-                        })
-                    } else {
-                        location.replace("/?floor=" + ${rq.floor});
-                    }
-                }, "json")
+                if (amountToPay != getCartItemSumPrice) {
+                    exampleFunction().then((result) => {
+                        if (result == "true") {
+                            $('form[name=do-insert-product-form]').submit();
+                            location.replace("/?floor=" + ${rq.floor});
+                        } else {
+                            closeMsgBox();
+                        }
+                    })
+                } else {
+                    location.replace("/?floor=" + ${rq.floor});
+                }
             }
         })
 
-
         // ========== 주문 개수나 총매출액 처리 ==========
-        let productSumPrice = 0;
-        let currentAmount = -1;
+        function totalPrice_TotalCnt_Calculate(price, disPrice) {
+            let intPrice = parseInt(price)
+            let intDisPrice = parseInt(disPrice)
+            let totalQuantityNode = document.querySelector(".ProductTotalQuantity");
+            let totalPriceNode = document.querySelector(".ProductsTotalSumPrice");
+            let discountPriceNode = document.querySelector(".discountAmount");
+            let receivePriceNode = document.querySelector(".amountToPay");
 
-        function getProductTotalSumPriceAndTotalQuantity__2(price) {
-            if (price == null) {
-                $.get("/usr/tables/getProductTotalSumPriceAndTotalQuantity", {
-                    tabId: ${tabId},
-                    floor: ${floor}
-                }, function (data) {
-                    if (data.data1 > 0 && data.data2 > 0) {
-                        let disAmount = $(".discountAmount").html()
-                        $(".ProductTotalQuantity").html(data.data1)
-                        $(".ProductsTotalSumPrice").val(data.data2)
-                        $(".amountToPay").html(data.data2 - parseInt(disAmount) - ${rq.leftAmount})
-                    } else {
-                        $(".ProductTotalQuantity").html(0)
-                        $(".ProductsTotalSumPrice").val(0)
-                        $(".amountToPay").html(0)
-                    }
-                }, "json")
-            } else if (price != null) {
-                if (currentAmount == -1) {
-                    currentAmount = $(".amountToPay").html()
-                    productSumPrice += parseInt(currentAmount);
-                    productSumPrice += parseInt(price);
-                    let productList = document.querySelectorAll(".product-box-list")
-                    $(".ProductTotalQuantity").html(productList.length)
-                    $(".ProductsTotalSumPrice").val(productSumPrice + parseInt($(".discountAmount").html()))
-                    $(".amountToPay").html(productSumPrice)
-                } else {
-                    productSumPrice += parseInt(price);
-                    let productList = document.querySelectorAll(".product-box-list")
-                    $(".ProductTotalQuantity").html(productList.length)
-                    $(".ProductsTotalSumPrice").val(productSumPrice + parseInt($(".discountAmount").html()))
-                    $(".amountToPay").html(productSumPrice)
-                }
-            }
+            let totalQuantity = $(".tbody li").length;
+            let totalPrice = parseInt(totalPriceNode.value);
+            let discountPrice = parseInt(discountPriceNode.textContent);
+            let receivePrice = (totalPrice + intPrice) - (discountPrice + intDisPrice);
+
+            totalQuantityNode.textContent = totalQuantity;
+            totalPriceNode.value = totalPrice + intPrice;
+            discountPriceNode.textContent = discountPrice + intDisPrice;
+            receivePriceNode.textContent = receivePrice;
         }
 
         // ========== 메뉴 주문 함수 처리 ==========
 
-        let productIndex = 1;
-        let productList = document.querySelectorAll(".product-box-list")
-        if (productList != null) {
-            productIndex = productList.length + 1;
+        function selectMenuItem(element) {
+            let productLen = $(".tbody li").length
+            productLen++;
+            let productId = element.id.substring(element.id.indexOf("_") + 1);
+            let productName = element.children[0].textContent;
+            let productPrice = element.children[1].dataset.value;
+            let str = "";
+            str += `
+                    <li class="flex newProduct \${productLen == 1 ? 'checked' : ''}"
+                            id="newProduct_\${productId}" productId="\${productId}" >
+                         <input type="submit" id="id_\${productLen}" value="\${productLen}">
+                         <input type="submit" id="product-name_\${productLen}" value="\${productName}" class="productList_\${productId}">
+                         <input type="submit" id="product-count_\${productLen}" value="1" class="productCount_\${productLen}">
+                         <input type="submit" data-value="\${productPrice}" id="product-price_\${productLen}" value="\${productPrice}" class="productPrice_\${productLen}">
+                         <input type="submit" id="product-discount_\${productLen}" value="0">
+                    </li>
+                   `
+
+            let isSameProduct = document.querySelector("#newProduct_" + productId);
+
+            if (isSameProduct != null) {
+                let sameProduct = isSameProduct.children[2];
+                sameProduct.value++;
+                doFocusToProductLi(productId);
+                scrollToSelectedItem(document.querySelector("#newProduct_" + productId));
+                clickEvent();
+            } else {
+                $(".tbody").append(str);
+                doFocusToProductLi(productId);
+                scrollToSelectedItem(document.querySelector("#newProduct_" + productId));
+                clickEvent();
+
+                if (productLen != 0) {
+                    $(".msg-tag").html(`상품 총 수량 \${productLen}개`)
+                }
+            }
         }
-        let product_list_lastChild = null
-        let beforeDuplProduct = null
 
-        function selectMenu(productId) {
-            $.get("/usr/tables/getProduct", {
-                id: productId,
-                tabId: ${tabId},
-                floor: ${floor}
-            }, function (data) {
-                let product = data.data1;
-                let str = "";
-                str += `
-                        <li class="flex product-box-list product-box-list_\${productIndex}" id="product_\${product.id}" productId="\${product.id}" >
-                            <input type="submit" id="id_\${productIndex}" value="\${productIndex}">
-                            <input type="submit" id="product-name_\${productIndex}" value="\${product.productKorName}" class="productList_\${product.id}">
-                            <input type="submit" id="product-count_\${productIndex}" value="\${product.quantity + 1}" class="productCount_\${productIndex}">
-                            <input type="submit" data-value="\${product.price}" id="product-price_\${productIndex}" value="\${product.price}" class="productPrice_\${productIndex}">
-                            <input type="submit" id="product-discount_\${productIndex}" value="0">
-                        </li>
-                    `
-                let duplProduct = document.querySelector("#product_" + product.id)
-                if (duplProduct != null) {
-                    if (beforeDuplProduct != null) {
-                        beforeDuplProduct.style.backgroundColor = "inherit";
-                        beforeDuplProduct.classList.remove("checked");
-                    }
+        function doFocusToProductLi(productId) {
+            document.querySelector(".tbody li.checked").style.backgroundColor = "inherit";
+            document.querySelector(".tbody li.checked").classList.remove("checked");
+            document.querySelector("#newProduct_" + productId).style.backgroundColor = "aqua";
+            document.querySelector("#newProduct_" + productId).classList.add("checked");
 
-                    duplProduct.children[2].value++ // product 수 증가
-                    const productSumPrice = (duplProduct.children[3].dataset.value * duplProduct.children[2].value) // product 갯수에 맞는 총가격
-                    duplProduct.children[3].value = productSumPrice
-                    duplProduct.style.backgroundColor = "aqua"; // 배경색 주기
-                    duplProduct.classList.add("checked"); // 클래스 입력
-                    beforeDuplProduct = duplProduct;
+            // 상품 갯수에 맞는 가격을 보여주기 //
+            let currentItem = document.querySelector("#newProduct_" + productId)
+            const productSumPrice = (currentItem.children[3].dataset.value * currentItem.children[2].value)
+            currentItem.children[3].value = productSumPrice;
 
-                    product_list_lastChild = document.querySelector(".product-box-list:last-child")
+            // 총매출액에 추가 된 상품 금액 더하기 //
+            let price = currentItem.children[3].dataset.value
+            totalPrice_TotalCnt_Calculate(price, 0);
+        }
 
-                    if (product_list_lastChild != duplProduct) {
-                        product_list_lastChild.style.backgroundColor = "inherit"
-                        product_list_lastChild.classList.remove("checked");
-                    }
+        function scrollToSelectedItem(selectedItem) {
+            selectedItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: "nearest"
+            });
+        }
 
-                    let price = duplProduct.children[3].dataset.value
-                    getProductTotalSumPriceAndTotalQuantity__2(price);
-                } else {
-                    let justBeforeChild = document.querySelector(".product-box-list_" + (productIndex - 1))
-                    if (justBeforeChild != null) {
-                        justBeforeChild.style.backgroundColor = "inherit";
-                        justBeforeChild.classList.remove("checked");
-                    }
-
-                    <%--  ========= 등록된 상품 있으면 order-msg-box 에서 수량 보여주기 ===============--%>
-                    if (productIndex != 0) {
-                        $(".msg-tag").html(`상품 총 수량 \${productIndex}개`)
-                    }
-
-                    const tbody = $(".tbody").html()
-                    productIndex++;
-                    $(".tbody").html(tbody + str);
-
-                    let productLastChild = document.querySelector("#selectedManuList-1 li:last-child")
-                    productLastChild.style.backgroundColor = "aqua";
-                    productLastChild.classList.add("checked")
-                    let price = productLastChild.children[3].value
-                    getProductTotalSumPriceAndTotalQuantity__2(price);
-
-                    if (beforeDuplProduct != null) {
-                        beforeDuplProduct.style.backgroundColor = "inherit";
-                        beforeDuplProduct.classList.remove("checked");
-                    }
-                }
-
-                if (product_list_lastChild != duplProduct) {
-                    product_list_lastChild.style.backgroundColor = "inherit"
-                    product_list_lastChild.classList.remove("checked");
-                }
-
-                product_list_lastChild = document.querySelector("#selectedManuList-1 li:last-child")
-                document.querySelectorAll(".product-box-list").forEach((element) => {
-                    element.addEventListener("click", (e) => {
-                        product_list_lastChild.style.backgroundColor = "inherit";
-                        product_list_lastChild.classList.remove("checked")
-                        if (product != null) {
-                            document.querySelector("#product_" + product.id).style.backgroundColor = "inherit";
-                            document.querySelector("#product_" + product.id).classList.remove("checked")
-                        }
-                        product_list_lastChild = element
-                        let id = e.target.id.substring(e.target.id.indexOf("_") + 1)
-                        const el = document.querySelector(".product-box-list_" + id)
-                        el.style.backgroundColor = "aqua"
-                        el.classList.add("checked")
-                    })
+        function clickEvent() {
+            document.querySelectorAll(`.tbody li`).forEach((element, idx) => {
+                element.addEventListener("click", function () {
+                    let lastCheckedEl = document.querySelector(`.tbody li.checked`)
+                    lastCheckedEl.style.backgroundColor = "inherit"
+                    lastCheckedEl.style.color = "black"
+                    lastCheckedEl.classList.remove("checked")
+                    element.style.backgroundColor = "aqua"
+                    element.classList.add("checked")
                 })
-            }, "json")
+            })
         }
 
         let allSelectButton = document.querySelector(".buttons > button:first-child");
@@ -349,23 +302,32 @@
             }
         }
 
+        const checkedProductIds = [];
+        const checkedProductNames = [];
+
         function CancelProduct() {
             if ($(".tbody li").length != 0) {
-                let checkedProduct = $(".checked")
-                const checkedProductId = $('.checked').map((index, el) => el.id.substring(el.id.indexOf("_") + 1)).toArray();
+                let checkedProduct = $(".tbody li.checked")
+                const checkedProductId = $('.tbody li.checked').map((index, el) => el.id).toArray();
+                const checkedProductName = $('.tbody li.checked').map((index, el) => el.children[1].value).toArray();
+
+                for (let i = 0; i < checkedProductId.length; i++) {
+                    if (checkedProductId[i].startsWith("old")) {
+                        checkedProductIds.push(checkedProductId[i].substring(checkedProductId[i].indexOf("_") + 1));
+                        checkedProductNames.push(checkedProductName[i]);
+                    }
+                }
 
                 for (let i = 0; i < checkedProduct.length; i++) {
                     checkedProduct.remove();
-                    let cancelPrice = checkedProduct[i].children[3].value
-                    let discountPrice = checkedProduct[i].children[4].value
+                    let cancelPrice = parseInt(checkedProduct[i].children[3].value);
+                    let discountPrice = parseInt(checkedProduct[i].children[4].value);
 
                     if (discountPrice != 0) {
                         cancelPrice = cancelPrice + discountPrice
-                        let discountAmount = $(".discountAmount").html()
-                        $(".discountAmount").html(discountAmount - discountPrice)
-                        getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
+                        totalPrice_TotalCnt_Calculate(-cancelPrice, -discountPrice);
                     } else {
-                        getProductTotalSumPriceAndTotalQuantity__2(-cancelPrice);
+                        totalPrice_TotalCnt_Calculate(-cancelPrice, 0);
                     }
 
                     let selectManuListLastChild = document.querySelector("#selectedManuList-1 li:last-child")
@@ -375,18 +337,17 @@
                     }
                 }
 
-                $('input[name=delProductIds]').val(checkedProductId.join(","))
-
+                $('input[name=delProductList]').val(checkedProductIds.join(","))
+                $('input[name=delProductNameList]').val(checkedProductNames.join(","))
             }
         }
 
-        getProductTotalSumPriceAndTotalQuantity__2(null);
-
         function addProduct() {
             let n = 1
-            let checkedProduct = $(".checked")
+            let checkedProduct = $(".tbody li.checked")
 
             if (checkedProduct.length != 0) {
+                let productId = checkedProduct[0].id;
                 let productQuantityInput = checkedProduct[0].children[2];
                 let productSumPriceInput = checkedProduct[0].children[3];
                 let beforeQuantity = productQuantityInput.value
@@ -396,17 +357,19 @@
                     let afterQuantity = parseInt(beforeQuantity) + n
                     productQuantityInput.value = afterQuantity;
                     productSumPriceInput.value = parseInt(productSumPriceInput.value) + parseInt(productPrice);
+                    totalPrice_TotalCnt_Calculate(productPrice, 0);
 
-                    getProductTotalSumPriceAndTotalQuantity__2(productPrice);
+                    productId.startsWith("old") ? checkedProduct.addClass("updateProduct") : '';
                 }
             }
         }
 
         function removeProduct() {
             let n = 1
-            let checkedProduct = $(".checked")
+            let checkedProduct = $(".tbody li.checked")
 
             if (checkedProduct.length != 0) {
+                let productId = checkedProduct[0].id;
                 let productQuantityInput = checkedProduct[0].children[2];
                 let productSumPriceInput = checkedProduct[0].children[3];
 
@@ -417,8 +380,9 @@
                     let afterQuantity = parseInt(beforeQuantity) - n
                     productQuantityInput.value = afterQuantity;
                     productSumPriceInput.value = parseInt(productSumPriceInput.value) - parseInt(productPrice);
+                    totalPrice_TotalCnt_Calculate(-productPrice, 0);
 
-                    getProductTotalSumPriceAndTotalQuantity__2(-productPrice);
+                    productId.startsWith("old") ? checkedProduct.addClass("updateProduct") : '';
                 }
             }
         }
@@ -446,24 +410,79 @@
         }
 
         // ============ 메뉴 분할 결제나 할인 처리 =========
+        function amountDiscountFunc() {
+            let discountAmount = document.querySelector(".numberFeed input").value
+
+            if (discountAmount != 0) {
+                let checkedProduct = $(".tbody > .checked")
+                let discountAmountSumPrice = 0;
+                let currPrice = 0;
+                let disPrice = 0;
+
+                for (let i = 0; i < checkedProduct.length; i++) {
+                    let productId = checkedProduct[i].id
+                    let oldPrice = parseInt(checkedProduct[i].children[3].value)
+                    let productCnt = parseInt(checkedProduct[i].children[2].value)
+                    let costPrice = parseInt(checkedProduct[i].children[3].dataset.value)
+                    currPrice = parseInt(checkedProduct[i].children[3].value)
+
+                    if (oldPrice != 0 && discountAmount <= (costPrice * productCnt)) {
+                        disPrice += parseInt(checkedProduct[i].children[4].value)
+                        discountAmountSumPrice += parseInt(discountAmount)
+                        checkedProduct[i].children[4].value = parseInt(discountAmount)
+                        checkedProduct[i].children[3].value = (costPrice * productCnt) - parseInt(discountAmount)
+
+                        productId.startsWith("old") ? checkedProduct[i].classList.add("updateProduct") : '';
+                    }
+                }
+
+                if (currPrice != 0 || checkedProduct.length > 1) {
+                    const amountToPaySumPrice = document.querySelector(".amountToPay").textContent
+                    const productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
+                    const discountAmount = document.querySelector(".discountAmount").innerHTML
+
+                    if (discountAmount == 0) {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + disPrice) - parseInt(discountAmountSumPrice) - ${discountSumAMount};
+                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay) + ${discountSumAMount};
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html(afterDiscountPrice)
+                    } else {
+                        const amountToPay = (parseInt(amountToPaySumPrice) + disPrice) - parseInt(discountAmountSumPrice);
+                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay);
+                        $(".amountToPay").html(amountToPay)
+                        $(".discountAmount").html(afterDiscountPrice)
+                    }
+
+                }
+                clearInput();
+
+            } else {
+                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
+            }
+        }
+
         function calSailFunc() {
             let discountPercentage = document.querySelector(".numberFeed input").value
-            let currPrice = 0
             if (discountPercentage != 0 && discountPercentage <= 100) {
                 let checkedProduct = $(".tbody > .checked")
                 let checkedProductSumPrice = 0;
-                let asd = 0;
+                let disPrice = 0;
+                let currPrice = 0
+
                 for (let i = 0; i < checkedProduct.length; i++) {
+                    let productId = checkedProduct[i].id
                     let costPrice = parseInt(checkedProduct[i].children[3].dataset.value)
                     let productCnt = parseInt(checkedProduct[i].children[2].value)
                     currPrice = parseInt(checkedProduct[i].children[3].value)
 
                     if (currPrice != 0) {
-                        asd += parseInt(checkedProduct[i].children[4].value)
+                        disPrice += parseInt(checkedProduct[i].children[4].value)
                         let eachSailPrice = (costPrice * productCnt) / 100 * discountPercentage
                         checkedProductSumPrice += (costPrice * productCnt)
                         checkedProduct[i].children[4].value = eachSailPrice
                         checkedProduct[i].children[3].value = (costPrice * productCnt) - eachSailPrice
+
+                        productId.startsWith("old") ? checkedProduct[i].classList.add("updateProduct") : '';
                     }
                 }
 
@@ -474,65 +493,12 @@
                     let productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
                     let discountAmount = $(".discountAmount")[0].innerHTML
 
-                    if (discountAmount == 0) {
-                        const amountToPay = (parseInt(amountToPaySumPrice) + parseInt(asd)) - allSailPrice
-                        $(".amountToPay").html(amountToPay)
-                        $(".discountAmount").html(parseInt(productsTotalSumPrice) - amountToPay)
-                    } else {
-                        const amountToPay = (parseInt(amountToPaySumPrice) + parseInt(asd)) - allSailPrice
-                        $(".amountToPay").html(amountToPay)
-                        $(".discountAmount").html((parseInt(productsTotalSumPrice) - amountToPay))
-                    }
-                }
-
-                clearInput();
-
-            } else {
-                $(".msg-tag").html(`할인 금액을 확인해주세요!`)
-            }
-        }
-
-        function amountDiscountFunc() {
-            let discountAmount = document.querySelector(".numberFeed input").value
-
-            if (discountAmount != 0) {
-                let checkedProduct = $(".tbody > .checked")
-                let discountAmountSumPrice = 0;
-                let currPrice = 0;
-                let asd = 0;
-
-                for (let i = 0; i < checkedProduct.length; i++) {
-                    let oldPrice = parseInt(checkedProduct[i].children[3].value)
-                    let productCnt = parseInt(checkedProduct[i].children[2].value)
-                    let costPrice = parseInt(checkedProduct[i].children[3].dataset.value)
-                    currPrice = parseInt(checkedProduct[i].children[3].value)
-
-                    if (oldPrice != 0 && discountAmount <= (costPrice * productCnt)) {
-                        asd += parseInt(checkedProduct[i].children[4].value)
-                        discountAmountSumPrice += parseInt(discountAmount)
-                        checkedProduct[i].children[4].value = parseInt(discountAmount)
-                        checkedProduct[i].children[3].value = (costPrice * productCnt) - parseInt(discountAmount)
-                    }
-                }
-
-                if (currPrice != 0 || checkedProduct.length > 1) {
-                    const amountToPaySumPrice = document.querySelector(".amountToPay").textContent
-                    const productsTotalSumPrice = document.querySelector(".ProductsTotalSumPrice").value
-                    const discountAmount = document.querySelector(".discountAmount").innerHTML
-
-                    if (discountAmount == 0) {
-                        const amountToPay = (parseInt(amountToPaySumPrice) + asd) - parseInt(discountAmountSumPrice) - ${discountSumAMount};
-                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay) + ${discountSumAMount};
-                        $(".amountToPay").html(amountToPay)
-                        $(".discountAmount").html(afterDiscountPrice)
-                    } else {
-                        const amountToPay = (parseInt(amountToPaySumPrice) + asd) - parseInt(discountAmountSumPrice);
-                        const afterDiscountPrice = (parseInt(productsTotalSumPrice) - amountToPay);
-                        $(".amountToPay").html(amountToPay)
-                        $(".discountAmount").html(afterDiscountPrice)
-                    }
+                    const amountToPay = (parseInt(amountToPaySumPrice) + parseInt(disPrice)) - allSailPrice;
+                    $(".amountToPay").html(amountToPay);
+                    $(".discountAmount").html(parseInt(productsTotalSumPrice) - amountToPay);
 
                 }
+
                 clearInput();
 
             } else {
@@ -550,6 +516,7 @@
                 let oldPrice = 0;
 
                 for (let i = 0; i < checkedProduct.length; i++) {
+                    let productId = checkedProduct[i].id
                     currDisPrice = checkedProduct[i].children[4].value
                     oldPrice = checkedProduct[i].children[3].value
 
@@ -562,6 +529,8 @@
                             $(".discountAmount").html(discountSumPrice - currDisPrice)
                             checkedProduct[i].children[4].value = 0
                         }
+
+                        productId.startsWith("old") ? checkedProduct[i].classList.add("updateProduct") : '';
                     }
                 }
 
@@ -592,6 +561,7 @@
                 let oldSumPrice = 0;
 
                 for (let i = 0; i < checkedProduct.length; i++) {
+                    let productId = checkedProduct[i].id
                     let oldPrice = parseInt(checkedProduct[i].children[3].value)
                     oldSumPrice += parseInt(oldPrice)
                     let costPrice = checkedProduct[i].children[3].dataset.value
@@ -600,6 +570,8 @@
                         changeAmountSumPrice += parseInt(changeQuantity) * parseInt(costPrice)
                         checkedProduct[i].children[2].value = changeQuantity
                         checkedProduct[i].children[3].value = parseInt(changeQuantity) * parseInt(costPrice)
+
+                        productId.startsWith("old") ? checkedProduct[i].classList.add("updateProduct") : '';
                     }
                 }
 
@@ -618,10 +590,10 @@
         }
 
         // =============== 메뉴 서비스 처리 ====================
-
         function freeProduct() {
             let checkedProducts = document.querySelectorAll(".tbody > .checked");
             for (let i = 0; i < checkedProducts.length; i++) {
+                let productId = checkedProducts[i].id
                 let checkedProductName = checkedProducts[i].children[1].value;
                 let checkedProductSumPrice = checkedProducts[i].children[3];
                 let checkedProductSailPrice = checkedProducts[i].children[4];
@@ -634,6 +606,9 @@
                     let disCountAmount = $(".discountAmount").html()
                     $(".discountAmount").html(parseInt(disCountAmount) + parseInt(checkedProductSailPrice.value))
                     $(".amountToPay").html(parseInt(amountToPay) - parseInt(checkedProductSailPrice.value))
+
+                    productId.startsWith("old") ? checkedProducts[i].classList.add("updateProduct") :
+                        checkedProducts[i].classList.add("newProduct");
                 } else {
                     checkedProducts[i].children[1].value = checkedProductName.substring(3);
                     checkedProductSumPrice.value = checkedProductSailPrice.value;
@@ -641,6 +616,9 @@
                     let disCountAmount = $(".discountAmount").html()
                     $(".discountAmount").html(parseInt(disCountAmount) - parseInt(checkedProductSumPrice.value))
                     $(".amountToPay").html(parseInt(amountToPay) + parseInt(checkedProductSumPrice.value))
+
+                    productId.startsWith("old") ? checkedProducts[i].classList.add("updateProduct") :
+                        checkedProducts[i].classList.add("newProduct");
                 }
             }
         }
@@ -648,35 +626,76 @@
     </script>
     <div class="manuPageRight">
         <ul class="productType-box">
-            <c:forEach var="productType" items="${productTypes}">
-                <li>
-                    <button class="">${productType.name}</button>
+            <c:forEach var="productType" items="${productTypes}" varStatus="idx">
+                <li onclick="getProductByProTypeName(this);" name="${productType.korName}"
+                    id="productType_${productType.code}">
+                    <button class="">${productType.korName}</button>
                 </li>
             </c:forEach>
         </ul>
         <ul class="product-box">
             <c:forEach var="product" items="${products}">
-                <li id="productItems" onclick="selectMenu(${product.id})"
-                    class="flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
+                <li id="productItem_${product.id}" onclick="selectMenuItem(this)"
+                    class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
                     <span class="h-3/5" name="productName">${product.productKorName}</span>
-                    <span class="text-red-400 pt-2 h-2/5 price" name="price">${product.price}원</span>
+                    <span class="text-red-400 pt-2 h-2/5 price" data-value="${product.price}"
+                          name="price">${product.price}원</span>
                 </li>
             </c:forEach>
         </ul>
     </div>
+
+    <script>
+        function getProductByProTypeName(el) {
+            let productTypeCode = el.id.substring(el.id.indexOf("_") + 1);
+            let productTypeName = el.getAttribute("name");
+
+            $.ajax({
+                url: "/usr/tables/detail/getProduct",
+                data: {
+                    productTypeCode: productTypeCode,
+                    productTypeName: productTypeName
+                },
+                method: "GET",
+                success: function (data) {
+                    if (data.length != 0) {
+                        drawProductLi(data)
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log(error)
+                },
+                complete: function () {
+
+                }
+            })
+        }
+
+        function drawProductLi(data) {
+            let liElement = "";
+            for (let i = 0; i < data.length; i++) {
+                let product = data[i];
+                liElement += `
+                     <li id="productItem_\${product.id}" onclick="selectMenuItem(this)"
+                        class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
+                        <span class="h-3/5" name="productName">\${product.productKorName}</span>
+                        <span class="text-red-400 pt-2 h-2/5 price" name="price" data-value="\${product.price}">\${product.price.toLocaleString()}원</span>
+                    </li>
+                `
+            }
+            $(".manuPageRight .product-box").html(liElement);
+        }
+
+        function PutComma() {
+            document.querySelectorAll(".price").forEach((el) => {
+                let num = el.innerHTML.replace("원", "")
+                el.innerHTML = Number(num).toLocaleString();
+            })
+        }
+        PutComma();
+    </script>
 </div>
 
-
-<script>
-    function PutComma() {
-        document.querySelectorAll(".price").forEach((el) => {
-            let num = el.innerHTML.replace("원", "")
-            el.innerHTML = Number(num).toLocaleString();
-        })
-    }
-
-    PutComma();
-</script>
 <%@include file="../common/foot.jsp" %>
 
 <%@include file="../common/footer.jsp" %>

@@ -85,9 +85,9 @@
     </div>
 
     <%-- ====================== 상품관리  ======================== --%>
-    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-<%--        <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+        <%@include file="../basicInformation/salesInformationManagement.jsp" %>
+        <%@include file="../basicInformation/productSearchPage.jsp" %>
+        <%@include file="../basicInformation/productRegistrationPage.jsp" %>
 
     <%-- ====================== 터치키상품 관리  ======================== --%>
     <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>
