@@ -72,20 +72,27 @@ public class HomeMainService {
         return homeMainDao.getOutstandingTables(floor, beginDate, endDate);
     }
 
-    public void insertDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+    public void insertDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
                                          int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
-        homeMainDao.insertDeadlineSettlement(businessDate, openingDate, employeeName, employeeCode, totalSales, totalSalesCount,
+        homeMainDao.insertDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
                 discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
     }
 
-    public deadlineSettlement getDeadlineSettlement(String businessDate) {
-        return homeMainDao.getDeadlineSettlement(businessDate);
+    public deadlineSettlement getDeadlineSettlement(String openingDate) {
+        return homeMainDao.getDeadlineSettlement(openingDate);
     }
 
-    public void updateDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+    public void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
                                          int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
-        homeMainDao.updateDeadlineSettlement(businessDate, openingDate, employeeName, employeeCode, totalSales, totalSalesCount,
+        homeMainDao.updateDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
                 discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
     }
 
+    public void removeLeftCartItem(String beginDate) {
+        homeMainDao.removeLeftCartItem(beginDate);
+    }
+
+    public void removeLeftCart(String beginDate) {
+        homeMainDao.removeLeftCart(beginDate);
+    }
 }

@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class deadlineSettlement {
     private int id;
-    private String businessDate;
-    private String updateDate;
     private String openingDate;
-    private String employeeName;
-    private String employeeCode;
+    private String closingDate;
+    private String openEmployeeName;
+    private String openEmployeeCode;
+    private String closeEmployeeName;
+    private String closeEmployeeCode;
     private int totalSales;
     private int totalSalesCount;
     private int discountAmount;

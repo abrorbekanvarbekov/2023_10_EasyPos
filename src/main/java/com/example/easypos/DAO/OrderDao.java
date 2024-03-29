@@ -68,8 +68,8 @@ public interface OrderDao {
             select * from Cart
                 where tabId = #{tabId}
                 and floor = #{floor}
-                and regDate > #{beginDate}
-                and regDate < #{endDate}
+                and regDate >= #{beginDate}
+                and regDate <= #{endDate}
             """)
     Cart getCart(int floor, int tabId, String beginDate, String endDate);
 
@@ -77,7 +77,7 @@ public interface OrderDao {
             insert into Cart (regDate, updateDate, tabId, floor)
                 values (now(), now(), #{tabId} , #{floor});
             """)
-    void createCart(int floor, int tabId);
+    void createCart(int floor, int tabId, String beginDate);
 
     @Insert("""
             insert into CartItems(

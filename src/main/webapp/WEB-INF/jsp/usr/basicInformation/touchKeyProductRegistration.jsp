@@ -180,6 +180,7 @@
                         </div>
                         `
                     $(".productType-list-con-left").html(msgBox);
+                    $(".productType-list-con-right").html(msgBox);
                 }
             }, "json")
     }
@@ -408,7 +409,6 @@
                 const updateProColor = updateProColorBox.options[updateProColorBox.selectedIndex].value;
                 updateProductColorList.push(updateProColor);
             })
-
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/updateProducts",
                 data: {
@@ -429,7 +429,6 @@
                 }
             })
         }
-
     }
 
     function delProductType() {
@@ -534,7 +533,7 @@
 
                 $(`.search-pro-list-container`).html(productListItem);
 
-                clickEventForProType("search-pro-list-container", "product");z``
+                clickEventForProType("search-pro-list-container", "product");
                 let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
 
                 scrollToSelectedItem(listItemFirstItem)

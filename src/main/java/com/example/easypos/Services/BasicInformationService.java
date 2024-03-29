@@ -6,6 +6,7 @@ import com.example.easypos.Vo.ProductType;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -172,7 +173,25 @@ public class BasicInformationService {
             String productTypeKorName = productTypeKorNameList.get(i);
             String productTypeEngName = productTypeEngNameList.get(i);
             String productTypeColor = productTypeColorList.get(i);
+
             result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName, productTypeColor);
+            if (result == 1) {
+                String proTypeCode = String.format("%03d", productTypeCode + 1);
+                ProductType productType = basicInformationDao.getProductType(proTypeCode, productTypeKorName);
+
+                String dropSql = "drop table if exists `" + productType.getCode() + "`";
+                basicInformationDao.createAndDropTable(dropSql);
+                String createSql = "create table " + "`" + productType.getCode() + "`" + "\n" +
+                        "                (\n" +
+                        "                    id          int unsigned not null primary key auto_increment,\n" +
+                        "                    regDate     datetime     not null,\n" +
+                        "                    updateDate  datetime     not null,\n" +
+                        "                    `code`      varchar(50)  not null,\n" +
+                        "                    korName     varchar(100) not null,\n" +
+                        "                    productCode varchar(50)  not null\n" +
+                        "                );";
+                basicInformationDao.createAndDropTable(createSql);
+            }
         }
         return result;
     }
@@ -197,7 +216,12 @@ public class BasicInformationService {
         int result = 0;
         for (int i = 0; i < delProTypeIdList.size(); i++) {
             int delProductTypeId = Integer.parseInt(delProTypeIdList.get(i));
+            ProductType productType = basicInformationDao.getProductTypeById(delProductTypeId);
             result = basicInformationDao.delProductTypes(delProductTypeId);
+            if (result == 1) {
+                String dropSql = "drop table if exists `" + productType.getCode() + "`";
+                basicInformationDao.createAndDropTable(dropSql);
+            }
         }
         return result;
     }
@@ -210,6 +234,8 @@ public class BasicInformationService {
                 Product isDuplicatePro = basicInformationDao.getDuplicatePro(productId, productTypeId);
                 if (isDuplicatePro == null) {
                     result = basicInformationDao.addTypeForProduct(productId, productTypeId, productTypeColor);
+                    Product product = basicInformationDao.getDuplicatePro(productId, productTypeId);
+                    basicInformationDao.appendProForTypeItem(productTypeId, product.getProductCode());
                 }
             }
         }

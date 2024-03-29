@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -103,7 +104,7 @@ public class MemberController {
 
     @RequestMapping("/usr/member/doLoginEmployee")
     @ResponseBody
-    public ResultDate getEmployee(int employeeCode, String employeePw, String businessDate) {
+    public ResultDate getEmployee(int employeeCode, String employeePw, String openingDate) {
 
         Employee employee = memberService.getEmployee(employeeCode);
 
@@ -128,8 +129,8 @@ public class MemberController {
 
         String currentTime = formatter.format(now);
 
-        if (businessDate.length() != 0) {
-            rq.setBusinessDate(businessDate + " " + currentTime);
+        if (openingDate.length() != 0) {
+            rq.setBusinessDate(openingDate + " " + currentTime);
         }
         return ResultDate.from("S-1", "/?floor=1");
     }

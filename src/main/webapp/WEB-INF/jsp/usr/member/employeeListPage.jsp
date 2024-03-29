@@ -11,7 +11,8 @@
                 <li>
                     <span>영업일자</span>
                     <span>
-                        <input type="date" class="business-date" onchange="changeDate();" value="${todayDate}">
+                        <input type="date" class="business-date" date-value="${todayDate}" onchange="changeDate();"
+                               value="${todayDate}">
                     </span>
                 </li>
                 <li>
@@ -131,7 +132,6 @@
 
         if (element.id != "") {
             element.addEventListener("click", (event) => {
-                let businessDate = document.querySelector(".business-date").value
                 let employeeCode = document.querySelector(".employeeCode")
                 employeeCode.value = element.id;
                 let employeeName = document.querySelector(".employeeName")
@@ -139,20 +139,21 @@
                 let employeePw = document.querySelector(".employeePw")
                 employeePw.type = "password"
                 employeePw.focus();
-
                 // ==================================       //
                 $("#open-btn").click(() => {
-                    $.get("/usr/home-main/getDeadlineSettlement", {
-                        businessDate: businessDate
-                    }, async function (data) {
-                        if (data != null) {
+                    let businessDate = document.querySelector(".business-date").value
+                    $.ajax({
+                        url: "/usr/home-main/getDeadlineSettlement",
+                        data: {openingDate: businessDate},
+                        method: "GET",
+                        success: async function (data) {
                             let result = await showConfirmDialog("이미 마감정산 된 날짜 입니다. 장사를 이어서 하시겠습니까?");
                             if (result == "true") {
                                 $.get("/usr/member/doLoginEmployee", {
-                                    businessDate: businessDate,
                                     employeeCode: employeeCode.value,
-                                    employeePw: employeePw.value
-                                }, async function (data) {
+                                    employeePw: employeePw.value,
+                                    openingDate: businessDate
+                                }, function (data) {
                                     if (data.success == true) {
                                         location.replace(data.msg)
                                     } else if (data.success == false) {
@@ -160,20 +161,23 @@
                                     }
                                 }, "json")
                             }
-                        } else {
+                        },
+                        error: function (request, status, error) {
                             $.get("/usr/member/doLoginEmployee", {
-                                businessDate: businessDate,
                                 employeeCode: employeeCode.value,
-                                employeePw: employeePw.value
-                            }, async function (data) {
+                                employeePw: employeePw.value,
+                                openingDate: businessDate
+                            }, function (data) {
                                 if (data.success == true) {
                                     location.replace(data.msg)
                                 } else if (data.success == false) {
                                     $(".openStore-msg-box > .msg-tag").html(data.msg)
                                 }
                             }, "json")
+                        },
+                        complete: function () {
                         }
-                    }, "json")
+                    })
                 })
 
                 // =============================================================================== //

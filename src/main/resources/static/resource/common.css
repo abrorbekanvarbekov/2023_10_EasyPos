@@ -580,7 +580,7 @@ body .header-box li:hover, .header-box-detail li:hover {
 
 .manuPage > .manuPageLeft {
     float: left;
-    width: 40%;
+    width: 35%;
     height: 100%;
     position: relative;
     border-left: 1px solid grey;
@@ -826,7 +826,7 @@ body .header-box li:hover, .header-box-detail li:hover {
 
 /*Detail ManuPage RightFeed*/
 .manuPage > .manuPageRight {
-    width: 60%;
+    width: 65%;
     height: 100%;
     position: relative;
     border-left: 1px solid grey;
@@ -842,14 +842,50 @@ body .header-box li:hover, .header-box-detail li:hover {
     max-height: 27%;
 }
 
-.manuPage > .manuPageRight > .productType-box li {
+.manuPage > .manuPageRight > .productType-box li:not(:nth-child(14)) {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 15%;
+    width: 14%;
     height: 50%;
     border: 1px solid darkgray;
     font-size: clamp(0.7rem, 1vw, 1.5rem);
+}
+
+.manuPage > .manuPageRight > .productType-box li:nth-child(14) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 14%;
+    height: 50%;
+    border: 1px solid gray;
+    background-color: white;
+}
+
+.productType-box li:nth-child(14) > span:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    border-right: 1px solid darkgray;
+    font-size: clamp(1.3rem, 2.2vw, 2.2rem);
+}
+
+.productType-box li:nth-child(14) > span:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    font-size: clamp(1.3rem, 2.2vw, 2.2rem);
+}
+
+.productType-box li > span:active {
+    transform: translateY(2px);
 }
 
 .productType-box li > button {
@@ -876,15 +912,54 @@ body .header-box li:hover, .header-box-detail li:hover {
     max-height: 70%;
 }
 
-.manuPage > .manuPageRight > .product-box li {
+.manuPage > .manuPageRight > .product-box li:not(:nth-child(28)) {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 14%;
     height: 25%;
     background-color: aqua;
     border: 1px solid darkgray;
+    cursor: pointer;
+    padding: 1%;
     font-size: clamp(0.7rem, 1vw, 1.3rem);
+}
+
+.manuPage > .manuPageRight > .product-box li:nth-child(28) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 14%;
+    height: 25%;
+    border: 1px solid gray;
+    background-color: white;
+}
+
+.product-box li:nth-child(28) > span:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    border-right: 1px solid darkgray;
+    font-size: clamp(1.3rem, 2.2vw, 2.2rem);
+}
+
+.product-box li:nth-child(28) > span:active {
+    transform: translateY(2px);
+}
+
+.product-box li:nth-child(28) > span:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    font-size: clamp(1.3rem, 2.2vw, 2.2rem);
 }
 
 .product-box li {
@@ -894,7 +969,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 100%;
 }
 
-.product-box li:active {
+.product-box li:not(:nth-child(28)):active {
     transform: translateY(2px);
 }
 

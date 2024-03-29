@@ -627,21 +627,47 @@
     <div class="manuPageRight">
         <ul class="productType-box">
             <c:forEach var="productType" items="${productTypes}" varStatus="idx">
-                <li onclick="getProductByProTypeName(this);" name="${productType.korName}"
+                <li onclick="getProductByProTypeName(this);"
+                    name="${productType.korName}"
                     id="productType_${productType.code}">
-                    <button class="">${productType.korName}</button>
+                    <button style="background-color: ${productType.color}" class="">${productType.korName}</button>
                 </li>
             </c:forEach>
+            <c:if test="${productTypes.size() <= 13}">
+                <c:forEach begin="${productTypes.size() + 1}" end="13" varStatus="idx">
+                    <li id="productType_${idx.index + 1}"></li>
+                    <c:if test="${idx.index == 13}">
+                        <li id="productType_${idx.index + 1}">
+                            <span class="material-symbols-outlined">arrow_back_ios</span>
+                            <span class="material-symbols-outlined ${productTypes.size() > 13 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </c:if>
         </ul>
         <ul class="product-box">
             <c:forEach var="product" items="${products}">
                 <li id="productItem_${product.id}" onclick="selectMenuItem(this)"
-                    class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
-                    <span class="h-3/5" name="productName">${product.productKorName}</span>
+                    class="productItems">
+                    <span class="w-full h-3/5 text-center" name="productName">${product.productKorName}</span>
                     <span class="text-red-400 pt-2 h-2/5 price" data-value="${product.price}"
                           name="price">${product.price}원</span>
                 </li>
             </c:forEach>
+            <c:if test="${products.size() <= 27}">
+                <c:forEach begin="${products.size() + 1}" end="27" varStatus="idx">
+                    <li id="${idx.index}"
+                        class="productItems ">
+                    </li>
+                    <c:if test="${idx.index == 27}">
+                        <li id="${idx.index}"
+                            class="productItems ">
+                            <span class="material-symbols-outlined">arrow_back_ios</span>
+                            <span class="material-symbols-outlined ${products.size() > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </c:if>
         </ul>
     </div>
 
@@ -658,9 +684,7 @@
                 },
                 method: "GET",
                 success: function (data) {
-                    if (data.length != 0) {
-                        drawProductLi(data)
-                    }
+                    drawProductLi(data);
                 },
                 error: function (request, status, error) {
                     console.log(error)
@@ -673,25 +697,65 @@
 
         function drawProductLi(data) {
             let liElement = "";
-            for (let i = 0; i < data.length; i++) {
-                let product = data[i];
-                liElement += `
+            if (data.length != 0) {
+                for (let i = 0; i < data.length; i++) {
+                    let product = data[i];
+                    liElement += `
                      <li id="productItem_\${product.id}" onclick="selectMenuItem(this)"
                         class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
-                        <span class="h-3/5" name="productName">\${product.productKorName}</span>
+                        <span class="w-full h-3/5 text-center" name="productName">\${product.productKorName}</span>
                         <span class="text-red-400 pt-2 h-2/5 price" name="price" data-value="\${product.price}">\${product.price.toLocaleString()}원</span>
                     </li>
                 `
+                }
+
+                if (data.length <= 27) {
+                    for (let i = data.length + 1; i <= 27; i++) {
+                        liElement += `
+                         <li id="\${i}"
+                            class="productItems ">
+                         </li>
+                        `
+                        if (i == 27) {
+                            liElement += `
+                             <li id="\${i}"class="productItems ">
+                                <span class="material-symbols-outlined">arrow_back_ios</span>
+                                <span class="material-symbols-outlined \${data.length > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                             </li>
+                            `
+                        }
+                    }
+                }
+                $(".manuPageRight .product-box").html(liElement);
+            } else {
+                if (data.length <= 27) {
+                    for (let i = data.length + 1; i <= 27; i++) {
+                        liElement += `
+                             <li id="\${i}"
+                                class="productItems flex ">
+                             </li>
+                            `
+                        if (i == 27) {
+                            liElement += `
+                             <li id="\${i}"class="productItems ">
+                                <span class="material-symbols-outlined">arrow_back_ios</span>
+                                <span class="material-symbols-outlined \${data.length > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                             </li>
+                            `
+                        }
+                    }
+                }
+                $(".manuPageRight .product-box").html(liElement);
             }
-            $(".manuPageRight .product-box").html(liElement);
         }
 
         function PutComma() {
             document.querySelectorAll(".price").forEach((el) => {
                 let num = el.innerHTML.replace("원", "")
-                el.innerHTML = Number(num).toLocaleString();
+                el.innerHTML = Number(num).toLocaleString() + "원";
             })
         }
+
         PutComma();
     </script>
 </div>

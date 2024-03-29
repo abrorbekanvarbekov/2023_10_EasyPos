@@ -340,10 +340,11 @@
                     const result3 = await showConfirmDialog("현금 시재 입력되지 않았습니다. 현금 시재를 입력하지 않은 채로 마감을 진행하시겠습니까?");
                     if (result3 == "true") {
                         $.get("/usr/home-main/setDeadlineSettlement", {
-                            businessDate: '${businessDate}',
-                            openingDate: '${openingTime}',
-                            employeeName: '${rq.getLoginedEmployee().getName()}',
-                            employeeCode: '${rq.getLoginedEmployee().getEmployeeCode()}',
+                            openingDate: '${businessDate}',
+                            openEmployeeName: '${rq.getLoginedEmployee().getName()}',
+                            openEmployeeCode: '${rq.getLoginedEmployee().getEmployeeCode()}',
+                            closeEmployeeName: '${rq.getLoginedEmployee().getName()}',
+                            closeEmployeeCode: '${rq.getLoginedEmployee().getEmployeeCode()}',
                             totalSales: ${payedTotalAmount},
                             totalSalesCount: ${payedCartCnt},
                             discountAmount: ${payedTotalDiscountAmount},

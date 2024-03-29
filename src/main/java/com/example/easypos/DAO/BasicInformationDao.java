@@ -205,6 +205,11 @@ public interface BasicInformationDao {
             """)
     int getProductTypeListSize();
 
+    @Select("""
+            ${sql}
+            """)
+    void createAndDropTable(String sql);
+
     @Insert("""
             insert into productType
             set regDate      = now(),
@@ -234,8 +239,10 @@ public interface BasicInformationDao {
     int delProductTypes(int delProductTypeId);
 
     @Select("""
-            select * from product
-            where productType = #{productTypeId};
+            select p.productCode, p.productKorName, p.price, p.color, p.id
+             from `${productTypeId}` as i
+                inner join product as p
+                    on p.productCode = i.productCode;
             """)
     List<Product> getProducts(String productTypeId);
 
@@ -264,8 +271,29 @@ public interface BasicInformationDao {
     int updateProducts(int productId, String productNewColor);
 
     @Delete("""
-            delete from product
+            update product
+            set productType = ''
             where id = #{delProductId};
             """)
     int delTypeForProducts(int delProductId);
+
+    @Select("""
+            select * from productType
+                where code = #{proTypeCode}
+                and korName = #{productTypeKorName}
+            """)
+    ProductType getProductType(String proTypeCode, String productTypeKorName);
+
+    @Select("""
+            select * from ProductType
+                where id = #{delProductTypeId}
+            """)
+    ProductType getProductTypeById(int delProductTypeId);
+
+    @Insert("""
+            insert into `${productTypeId}` (regDate, updateDate,`code`, korName, productCode)
+                    select now(), now(), `code`, korName, #{productCode} from productType
+                    where `code` = #{productTypeId};
+            """)
+    void appendProForTypeItem(String productTypeId, String productCode);
 }

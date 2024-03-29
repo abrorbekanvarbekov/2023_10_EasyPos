@@ -95,11 +95,12 @@ public interface HomeMainDao {
 
     @Insert("""
             insert into deadlineSettlement
-            set businessDate = #{businessDate},
-                updateDate = now(),
-                openingDate = #{openingDate},
-                employeeName = #{employeeName},
-                employeeCode = #{employeeCode},
+            set openingDate = #{openingDate},
+                closingDate = now(),
+                openEmployeeName = #{openEmployeeName},
+                openEmployeeCode = #{openEmployeeCode},
+                closeEmployeeName = #{closeEmployeeName},
+                closeEmployeeCode = #{closeEmployeeCode},
                 totalSales = #{totalSales},
                 totalSalesCount = #{totalSalesCount},
                 discountAmount = #{discountAmount},
@@ -109,23 +110,25 @@ public interface HomeMainDao {
                 paidByCash = #{paidByCash},
                 paidByCart = #{paidByCart}
             """)
-    void insertDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+    void insertDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName,
+                                  String closeEmployeeCode, int totalSales, int totalSalesCount,
                                   int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
 
     @Select("""
             select * from deadlineSettlement
-            where businessDate = #{businessDate}
+            where openingDate = #{openingDate}
             limit 1
             """)
-    deadlineSettlement getDeadlineSettlement(String businessDate);
+    deadlineSettlement getDeadlineSettlement(String openingDate);
 
     @Update("""
             update deadlineSettlement
-                set businessDate = #{businessDate},
-                    updateDate = now(),
-                    openingDate = #{openingDate},
-                    employeeName = #{employeeName},
-                    employeeCode = #{employeeCode},
+                set openingDate = #{openingDate},
+                    closingDate = now(),
+                    openEmployeeName = #{openEmployeeName},
+                    openEmployeeCode = #{openEmployeeCode},
+                    closeEmployeeName = #{closeEmployeeName},
+                    closeEmployeeCode = #{closeEmployeeCode},
                     totalSales = #{totalSales},
                     totalSalesCount = #{totalSalesCount},
                     discountAmount = #{discountAmount},
@@ -134,9 +137,21 @@ public interface HomeMainDao {
                     amountOfReturns = #{amountOfReturns},
                     paidByCash = #{paidByCash},
                     paidByCart = #{paidByCart}
-                where businessDate = #{businessDate}
+                where openingDate = #{openingDate}
             """)
-    void updateDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode, int totalSales, int totalSalesCount,
+    void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
                                   int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
 
+    @Update("""
+            delete from CartItems
+                where regDate >= #{beginDate}
+                and delStatus = 0
+            """)
+    void removeLeftCartItem(String beginDate);
+
+    @Update("""
+            delete from Cart
+                where regDate >= #{beginDate}
+            """)
+    void removeLeftCart(String beginDate);
 }

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -89,13 +90,23 @@ public class HomeMainController {
     //    ============================================================================= //
 
     @RequestMapping("/usr/home-main/deadlineSettlement")
-    public String deadlineSettlement(Model model) {
+    public String deadlineSettlement(Model model) throws ParseException {
 
         String floor = String.valueOf(rq.getFloor());
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String businessDate = businessFullDate[0];
         String openingTime = businessFullDate[1];
-        String beginDate = businessDate + " 00:00:00";
+        String currentDate = dateFormatter.format(dateNow);
+        Date format1 = dateFormatter.parse(businessDate);
+        Date format2 = dateFormatter.parse(currentDate);
+        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
+
+        String beginDate = rq.getBusinessDate();
+
+        if (diffSec != 0) {
+            businessDate = currentDate;
+        }
+
         String endDate = businessDate + " 23:59:59";
 
 
@@ -114,8 +125,8 @@ public class HomeMainController {
         businessDateToFormat.insert(12, "일 ");
 
         model.addAttribute("businessDate", businessDate);
-        model.addAttribute("businessDateToFormat", businessDateToFormat);
         model.addAttribute("openingTime", openingTime);
+        model.addAttribute("businessDateToFormat", businessDateToFormat);
         model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
         model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(0)));
@@ -132,34 +143,43 @@ public class HomeMainController {
         return "/usr/home-main/deadlineSettlement";
     }
 
-
     @RequestMapping("/usr/home-main/setDeadlineSettlement")
     @ResponseBody
-    public ResultDate<String> setDeadlineSettlement(String businessDate, String openingDate, String employeeName, String employeeCode,
-                                                    int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales,
-                                                    int amountOfReturns, int paidByCash, int paidByCart) {
-        deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(businessDate);
-        if (deadlineSettlement == null) {
-            homeMainService.insertDeadlineSettlement(businessDate, openingDate, employeeName, employeeCode, totalSales, totalSalesCount,
-                    discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
-        } else {
-            homeMainService.updateDeadlineSettlement(businessDate, openingDate, employeeName, employeeCode, totalSales, totalSalesCount,
-                    discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
-        }
+    public ResultDate<String> setDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
 
-        rq.logout();
-        rq.logoutToEmployee();
-        return ResultDate.from("S-1", "/usr/member/loginPage");
+        try {
+            deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(openingDate);
+            if (deadlineSettlement == null) {
+                homeMainService.insertDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+            } else {
+                homeMainService.updateDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+            }
+
+            rq.logout();
+            rq.logoutToEmployee();
+            String beginDate = rq.getBusinessDate();
+            homeMainService.removeLeftCartItem(beginDate);
+            homeMainService.removeLeftCart(beginDate);
+            return ResultDate.from("S-1", "/usr/member/loginPage");
+        } catch (Exception e) {
+            return ResultDate.from("F-1", e.getMessage());
+        }
     }
 
     @RequestMapping("/usr/home-main/getDeadlineSettlement")
     @ResponseBody
-    public ResponseEntity getDeadlineSettlement(String businessDate) {
-        deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(businessDate);
-        if (deadlineSettlement != null) {
+    public ResponseEntity getDeadlineSettlement(String openingDate) throws ParseException {
+
+        deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(openingDate);
+        String currentDate = dateFormatter.format(dateNow);
+        Date format1 = dateFormatter.parse(openingDate);
+        Date format2 = dateFormatter.parse(currentDate);
+        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
+
+        if (deadlineSettlement != null || diffSec < 0) {
             return ResponseEntity.ok().body(deadlineSettlement);
         } else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

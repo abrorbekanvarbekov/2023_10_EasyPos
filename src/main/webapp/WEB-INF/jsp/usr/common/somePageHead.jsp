@@ -13,14 +13,21 @@
     </a>
     <ul class="header-box-detail">
         <li>
-            <a href="${pageName == '개점처리' ? 'loginPage' : '/?floor=1'}">
+            <a>
                 <c:if test="${pageName == '메인메뉴' }">
-                    <span class="material-symbols-outlined text-4xl">power_settings_new</span>
+                    <span class="material-symbols-outlined text-4xl"
+                          onclick="doWindowClose();">power_settings_new</span>
                 </c:if>
                 <c:if test="${pageName != '메인메뉴'}">
-                    <span class="material-symbols-outlined text-5xl">close</span>
+                    <span class="material-symbols-outlined text-5xl" onclick="history.back();">close</span>
                 </c:if>
             </a>
         </li>
     </ul>
 </div>
+
+<script>
+    function doWindowClose() {
+        location.replace("https://www.google.com/")
+    }
+</script>

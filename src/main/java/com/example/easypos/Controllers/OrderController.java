@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,64 +41,74 @@ public class OrderController {
     @RequestMapping("/usr/tables/detail")
     public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, Model model) throws ParseException {
 
-        int tabNum = Integer.parseInt(tabId);
-        String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0];
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(businessDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
+        try {
+            int tabNum = Integer.parseInt(tabId);
+            String[] businessFullDate = rq.getBusinessDate().split(" ");
+            String businessDate = businessFullDate[0];
+            String currentDate = dateFormatter.format(dateNow);
+            Date format1 = dateFormatter.parse(businessDate);
+            Date format2 = dateFormatter.parse(currentDate);
+            long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
 
-        String beginDate = businessDate + " 00:00:00";
-        if (diffSec != 0) {
-            businessDate = currentDate;
-        }
-        String endDate = businessDate + " 23:59:59";
-
-        if (floor <= 0 || floor > 3) {
-            return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
-        }
-
-        List<ProductType> productTypes = orderService.getProductTypes();
-        List<Product> products = orderService.getProductList(productTypes.get(0).getCode(), productTypes.get(0).getKorName());
-        List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, beginDate, endDate);
-
-        int totalQuantity = 0;
-        int totalPrice = 0;
-        int discountSumAMount = 0;
-        int receiveAmount = 0;
-
-        if (cartItemsList.size() != 0) {
-            totalQuantity = cartItemsList.size();
-            for (CartItems cartItems : cartItemsList) {
-                totalPrice += (cartItems.getProductSumPrice() + cartItems.getProductSailPrice());
-                discountSumAMount += cartItems.getProductSailPrice();
+            String beginDate = rq.getBusinessDate();
+            if (diffSec != 0) {
+                businessDate = currentDate;
             }
-            receiveAmount = (totalPrice - discountSumAMount);
-        }
 
-        Cart cart = orderService.getCart(floor, tabNum, beginDate, endDate);
+            String endDate = businessDate + " 23:59:59";
 
-        if (cart != null) {
-            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId());
-            List<paymentCreditCart> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId());
-
-            if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
-                model.addAttribute("paymentCashList", paymentCashList);
-                model.addAttribute("paymentCartList", paymentCartList);
+            if (floor <= 0 || floor > 3) {
+                return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
             }
-        }
 
-        model.addAttribute("tabId", tabId);
-        model.addAttribute("floor", floor);
-        model.addAttribute("productTypes", productTypes);
-        model.addAttribute("cartItemsList", cartItemsList);
-        model.addAttribute("products", products);
-        model.addAttribute("totalQuantity", totalQuantity);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("discountSumAMount", discountSumAMount);
-        model.addAttribute("receiveAmount", receiveAmount);
-        return "/usr/table/detail";
+            List<ProductType> productTypes = orderService.getProductTypes();
+            List<Product> products = new ArrayList<>();
+            if (productTypes.size() != 0) {
+                products = orderService.getProductList(productTypes.get(0).getCode(), productTypes.get(0).getKorName());
+            }
+
+            List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, beginDate, endDate);
+
+            int totalQuantity = 0;
+            int totalPrice = 0;
+            int discountSumAMount = 0;
+            int receiveAmount = 0;
+
+            if (cartItemsList.size() != 0) {
+                totalQuantity = cartItemsList.size();
+                for (CartItems cartItems : cartItemsList) {
+                    totalPrice += (cartItems.getProductSumPrice() + cartItems.getProductSailPrice());
+                    discountSumAMount += cartItems.getProductSailPrice();
+                }
+                receiveAmount = (totalPrice - discountSumAMount);
+            }
+
+            Cart cart = orderService.getCart(floor, tabNum, beginDate, endDate);
+
+            if (cart != null) {
+                List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId());
+                List<paymentCreditCart> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId());
+
+                if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
+                    model.addAttribute("paymentCashList", paymentCashList);
+                    model.addAttribute("paymentCartList", paymentCartList);
+                }
+            }
+
+            model.addAttribute("tabId", tabId);
+            model.addAttribute("floor", floor);
+            model.addAttribute("productTypes", productTypes);
+            model.addAttribute("cartItemsList", cartItemsList);
+            model.addAttribute("products", products);
+            model.addAttribute("totalQuantity", totalQuantity);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("discountSumAMount", discountSumAMount);
+            model.addAttribute("receiveAmount", receiveAmount);
+            return "/usr/table/detail";
+        } catch (Exception e) {
+            model.addAttribute("msg", e.getMessage());
+            return "/usr/common/errorPage";
+        }
     }
 
     // ==============================================================//
@@ -133,12 +144,13 @@ public class OrderController {
         Date format1 = dateFormatter.parse(businessDate);
         Date format2 = dateFormatter.parse(currentDate);
         long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-        String beginDate = businessDate + " 00:00:00";
+        String beginDate = rq.getBusinessDate();
 
         // 만약에 영업일이 현재 날짜랑 안 맞을 때
         if (diffSec != 0) {
             businessDate = currentDate;
         }
+
         String endDate = businessDate + " 23:59:59";
 
         if (floor <= 0 || floor > 3) {
@@ -150,7 +162,7 @@ public class OrderController {
             Cart cart;
             cart = orderService.getCart(floor, tabId, beginDate, endDate);
             if (cart == null) {
-                orderService.createCart(floor, tabId);
+                orderService.createCart(floor, tabId, beginDate);
                 cart = orderService.getCart(floor, tabId, beginDate, endDate);
             }
 
@@ -158,6 +170,7 @@ public class OrderController {
                 CartItems cartItem = orderService.getCartItem(productIdList.get(i), productNamesList.get(i), tabId, floor);
 
                 if (cartItem == null || (productNamesList.get(i).startsWith("[S]"))) {
+                    System.out.println(businessDate);
                     orderService.insertCartItems(businessDate, productIdList.get(i), productCntList.get(i),
                             productSailPriceList.get(i), productPricesList.get(i), productNamesList.get(i), tabId, floor, cart.getId());
 

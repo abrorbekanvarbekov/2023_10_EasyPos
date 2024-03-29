@@ -1,5 +1,6 @@
 package com.example.easypos.Vo;
 
+import com.example.easypos.Services.HomeMainService;
 import com.example.easypos.Services.MemberService;
 import com.example.easypos.Util.Util;
 import lombok.Getter;
@@ -14,20 +15,17 @@ import java.io.IOException;
 
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Getter
 public class Rq {
-    @Getter
+    private MemberService memberService;
+    private HomeMainService homeMainService;
+
     private int loginedMemberId;
-    @Getter
     private String businessDate;
-    @Getter
     private Members loginedMember;
-    @Getter
     private Employee loginedEmployee;
-    @Getter
     private int loginedEmployeeCode;
-    @Getter
     private int floor;
-    @Getter
     private int leftAmount;
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -38,7 +36,7 @@ public class Rq {
         this.request = request;
         this.response = response;
         this.session = session;
-
+        this.memberService = memberService;
 
         String businessDate = "";
         if (session.getAttribute("businessDate") != null) {
@@ -49,7 +47,7 @@ public class Rq {
         Members loginedMember = null;
         if (session.getAttribute("loginedMemberId") != null) {
             loginedMemberId = (int) session.getAttribute("loginedMemberId");
-            loginedMember = memberService.getMemberById(loginedMemberId);
+            loginedMember = this.memberService.getMemberById(loginedMemberId);
         }
 
         int floor = 0;
@@ -68,7 +66,6 @@ public class Rq {
             loginedEmployeeCode = (int) session.getAttribute("loginedEmployee");
             loginedEmployee = memberService.getEmployee(loginedEmployeeCode);
         }
-
 
         this.businessDate = businessDate;
         this.loginedEmployeeCode = loginedEmployeeCode;
@@ -122,6 +119,7 @@ public class Rq {
 
     public void logout() {
         this.session.removeAttribute("loginedMemberId");
+        this.loginedMember = null;
     }
 
     public void logoutToEmployee() {
