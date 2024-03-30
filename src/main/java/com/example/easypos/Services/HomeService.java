@@ -19,24 +19,24 @@ public class HomeService {
         this.homeDao = homeDao;
     }
 
-    public List<CartItems> getCartItems(int floor, String beginDate, String endDate) {
-        return homeDao.getCartItems(floor, beginDate, endDate);
+    public List<CartItems> getCartItems(int floor, String openingDate) {
+        return homeDao.getCartItems(floor, openingDate);
     }
 
     public List<Table> getTableLIst(int floor) {
         return homeDao.getTableList(floor);
     }
 
-    public List<CartItems> getPriceSumList(int floor, String beginDate, String endDate) {
-        return homeDao.getPriceSumList(floor, beginDate, endDate);
+    public List<CartItems> getPriceSumList(int floor, String openingDate) {
+        return homeDao.getPriceSumList(floor, openingDate);
     }
 
     public List<TableGroup> getTableGroups() {
         return homeDao.getTableGroups();
     }
 
-    public List<CartItems> getOrderTablesList(int i, String beginDate, String endDate) {
-        return homeDao.getOrderTablesList(i, beginDate, endDate);
+    public List<CartItems> getOrderTablesList(int i, String openingDate) {
+        return homeDao.getOrderTablesList(i, openingDate);
     }
 
     // ==============================================================//
@@ -47,28 +47,28 @@ public class HomeService {
 
     // ==============================================================//
 
-    public List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate) {
-        return homeDao.getPayedTotalAmount(floor, beginDate, endDate);
+    public List<Integer> getPayedTotalAmount(String floor, String openingDate) {
+        return homeDao.getPayedTotalAmount(floor, openingDate);
     }
 
-    public List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate) {
-        return homeDao.getPayedTotalCnt(floor, beginDate, endDate);
+    public List<Integer> getPayedTotalCnt(String floor, String openingDate) {
+        return homeDao.getPayedTotalCnt(floor, openingDate);
     }
 
-    public List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate) {
-        return homeDao.getPayedTotalDiscountAmount(floor, beginDate, endDate);
+    public List<Integer> getPayedTotalDiscountAmount(String floor, String openingDate) {
+        return homeDao.getPayedTotalDiscountAmount(floor, openingDate);
     }
 
-    public int getOutstandingAmount(String floor, String beginDate, String endDate) {
-        return homeDao.getOutstandingAmount(floor, beginDate, endDate);
+    public int getOutstandingAmount(String floor, String openingDate) {
+        return homeDao.getOutstandingAmount(floor, openingDate);
     }
 
-    public List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate) {
-        return homeDao.getNumberOfReturns(floor, beginDate, endDate);
+    public List<Integer> getNumberOfReturns(String floor, String openingDate) {
+        return homeDao.getNumberOfReturns(floor, openingDate);
     }
 
-    public List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate) {
-        return homeDao.getAmountOfReturns(floor, beginDate, endDate);
+    public List<Integer> getAmountOfReturns(String floor, String openingDate) {
+        return homeDao.getAmountOfReturns(floor, openingDate);
     }
 
     public int getOutstandingTables(String floor) {

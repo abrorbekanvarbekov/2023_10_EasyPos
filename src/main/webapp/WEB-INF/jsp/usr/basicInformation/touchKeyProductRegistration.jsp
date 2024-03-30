@@ -15,7 +15,7 @@
                     <span>조회</span>
                 </button>
                 <button onclick="saveProductType();" class="btn btn-active btn-sm pl-2">저장</button>
-                <button onclick="delProductType();" class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="delProductTypeAndProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
                 <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
         </div>
@@ -242,15 +242,15 @@
                 $.each(data, (idx, value) => {
                     let ordinalNum = (idx + 1).toString();
                     productLi += `
-                    <li class="product \${idx+1 == 1 ? 'checked' : ''}" id="product_\${value.id}">
-                        <span><input type="checkbox" id="product-checkbox" value="\${value.id}"></span>
+                    <li class="product \${idx+1 == 1 ? 'checked' : ''}" id="product_\${value.productCode}">
+                        <span><input type="checkbox" id="product-checkbox" value="\${value.productCode}"></span>
                         <span>\${ordinalNum.padStart(3, "0")}</span>
                         <span>\${value.productCode}</span>
                         <span>\${value.productKorName}</span>
                         <span>\${value.price}</span>
                         <span>매장</span>
                         <span style="background-color: \${value.color}">
-                            <select id="productColorBox_\${value.id}" class="select select-bordered select-sm w-full max-w-xs"
+                            <select id="productColorBox_\${value.productCode}" class="select select-bordered select-sm w-full max-w-xs"
                                 style="background-color: \${value.color}" onchange="updateProduct(this.id)">
                               <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
                               <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
@@ -399,21 +399,24 @@
 
         if (updateProLen != 0) {
             let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
-            let updateProductIdList = [];
+            let selectProTypeCode = selectProTypeItem.children[2].textContent;
+            let updateProductCodeList = [];
             let updateProductColorList = [];
 
             $(".productType-list-con-right > .update-pro-item").each((idx, el) => {
-                const updateProductId = el.id.substring(el.id.indexOf("_") + 1);
-                updateProductIdList.push(updateProductId);
+                const updateProductCode = el.id.substring(el.id.indexOf("_") + 1);
+                updateProductCodeList.push(updateProductCode);
                 const updateProColorBox = el.children[6].children[0];
                 const updateProColor = updateProColorBox.options[updateProColorBox.selectedIndex].value;
                 updateProductColorList.push(updateProColor);
             })
+
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/updateProducts",
                 data: {
-                    updateProductIdList: updateProductIdList.join(","),
-                    updateProductColorList: updateProductColorList.join(",")
+                    updateProductCodeList: updateProductCodeList.join(","),
+                    updateProductColorList: updateProductColorList.join(","),
+                    selectProTypeCode: selectProTypeCode
                 },
                 method: "POST",
                 success: function (data) {
@@ -431,9 +434,10 @@
         }
     }
 
-    function delProductType() {
+    function delProductTypeAndProduct() {
         const delProTypeIdList = $('#product-type-checkbox:checked').map((index, el) => el.value).toArray();
-        const delProductIdList = $('#product-checkbox:checked').map((index, el) => el.value).toArray();
+        const delProductCodeList = $('#product-checkbox:checked').map((index, el) => el.value).toArray();
+
         if (delProTypeIdList != 0) {
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/delProductTypes",
@@ -455,12 +459,15 @@
             })
         }
 
-        if (delProductIdList != 0) {
+        if (delProductCodeList != 0) {
             let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
+            let productTypeCode = selectProTypeItem.children[2].textContent;
+
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
                 data: {
-                    delProductIdList: delProductIdList.join(",")
+                    delProductCodeList: delProductCodeList.join(","),
+                    productTypeCode: productTypeCode
                 },
                 method: "POST",
                 success: function (data) {
@@ -509,6 +516,7 @@
         let searchCategory = searchCategorySelect.options[searchCategorySelect.selectedIndex].textContent;
         let searchDivision = document.querySelector(`.productCl-box div > .product-nameOrCode-input`).value;
         $('.search-pro-list-container').css("display", "flex");
+
         $.get("/usr/basic-information/productSearch", {
             bigClassificationCode: bigClassificationCode,
             middleClassificationCode: middleClassificationCode,
@@ -521,7 +529,7 @@
                 $.each(data, (idx, value) => {
                     productListItem += `
                     <li class="product \${idx+1 == 1 ? 'checked' : ''}">
-                        <span><input type="checkbox" value="\${value.id}"></span>
+                        <span><input type="checkbox" value="\${value.productCode}"></span>
                         <span>\${value.smallClassificationName}</span>
                         <span>\${value.productCode}</span>
                         <span>\${value.productKorName}</span>
@@ -560,7 +568,7 @@
 
             if (selectProductItem.length != 0 && productListLength > 0) {
                 $.post("/usr/basic-information/touchKeyManagement/addTypeForProducts", {
-                    productIdList: selectProductItem.join(","),
+                    productCodeList: selectProductItem.join(","),
                     productTypeId: selectProTypeItemCode,
                     productTypeColor: selectProTypeColor
                 }, function (data) {

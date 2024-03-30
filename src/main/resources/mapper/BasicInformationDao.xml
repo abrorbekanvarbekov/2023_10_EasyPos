@@ -38,7 +38,7 @@
     </select>
 
     <select id="getProductList" resultType="Product">
-        select p.id, p.productCode, p.productKorName, p.productEngName, p.price, p.costPrice, p.productType,
+        select p.id, p.productCode, p.productKorName, p.productEngName, p.price, p.costPrice,
         pBC.bigClassificationName as bigClassificationName,
         pBC.bigClassificationCode as bigClassificationCode,
         pMC.middleClassificationName as middleClassificationName,

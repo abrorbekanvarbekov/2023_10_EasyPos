@@ -144,14 +144,14 @@ public interface HomeMainDao {
 
     @Update("""
             delete from CartItems
-                where regDate >= #{beginDate}
+                where openingDate = #{businessDate}
                 and delStatus = 0
             """)
-    void removeLeftCartItem(String beginDate);
+    void removeLeftCartItem(String businessDate);
 
     @Update("""
             delete from Cart
-                where regDate >= #{beginDate}
+                where openingDate = #{businessDate}
             """)
-    void removeLeftCart(String beginDate);
+    void removeLeftCart(String businessDate);
 }

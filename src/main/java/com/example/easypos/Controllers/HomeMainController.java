@@ -146,6 +146,8 @@ public class HomeMainController {
     @RequestMapping("/usr/home-main/setDeadlineSettlement")
     @ResponseBody
     public ResultDate<String> setDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String businessDate = businessFullDate[0];
 
         try {
             deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(openingDate);
@@ -157,9 +159,8 @@ public class HomeMainController {
 
             rq.logout();
             rq.logoutToEmployee();
-            String beginDate = rq.getBusinessDate();
-            homeMainService.removeLeftCartItem(beginDate);
-            homeMainService.removeLeftCart(beginDate);
+            homeMainService.removeLeftCartItem(businessDate);
+            homeMainService.removeLeftCart(businessDate);
             return ResultDate.from("S-1", "/usr/member/loginPage");
         } catch (Exception e) {
             return ResultDate.from("F-1", e.getMessage());

@@ -6,7 +6,6 @@ import com.example.easypos.Vo.ProductType;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -188,7 +187,8 @@ public class BasicInformationService {
                         "                    updateDate  datetime     not null,\n" +
                         "                    `code`      varchar(50)  not null,\n" +
                         "                    korName     varchar(100) not null,\n" +
-                        "                    productCode varchar(50)  not null\n" +
+                        "                    productCode varchar(50)  not null,\n" +
+                        "                    color       varchar(50)  not null\n" +
                         "                );";
                 basicInformationDao.createAndDropTable(createSql);
             }
@@ -226,16 +226,13 @@ public class BasicInformationService {
         return result;
     }
 
-    public int addTypeForProducts(List<String> productIdList, String productTypeId, String productTypeColor) {
+    public int addTypeFromProducts(List<String> productCodeList, String productTypeId, String productTypeColor) {
         int result = 0;
-        if (productIdList.size() != 0) {
-            for (int i = 0; i < productIdList.size(); i++) {
-                int productId = Integer.parseInt(productIdList.get(i));
-                Product isDuplicatePro = basicInformationDao.getDuplicatePro(productId, productTypeId);
+        if (productCodeList.size() != 0) {
+            for (int i = 0; i < productCodeList.size(); i++) {
+                Product isDuplicatePro = basicInformationDao.getDuplicatePro(productCodeList.get(i), productTypeId);
                 if (isDuplicatePro == null) {
-                    result = basicInformationDao.addTypeForProduct(productId, productTypeId, productTypeColor);
-                    Product product = basicInformationDao.getDuplicatePro(productId, productTypeId);
-                    basicInformationDao.appendProForTypeItem(productTypeId, product.getProductCode());
+                    result = basicInformationDao.appendProForTypeItem(productCodeList.get(i), productTypeId, productTypeColor);
                 }
             }
         }
@@ -243,24 +240,22 @@ public class BasicInformationService {
     }
 
 
-    public int updateProducts(List<String> updateProductIdList, List<String> updateProductColorList) {
+    public int updateProducts(List<String> updateProductCodeList, List<String> updateProductColorList, String selectProTypeCode) {
         int result = 0;
-        if (updateProductIdList.size() != 0) {
-            for (int i = 0; i < updateProductIdList.size(); i++) {
-                int productId = Integer.parseInt(updateProductIdList.get(i));
+        if (updateProductCodeList.size() != 0) {
+            for (int i = 0; i < updateProductCodeList.size(); i++) {
+                String productCode = updateProductCodeList.get(i);
                 String productNewColor = updateProductColorList.get(i);
-                result = basicInformationDao.updateProducts(productId, productNewColor);
+                result = basicInformationDao.updateProducts(productCode, productNewColor, selectProTypeCode);
             }
         }
-
         return result;
     }
 
-    public int delTypeForProducts(List<String> delProductIdList) {
+    public int delTypeForProducts(List<String> delProductCodeList, String productTypeCode) {
         int result = 0;
-        for (int i = 0; i < delProductIdList.size(); i++) {
-            int delProductId = Integer.parseInt(delProductIdList.get(i));
-            result = basicInformationDao.delTypeForProducts(delProductId);
+        for (int i = 0; i < delProductCodeList.size(); i++) {
+            result = basicInformationDao.delProductFromItem(delProductCodeList.get(i), productTypeCode);
         }
         return result;
     }

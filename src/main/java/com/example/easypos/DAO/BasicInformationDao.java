@@ -139,8 +139,7 @@ public interface BasicInformationDao {
             """)
     void removeSmallClassification(String removeClassificationId, String checkedBigClassificationCode, String checkedMiddleClassificationCode);
 
-    List<Product> getProductList(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
-                                 String searchCategory, String productName);
+    List<Product> getProductList(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode, String searchCategory, String productName);
 
 
     @Insert("""
@@ -156,8 +155,7 @@ public interface BasicInformationDao {
                 price                    = #{price},
                 costPrice                = #{costPrice};
             """)
-    int addProduct(int productCode, String bigClassificationCode, String middleClassificationCode, String smallClassificationCode,
-                   String productKorName, String productEngName, int price, int costPrice);
+    int addProduct(int productCode, String bigClassificationCode, String middleClassificationCode, String smallClassificationCode, String productKorName, String productEngName, int price, int costPrice);
 
 
     @Select("""
@@ -177,8 +175,7 @@ public interface BasicInformationDao {
                     costPrice = #{costPrice}
                 where id = #{productId}
             """)
-    int modifyProduct(int productId, String bigClassificationCode, String middleClassificationCode,
-                      String smallClassificationCode, String productKorName, String productEngName, int price, int costPrice);
+    int modifyProduct(int productId, String bigClassificationCode, String middleClassificationCode, String smallClassificationCode, String productKorName, String productEngName, int price, int costPrice);
 
 
     @Delete("""
@@ -195,8 +192,7 @@ public interface BasicInformationDao {
                     and middleClassificationCode = #{middleClassificationCode}
                     and smallClassificationCode = #{smallClassificationCode};
             """)
-    void updateSmallClassProductCnt(String bigClassificationCode, String middleClassificationCode,
-                                    String smallClassificationCode, int productCnt);
+    void updateSmallClassProductCnt(String bigClassificationCode, String middleClassificationCode, String smallClassificationCode, int productCnt);
 
     List<ProductType> getProductTypeList(String searchKeyword);
 
@@ -239,7 +235,7 @@ public interface BasicInformationDao {
     int delProductTypes(int delProductTypeId);
 
     @Select("""
-            select p.productCode, p.productKorName, p.price, p.color, p.id
+            select p.productCode, p.productKorName, p.price, i.color, p.id
              from `${productTypeId}` as i
                 inner join product as p
                     on p.productCode = i.productCode;
@@ -247,11 +243,10 @@ public interface BasicInformationDao {
     List<Product> getProducts(String productTypeId);
 
     @Select("""
-            select * from product
-                where id = #{productId}
-                and productType = #{productTypeId};
+            select * from `${productTypeId}`
+                where productCode = #{productCode}
             """)
-    Product getDuplicatePro(int productId, String productTypeId);
+    Product getDuplicatePro(String productCode, String productTypeId);
 
     @Update("""
             update product
@@ -263,19 +258,18 @@ public interface BasicInformationDao {
     int addTypeForProduct(int productId, String productTypeId, String productTypeColor);
 
     @Update("""
-            update product
+            update `${selectProTypeCode}`
             set updateDate = now(),
                 color = #{productNewColor}
-            where id = #{productId}
+            where productCode = #{productCode}
             """)
-    int updateProducts(int productId, String productNewColor);
+    int updateProducts(String productCode, String productNewColor, String selectProTypeCode);
 
     @Delete("""
-            update product
-            set productType = ''
-            where id = #{delProductId};
+            delete from `${productTypeCode}`
+                where productCode = #{delProductCode};
             """)
-    int delTypeForProducts(int delProductId);
+    int delProductFromItem(String delProductCode, String productTypeCode);
 
     @Select("""
             select * from productType
@@ -291,9 +285,9 @@ public interface BasicInformationDao {
     ProductType getProductTypeById(int delProductTypeId);
 
     @Insert("""
-            insert into `${productTypeId}` (regDate, updateDate,`code`, korName, productCode)
-                    select now(), now(), `code`, korName, #{productCode} from productType
-                    where `code` = #{productTypeId};
+            insert into `${productTypeCode}` (regDate, updateDate, `code`, korName, productCode, color)
+                    select now(), now(), `code`, korName, #{productCode}, #{productTypeColor} from productType
+                    where `code` = #{productTypeCode};
             """)
-    void appendProForTypeItem(String productTypeId, String productCode);
+    int appendProForTypeItem(String productCode, String productTypeCode, String productTypeColor);
 }

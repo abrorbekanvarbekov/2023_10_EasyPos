@@ -88,11 +88,11 @@ public class HomeMainService {
                 discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
     }
 
-    public void removeLeftCartItem(String beginDate) {
-        homeMainDao.removeLeftCartItem(beginDate);
+    public void removeLeftCartItem(String businessDate) {
+        homeMainDao.removeLeftCartItem(businessDate);
     }
 
-    public void removeLeftCart(String beginDate) {
-        homeMainDao.removeLeftCart(beginDate);
+    public void removeLeftCart(String businessDate) {
+        homeMainDao.removeLeftCart(businessDate);
     }
 }

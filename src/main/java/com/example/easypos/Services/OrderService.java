@@ -24,30 +24,31 @@ public class OrderService {
         return orderDao.getProductList(productTypeCode, productTypeName);
     }
 
-    public List<CartItems> getCartItemsList(int tableId, int floor, String beginDate, String endDate) {
-        return orderDao.getCartItemsList(tableId, floor, beginDate, endDate);
+    public List<CartItems> getCartItemsList(int tableId, int floor, String openingDate) {
+        return orderDao.getCartItemsList(tableId, floor, openingDate);
     }
 
     // ==============================================================//
 
-    public CartItems getCartItem(int productId, String productName, int tabId, int floor) {
-        return orderDao.getCartItem(productId, productName, tabId, floor);
+    public CartItems getCartItem(int productId, String productName, int tabId, int floor, String openingDate) {
+        return orderDao.getCartItem(productId, productName, tabId, floor, openingDate);
     }
 
     public void cancelProduct(int productId, String productName, int tabId, int floor) {
         orderDao.cancelProduct(productId, productName, tabId, floor);
     }
 
-    public Cart getCart(int floor, int tabId, String beginDate, String endDate) {
-        return orderDao.getCart(floor, tabId, beginDate, endDate);
+    public Cart getCart(int floor, int tabId, String openingDate) {
+        return orderDao.getCart(floor, tabId, openingDate);
     }
 
-    public void createCart(int floor, int tabId, String beginDate) {
-        orderDao.createCart(floor, tabId, beginDate);
+    public void createCart(int floor, int tabId, String openingDate) {
+        orderDao.createCart(floor, tabId, openingDate);
     }
 
-    public void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id) {
-        orderDao.insertCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id);
+    public void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices,
+                                String productName, int tabId, int floor, int cart_id, String openingDate) {
+        orderDao.insertCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id, openingDate);
     }
 
     public int updateCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor) {

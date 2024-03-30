@@ -278,8 +278,8 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/addTypeForProducts")
     @ResponseBody
-    public ResultDate addTypeForProducts(@RequestParam List<String> productIdList, String productTypeId, String productTypeColor) {
-        int result = basicInformationService.addTypeForProducts(productIdList, productTypeId, productTypeColor);
+    public ResultDate addTypeFromProducts(@RequestParam List<String> productCodeList, String productTypeId, String productTypeColor) {
+        int result = basicInformationService.addTypeFromProducts(productCodeList, productTypeId, productTypeColor);
         if (result == 1) {
             return ResultDate.from("S-1", "성공");
         } else {
@@ -289,9 +289,10 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/updateProducts")
     @ResponseBody
-    public ResponseEntity updateProducts(@RequestParam List<String> updateProductIdList,
-                                         @RequestParam List<String> updateProductColorList) {
-        int result = basicInformationService.updateProducts(updateProductIdList, updateProductColorList);
+    public ResponseEntity updateProducts(@RequestParam List<String> updateProductCodeList,
+                                         @RequestParam List<String> updateProductColorList,
+                                         String selectProTypeCode) {
+        int result = basicInformationService.updateProducts(updateProductCodeList, updateProductColorList, selectProTypeCode);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
@@ -301,9 +302,9 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/delTypeForProducts")
     @ResponseBody
-    public ResponseEntity delTypeForProducts(@RequestParam List<String> delProductIdList) {
+    public ResponseEntity delTypeForProducts(@RequestParam List<String> delProductCodeList, String productTypeCode) {
 
-        int result = basicInformationService.delTypeForProducts(delProductIdList);
+        int result = basicInformationService.delTypeForProducts(delProductCodeList, productTypeCode);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {

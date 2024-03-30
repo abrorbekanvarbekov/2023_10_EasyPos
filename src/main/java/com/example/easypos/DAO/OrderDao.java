@@ -13,8 +13,10 @@ public interface OrderDao {
     List<ProductType> getProductTypes();
 
     @Select("""
-            select * from product
-            where productType = #{productTypeCode};
+            select p.* from `${productTypeCode}` as i
+                     inner join product as p
+                     on i.productCode = p.productCode
+                where `code` = #{productTypeCode}
             """)
     List<Product> getProductList(String productTypeCode, String productTypeName);
 
@@ -26,11 +28,10 @@ public interface OrderDao {
                 where c.table_id = #{tableId}
                   and c.floor_id = #{floor}
                   and c.delStatus = 0
-                  and c.regDate > #{beginDate}
-                  and c.regDate < #{endDate}
+                  and openingDate = #{openingDate}
                 order by regDate
             """)
-    List<CartItems> getCartItemsList(int tableId, int floor, String beginDate, String endDate);
+    List<CartItems> getCartItemsList(int tableId, int floor, String openingDate);
 
     @Select("""
             select ifnull(sum(CartItems.productSailPrice), 0) from CartItems
@@ -49,9 +50,10 @@ public interface OrderDao {
             and floor_id = #{floor}
             and productName = #{productName}
             and delStatus = 0
+            and openingDate = #{openingDate}
             limit 1
             """)
-    CartItems getCartItem(int productId, String productName, int tabId, int floor);
+    CartItems getCartItem(int productId, String productName, int tabId, int floor, String openingDate);
 
     @Delete("""
             delete from CartItems
@@ -68,21 +70,21 @@ public interface OrderDao {
             select * from Cart
                 where tabId = #{tabId}
                 and floor = #{floor}
-                and regDate >= #{beginDate}
-                and regDate <= #{endDate}
+                and openingDate = #{openingDate}
             """)
-    Cart getCart(int floor, int tabId, String beginDate, String endDate);
+    Cart getCart(int floor, int tabId, String openingDate);
 
     @Insert("""
-            insert into Cart (regDate, updateDate, tabId, floor)
-                values (now(), now(), #{tabId} , #{floor});
+            insert into Cart (regDate, updateDate, tabId, floor, openingDate)
+                values (now(), now(), #{tabId} , #{floor}, #{openingDate});
             """)
-    void createCart(int floor, int tabId, String beginDate);
+    void createCart(int floor, int tabId, String openingDate);
 
     @Insert("""
             insert into CartItems(
                     regDate,
                     updateDate,
+                    openingDate,
                     product_id,
                     productName,
                     table_id,
@@ -91,12 +93,13 @@ public interface OrderDao {
                     productSumPrice,
                     productSailPrice,
                     floor_id,
-                    cart_id)
-                select concat(#{businessDate}, curtime()), concat(#{businessDate}, curtime()), #{productId}, #{productName}, #{tabId}, #{productCnt}, p.price, #{productPrices}, #{productSailPrice}, #{floor}, #{cart_id}
+                    cart_id )
+                select now(), now(), #{openingDate}, #{productId}, #{productName}, #{tabId}, #{productCnt}, p.price, #{productPrices}, #{productSailPrice}, #{floor}, #{cart_id}
                 from product as p
                 where p.id = #{productId}
             """)
-    void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, int cart_id);
+    void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName,
+                         int tabId, int floor, int cart_id, String openingDate);
 
     @Select("""
             select * from product

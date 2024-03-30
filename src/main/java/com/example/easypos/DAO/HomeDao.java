@@ -19,10 +19,9 @@ public interface HomeDao {
               from CartItems as c
               where c.floor_id = #{floor}
                     and c.delStatus = 0
-                    and c.regDate > #{beginDate}
-                    and c.regDate < #{endDate}
+                    and openingDate = #{openingDate}
             """)
-    List<CartItems> getCartItems(int floor, String beginDate, String endDate);
+    List<CartItems> getCartItems(int floor, String openingDate);
 
     @Select("""
             select * from `table`
@@ -37,12 +36,11 @@ public interface HomeDao {
                          inner join product as p
                                     on c.product_id = p.id
                 where c.floor_id = #{floor}
-                and c.regDate > #{beginDate}
-                and c.regDate < #{endDate}
+                and openingDate = #{openingDate}
                 and c.delStatus = 0
                 group by c.table_id;
             """)
-    List<CartItems> getPriceSumList(int floor, String beginDate, String endDate);
+    List<CartItems> getPriceSumList(int floor, String openingDate);
 
     @Select("""
             select * from tableGroup
@@ -53,13 +51,12 @@ public interface HomeDao {
             select * from CartItems
                 where CartItems.floor_id = #{i}
                   and delStatus = 0
-                  and regDate > #{beginDate}
-                  and regDate < #{endDate}
+                  and openingDate = #{openingDate}
                 group by table_id;
             """)
-    List<CartItems> getOrderTablesList(int i, String beginDate, String endDate);
+    List<CartItems> getOrderTablesList(int i, String openingDate);
 
-// ==============================================================//
+    // ==============================================================//
     @Update("""
             update `table`
             set updateDate = now(),
@@ -70,18 +67,18 @@ public interface HomeDao {
             """)
     void updateTablePos(int elPosX, int elPosY, int number, int floor);
 
-// ==============================================================//
-    List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate);
+    // ==============================================================//
+    List<Integer> getPayedTotalAmount(String floor, String openingDate);
 
-    List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate);
+    List<Integer> getPayedTotalCnt(String floor, String openingDate);
 
-    List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate);
+    List<Integer> getPayedTotalDiscountAmount(String floor, String openingDate);
 
-    List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate);
+    List<Integer> getNumberOfReturns(String floor, String openingDate);
 
-    List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate);
+    List<Integer> getAmountOfReturns(String floor, String openingDate);
 
-    int getOutstandingAmount(String floor, String beginDate, String endDate);
+    int getOutstandingAmount(String floor, String openingDate);
 
     @Select("""
             select count(*) from CartItems

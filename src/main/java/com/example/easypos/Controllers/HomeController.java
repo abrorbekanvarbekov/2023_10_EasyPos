@@ -32,31 +32,21 @@ public class HomeController {
     @RequestMapping("/")
     public String Tables(Model model, @RequestParam(defaultValue = "1") int floor) throws ParseException {
         String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0] + " ";
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(businessDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-        String beginDate = rq.getBusinessDate(); // 오픈한 시간 부터
-        // 만약에 영업일이 현재 날짜랑 안 맞을 때
-        if (diffSec != 0) {
-            businessDate = currentDate + " ";
-        }
-
-        String endDate = businessDate + "23:59:59";
+        String openingDate = businessFullDate[0];
 
         if (floor <= 0 || floor > 3) {
             return rq.jsReturnOnView("잘못 된 번호 입력");
         }
 
         rq.floor(floor);
-        List<CartItems> cartItems = homeService.getCartItems(floor, beginDate, endDate);
+        List<CartItems> cartItems = homeService.getCartItems(floor, openingDate);
         List<Table> tables = homeService.getTableLIst(floor);
-        List<CartItems> priceSumList = homeService.getPriceSumList(floor, beginDate, endDate);
+        List<CartItems> priceSumList = homeService.getPriceSumList(floor, openingDate);
         List<TableGroup> tableGroups = homeService.getTableGroups();
+
         int orderTablesCnt = 0;
         for (int i = 1; i <= 3; i++) {
-            List<CartItems> orderTablesList = homeService.getOrderTablesList(i, beginDate, endDate);
+            List<CartItems> orderTablesList = homeService.getOrderTablesList(i, openingDate);
             orderTablesCnt += orderTablesList.size();
         }
 
@@ -118,30 +108,18 @@ public class HomeController {
     public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) throws ParseException {
 
         String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0] + " ";
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(businessDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-        String beginDate = rq.getBusinessDate();
+        String openingDate = businessFullDate[0] + " ";
 
-        // 만약에 영업일이 현재 날짜랑 안 맞을 때
-        if (diffSec != 0) {
-            businessDate = currentDate;
-        }
-
-        String endDate = businessDate + " 23:59:59";
-
-        List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor, beginDate, endDate);
-        List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor, beginDate, endDate);
-        List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor, beginDate, endDate);
-        List<Integer> numberOfReturns = homeService.getNumberOfReturns(floor, beginDate, endDate);
-        List<Integer> amountOfReturns = homeService.getAmountOfReturns(floor, beginDate, endDate);
-        int outstandingAmount = homeService.getOutstandingAmount(floor, beginDate, endDate);
+        List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor, openingDate);
+        List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor, openingDate);
+        List<Integer> payedTotalDiscountAmount = homeService.getPayedTotalDiscountAmount(floor, openingDate);
+        List<Integer> numberOfReturns = homeService.getNumberOfReturns(floor, openingDate);
+        List<Integer> amountOfReturns = homeService.getAmountOfReturns(floor, openingDate);
+        int outstandingAmount = homeService.getOutstandingAmount(floor, openingDate);
         int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
 
         model.addAttribute("floor", floor);
-        model.addAttribute("businessDate", businessDate);
+        model.addAttribute("businessDate", openingDate);
         model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
         model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(0)));
