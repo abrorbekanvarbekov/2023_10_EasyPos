@@ -3,201 +3,174 @@
 
 <mapper namespace="com.example.easypos.DAO.HomeMainDao">
     <select id="getPayedTotalAmount" resultType="int">
-        select ifnull(sum(payCart.CartAmountPaid), 0)
-        from paymentCreditCartAndCash as payCart
+        select ifnull(sum(payCard.CartAmountPaid), 0)
+        from paymentCreditCardAndCash as payCard
         <if test="floor == 1">
-            where payCart.floor = 1
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 1
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
-            where payCart.floor = 2
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 2
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
-            where payCart.floor = 3
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 3
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         union all
         select ifnull(sum(payCash.CashAmountPaid), 0)
-        from paymentCreditCartAndCash as payCash
+        from paymentCreditCardAndCash as payCash
         <if test="floor == 1">
             where payCash.floor = 1
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
             where payCash.floor = 2
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
             where payCash.floor = 3
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
     </select>
 
     <select id="getPayedTotalCnt" resultType="int">
-        select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
-        from paymentCreditCartAndCash as payCart
+        select ifnull(count(case when payCard.CartAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
+        from paymentCreditCardAndCash as payCard
         <if test="floor == 1">
-            where payCart.floor = 1
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 1
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
-            where payCart.floor = 2
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 2
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
-            where payCart.floor = 3
-            and payCart.isReturn = 0
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.floor = 3
+            and payCard.isReturn = 0
+            and payCard.openingDate = #{openingDate}
         </if>
         union all
         select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as cashPaidAllCnt
-        from paymentCreditCartAndCash as payCash
+        from paymentCreditCardAndCash as payCash
         <if test="floor == 1">
             where payCash.floor = 1
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
             where payCash.floor = 2
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
             where payCash.floor = 3
             and payCash.isReturn = 0
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
     </select>
 
     <select id="getPayedTotalDiscountAmount" resultType="int">
-        select ifnull(sum(payCartandCash.discountAmount), 0)
-        from paymentCreditCartAndCash as payCartandCash
+        select ifnull(sum(payCardandCash.discountAmount), 0)
+        from paymentCreditCardAndCash as payCardandCash
         <if test="floor == 1">
-            where payCartandCash.floor = 1
-            and payCartandCash.isReturn = 0
-            and payCartandCash.regDate &gt; #{beginDate}
-            and payCartandCash.regDate &lt; #{endDate}
+            where payCardandCash.floor = 1
+            and payCardandCash.isReturn = 0
+            and payCardandCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
-            where payCartandCash.floor = 2
-            and payCartandCash.isReturn = 0
-            and payCartandCash.regDate &gt; #{beginDate}
-            and payCartandCash.regDate &lt; #{endDate}
+            where payCardandCash.floor = 2
+            and payCardandCash.isReturn = 0
+            and payCardandCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
-            where payCartandCash.floor = 3
-            and payCartandCash.isReturn = 0
-            and payCartandCash.regDate &gt; #{beginDate}
-            and payCartandCash.regDate &lt; #{endDate}
+            where payCardandCash.floor = 3
+            and payCardandCash.isReturn = 0
+            and payCardandCash.openingDate = #{openingDate}
         </if>
     </select>
 
     <select id="getNumberOfReturns" resultType="int">
-        select ifnull(count(case when payCart.CartAmountPaid > 0 then 1 end), 0) as returnItemCnt
-        from paymentCreditCartAndCash as payCart
+        select ifnull(count(case when payCard.CartAmountPaid > 0 then 1 end), 0) as returnItemCnt
+        from paymentCreditCardAndCash as payCard
         <if test="floor == 1">
-            where payCart.isReturn = 1
-            and payCart.floor = 1
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 1
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
-            where payCart.isReturn = 1
-            and payCart.floor = 2
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 2
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
-            where payCart.isReturn = 1
-            and payCart.floor = 3
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 3
+            and payCard.openingDate = #{openingDate}
         </if>
         union all
         select ifnull(count(case when payCash.CashAmountPaid > 0 then 1 end ), 0) as returnItemCnt
-        from paymentCreditCartAndCash as payCash
+        from paymentCreditCardAndCash as payCash
         <if test="floor == 1">
             where payCash.isReturn = 1
             and payCash.floor = 1
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
             where payCash.isReturn = 1
             and payCash.floor = 2
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
             where payCash.isReturn = 1
             and payCash.floor = 3
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
     </select>
 
     <select id="getAmountOfReturns" resultType="int">
-        select ifnull(sum(payCart.CartAmountPaid), 0)
-        from paymentCreditCartAndCash as payCart
+        select ifnull(sum(payCard.CartAmountPaid), 0)
+        from paymentCreditCardAndCash as payCard
         <if test="floor == 1">
-            where payCart.isReturn = 1
-            and payCart.floor = 1
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 1
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
-            where payCart.isReturn = 1
-            and payCart.floor = 2
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 2
+            and payCard.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
-            where payCart.isReturn = 1
-            and payCart.floor = 3
-            and payCart.regDate &gt; #{beginDate}
-            and payCart.regDate &lt; #{endDate}
+            where payCard.isReturn = 1
+            and payCard.floor = 3
+            and payCard.openingDate = #{openingDate}
         </if>
         union all
         select ifnull(sum(payCash.CashAmountPaid), 0)
-        from paymentCreditCartAndCash as payCash
+        from paymentCreditCardAndCash as payCash
         <if test="floor == 1">
             where payCash.isReturn = 1
             and payCash.floor = 1
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
             where payCash.isReturn = 1
             and payCash.floor = 2
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
             where payCash.isReturn = 1
             and payCash.floor = 3
-            and payCash.regDate &gt; #{beginDate}
-            and payCash.regDate &lt; #{endDate}
+            and payCash.openingDate = #{openingDate}
         </if>
     </select>
 
@@ -206,26 +179,22 @@
         from CartItems
         <if test="floor == '전체'">
             where CartItems.delStatus = 0
-            and CartItems.regDate &gt; #{beginDate}
-            and CartItems.regDate &lt; #{endDate}
+            and CartItems.openingDate = #{openingDate}
         </if>
         <if test="floor == 1">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 1
-            and CartItems.regDate &gt; #{beginDate}
-            and CartItems.regDate &lt; #{endDate}
+            and CartItems.openingDate = #{openingDate}
         </if>
         <if test="floor == 2">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 2
-            and CartItems.regDate &gt; #{beginDate}
-            and CartItems.regDate &lt; #{endDate}
+            and CartItems.openingDate = #{openingDate}
         </if>
         <if test="floor == 3">
             where CartItems.delStatus = 0
             and CartItems.floor_id = 3
-            and CartItems.regDate &gt; #{beginDate}
-            and CartItems.regDate &lt; #{endDate}
+            and CartItems.openingDate = #{openingDate}
         </if>
     </select>
 

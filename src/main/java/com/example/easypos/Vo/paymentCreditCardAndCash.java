@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class paymentCreditCartAndCash {
+public class paymentCreditCardAndCash {
     private int id;
     private String regDate;
     private String updateDate;
+    private String openingDate;
     private int tabId;
     private int floor;
     private int totalAmount;

@@ -108,7 +108,7 @@ public class HomeController {
     public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) throws ParseException {
 
         String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String openingDate = businessFullDate[0] + " ";
+        String openingDate = businessFullDate[0];
 
         List<Integer> payedTotalAmount = homeService.getPayedTotalAmount(floor, openingDate);
         List<Integer> payedTotalCnt = homeService.getPayedTotalCnt(floor, openingDate);

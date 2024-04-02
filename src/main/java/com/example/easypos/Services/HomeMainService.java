@@ -3,7 +3,7 @@ package com.example.easypos.Services;
 import com.example.easypos.DAO.HomeMainDao;
 import com.example.easypos.Vo.CartItems;
 import com.example.easypos.Vo.deadlineSettlement;
-import com.example.easypos.Vo.paymentCreditCartAndCash;
+import com.example.easypos.Vo.paymentCreditCardAndCash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,57 +19,58 @@ public class HomeMainService {
         this.homeMainDao = homeMainDao;
     }
 
-    public List<paymentCreditCartAndCash> getPaymentCartAndCashList(String beginDate, String endDate, String floor) {
-        return homeMainDao.getPaymentCartAndCashList(beginDate, endDate, floor);
+    public List<paymentCreditCardAndCash> getPaymentCartAndCashList(String openingDate, String floor) {
+        return homeMainDao.getPaymentCartAndCashList(openingDate, floor);
     }
 
-    public List<CartItems> getCartItemsByCart_id(int cartId) {
-        return homeMainDao.getCartItemsByCart_id(cartId);
+    public List<CartItems> getCartItemsByCart_id(int cartId, String openingDate) {
+        return homeMainDao.getCartItemsByCart_id(cartId, openingDate);
     }
 
 
-    public void returnPaymentCartAndCash(int cartId) {
-        homeMainDao.returnPaymentCartAndCash(cartId);
+    public void returnPaymentCartAndCash(int cartId, String openingDate) {
+        homeMainDao.returnPaymentCartAndCash(cartId, openingDate);
     }
 
-    public void insertReturnPayment(int cartId) {
-        homeMainDao.insertReturnPayment(cartId);
+    public void insertReturnPayment(int cartId, String openingDate) {
+        homeMainDao.insertReturnPayment(cartId, openingDate);
     }
 
-    public void cancelReturnPaymentCart(int cartId) {
-        homeMainDao.cancelReturnPaymentCart(cartId);
+    public void cancelReturnPaymentCart(int cartId, String openingDate) {
+        homeMainDao.cancelReturnPaymentCart(cartId, openingDate);
     }
 
-    public void cancelReturnPaymentCash(int cartId) {
-        homeMainDao.cancelReturnPaymentCash(cartId);
+    public void cancelReturnPaymentCash(int cartId, String openingDate) {
+        homeMainDao.cancelReturnPaymentCash(cartId, openingDate);
     }
 
-    public List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate) {
-        return homeMainDao.getPayedTotalAmount(floor, beginDate, endDate);
+
+    public List<Integer> getPayedTotalAmount(String floor, String openingDate) {
+        return homeMainDao.getPayedTotalAmount(floor, openingDate);
     }
 
-    public List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate) {
-        return homeMainDao.getPayedTotalCnt(floor, beginDate, endDate);
+    public List<Integer> getPayedTotalCnt(String floor, String openingDate) {
+        return homeMainDao.getPayedTotalCnt(floor, openingDate);
     }
 
-    public List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate) {
-        return homeMainDao.getPayedTotalDiscountAmount(floor, beginDate, endDate);
+    public List<Integer> getPayedTotalDiscountAmount(String floor, String openingDate) {
+        return homeMainDao.getPayedTotalDiscountAmount(floor, openingDate);
     }
 
-    public int getOutstandingAmount(String floor, String beginDate, String endDate) {
-        return homeMainDao.getOutstandingAmount(floor, beginDate, endDate);
+    public int getOutstandingAmount(String floor, String openingDate) {
+        return homeMainDao.getOutstandingAmount(floor, openingDate);
     }
 
-    public List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate) {
-        return homeMainDao.getNumberOfReturns(floor, beginDate, endDate);
+    public List<Integer> getNumberOfReturns(String floor, String openingDate) {
+        return homeMainDao.getNumberOfReturns(floor, openingDate);
     }
 
-    public List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate) {
-        return homeMainDao.getAmountOfReturns(floor, beginDate, endDate);
+    public List<Integer> getAmountOfReturns(String floor, String openingDate) {
+        return homeMainDao.getAmountOfReturns(floor, openingDate);
     }
 
-    public int getOutstandingTables(String floor, String beginDate, String endDate) {
-        return homeMainDao.getOutstandingTables(floor, beginDate, endDate);
+    public int getOutstandingTables(String floor, String openingDate) {
+        return homeMainDao.getOutstandingTables(floor, openingDate);
     }
 
     public void insertDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,

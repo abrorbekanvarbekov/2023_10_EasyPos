@@ -2,7 +2,7 @@ package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.Cart;
 import com.example.easypos.Vo.CartItems;
-import com.example.easypos.Vo.paymentCreditCartAndCash;
+import com.example.easypos.Vo.paymentCreditCardAndCash;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -20,6 +20,7 @@ public interface PayDao {
             insert into paymentCash
             set regDate = now(),
                 updateDate= now(),
+                openingDate= #{openingDate},
                 floor = #{floor},
                 tabId = #{tabId},
                 cashTotalAmount = #{totalAmount},
@@ -27,7 +28,7 @@ public interface PayDao {
                 discountAmount = #{cashTotalSailAmount},
                 cart_id = #{cart_id}
             """)
-    void insertPaymentCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cart_id);
+    void insertPaymentCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cart_id, String openingDate);
 
     @Update("""
             update CartItems
@@ -35,22 +36,25 @@ public interface PayDao {
                     delStatus = 1
                 where table_id = #{tabId}
                   and floor_id = #{floor}
+                  and openingDate = #{openingDate};
             """)
-    void removePaidCartItem(int floor, int tabId);
+    void removePaidCartItem(int floor, int tabId, String openingDate);
 
     @Delete("""
             delete from Cart
             where tabId = #{tabId}
             and floor = #{floor}
+            and openingDate = #{openingDate}
             """)
-    void removeCart(int floor, int tabId);
+    void removeCart(int floor, int tabId, String openingDate);
 
     // ==================================================================//
 
     @Insert("""
-            insert into paymentCreditCart
+            insert into paymentCreditCard
             set regDate = now(),
                 updateDate= now(),
+                openingDate= #{openingDate},
                 floor = #{floor},
                 tabId = #{tabId},
                 cartTotalAmount = #{totalAmount},
@@ -59,7 +63,8 @@ public interface PayDao {
                 payByCreditCartNumber = #{payByCreditCartNumber},
                 cart_id = #{cart_id}
             """)
-    void insertPaymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String payByCreditCartNumber, int cart_id);
+    void insertPaymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String payByCreditCartNumber,
+                                 int cart_id, String openingDate);
 
     @Insert("""
              insert into Cart (regDate, updateDate, tabId, floor)
@@ -71,22 +76,25 @@ public interface PayDao {
             select * from CartItems
                 where floor_id = #{floor}
                 and table_id = #{tabId}
-                and delStatus = 0;
+                and delStatus = 0
+                and openingDate = #{openingDate};
             """)
-    List<CartItems> getIsExistCartItem(int floor, int tabId);
+    List<CartItems> getIsExistCartItem(int floor, int tabId, String openingDate);
 
     @Select("""
             select * from CartItems
             where cart_id = #{cartId}
             and table_id = #{tabId}
-            and floor_id = #{floor};
+            and floor_id = #{floor}
+            and openingDate = #{openingDate}
             """)
-    List<CartItems> getPaidCartItem(int tabId, int floor, int cartId);
+    List<CartItems> getPaidCartItem(int tabId, int floor, int cartId, String openingDate);
 
     @Insert("""
-            insert into paymentCreditCartAndCash
+            insert into paymentCreditCardAndCash
             set regDate = now(),
                 updateDate = now(),
+                openingDate = #{openingDate},
                 tabId = #{tabId},
                 floor = #{floor},
                 totalAmount = #{totalAmount},
@@ -96,46 +104,52 @@ public interface PayDao {
                 payByCreditCartNumber = #{creditCartNumber},
                 cart_id = #{cartId}
             """)
-    void insertPaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber, int cartId);
+    void insertPaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
+                                         int cartId, String openingDate);
 
     @Select("""
-            select * from paymentCreditCartAndCash
-            where cart_id = #{cartId};
+            select * from paymentCreditCardAndCash
+                where cart_id = #{cartId}
+                and openingDate = #{openingDate};
             """)
-    paymentCreditCartAndCash getExistPaymentCartAndCashItem(int cartId);
+    paymentCreditCardAndCash getExistPaymentCartAndCashItem(int cartId, String openingDate);
 
     @Update("""
-            update paymentCreditCartAndCash
-            set updateDate = now(),
-                CartAmountPaid = CartAmountPaid + #{splitAmount}
-            where cart_id = #{cartId}
-            and tabId = #{tabId}
-            and floor = #{floor}
+            update paymentCreditCardAndCash
+                set updateDate = now(),
+                    CartAmountPaid = CartAmountPaid + #{splitAmount}
+                where cart_id = #{cartId}
+                and tabId = #{tabId}
+                and floor = #{floor}
+                and openingDate = #{openingDate};
             """)
-    void updatePaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber, int cartId);
+    void updatePaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
+                                         int cartId, String openingDate);
 
     @Insert("""
-            insert into paymentCreditCartAndCash
-            set regDate = now(),
-                updateDate = now(),
-                tabId = #{tabId},
-                floor = #{floor},
-                totalAmount = #{totalAmount},
-                CartAmountPaid = 0,
-                CashAmountPaid = #{splitAmount},
-                discountAmount = #{cashTotalSailAmount},
-                payByCreditCartNumber = '0',
-                cart_id = #{cartId}
+            insert into paymentCreditCardAndCash
+                set regDate = now(),
+                    updateDate = now(),
+                    openingDate = #{openingDate},
+                    tabId = #{tabId},
+                    floor = #{floor},
+                    totalAmount = #{totalAmount},
+                    CartAmountPaid = 0,
+                    CashAmountPaid = #{splitAmount},
+                    discountAmount = #{cashTotalSailAmount},
+                    payByCreditCartNumber = '0',
+                    cart_id = #{cartId}
             """)
-    void insertPaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cartId);
+    void insertPaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cartId, String openingDate);
 
     @Update("""
-            update paymentCreditCartAndCash
+            update paymentCreditCardAndCash
                 set updateDate = now(),
                     CashAmountPaid = CashAmountPaid + #{amountToBeReceivedCartS}
                 where cart_id = #{cartId}
                 and tabId = #{tabId}
                 and floor = #{floor}
+                and openingDate = #{openingDate};
             """)
-    void updatePaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int amountToBeReceivedCartS, int cashTotalSailAmount, int cartId);
+    void updatePaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int amountToBeReceivedCartS, int cashTotalSailAmount, int cartId, String openingDate);
 }

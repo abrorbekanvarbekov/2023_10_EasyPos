@@ -2,7 +2,7 @@ package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.CartItems;
 import com.example.easypos.Vo.deadlineSettlement;
-import com.example.easypos.Vo.paymentCreditCartAndCash;
+import com.example.easypos.Vo.paymentCreditCardAndCash;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -15,35 +15,36 @@ public interface HomeMainDao {
             select tabId, floor, cart_id, CashAmountPaid, CartAmountPaid,totalAmount,regDate,isReturn,discountAmount,
                         ifnull(sum(CashAmountPaid), 0) as sumCashAmountPaid,
                         ifnull(sum(CartAmountPaid), 0) as sumCartAmountPaid
-            from paymentCreditCartAndCash
-                 WHERE regDate >= #{beginDate}
-                   AND regDate <= #{endDate}
-                   and floor = #{floor}
+            from paymentCreditCardAndCash
+                 WHERE floor = #{floor}
+                   and openingDate = #{openingDate}
                  group by regDate
             """)
-    List<paymentCreditCartAndCash> getPaymentCartAndCashList(String beginDate, String endDate, String floor);
+    List<paymentCreditCardAndCash> getPaymentCartAndCashList(String openingDate, String floor);
 
     @Select("""
             select cartI.*, pay.CartAmountPaid, pay.CashAmountPaid, pay.totalAmount, pay.discountAmount
                 from CartItems as cartI
-                         inner join paymentCreditCartAndCash as pay
+                         inner join paymentCreditCardAndCash as pay
                                     on cartI.cart_id = pay.cart_id
                 where cartI.cart_id = #{cartId}
+                and cartI.openingDate = #{openingDate}
                 group by cartI.productName
             """)
-    List<CartItems> getCartItemsByCart_id(int cartId);
+    List<CartItems> getCartItemsByCart_id(int cartId, String openingDate);
 
 
     @Update("""
-            update paymentCreditCartAndCash
-            set isReturn = 2
-            where cart_id = #{cartId}
+            update paymentCreditCardAndCash
+                set isReturn = 2
+                    where cart_id = #{cartId}
+                    and openingDate = #{openingDate}
             """)
-    int returnPaymentCartAndCash(int cartId);
+    int returnPaymentCartAndCash(int cartId, String openingDate);
 
 
     @Insert("""
-            insert into paymentCreditCartAndCash(regDate, updateDate, tabId, floor, totalAmount, CartAmountPaid, CashAmountPaid,
+            insert into paymentCreditCardAndCash(regDate, updateDate, tabId, floor, totalAmount, CartAmountPaid, CashAmountPaid,
                                                  discountAmount, payByCreditCartNumber, cart_id, isReturn)
             select now(),
                    updateDate,
@@ -56,42 +57,44 @@ public interface HomeMainDao {
                    payByCreditCartNumber,
                    cart_id,
                    1
-            from paymentCreditCartAndCash
-            where paymentCreditCartAndCash.cart_id = #{cartId}
+            from paymentCreditCardAndCash
+                where paymentCreditCardAndCash.cart_id = #{cartId}
+                and paymentCreditCardAndCash.openingDate = #{openingDate}
             """)
-    void insertReturnPayment(int cartId);
+    void insertReturnPayment(int cartId, String openingDate);
 
     @Delete("""
             delete from paymentCreditCart
-            where cart_id = #{cartId}
+                where cart_id = #{cartId}
+                and openingDate = #{openingDate}
             """)
-    void cancelReturnPaymentCart(int cartId);
+    void cancelReturnPaymentCart(int cartId, String openingDate);
 
     @Delete("""
             delete from paymentCash
-            where cart_id = #{cartId}
+                where cart_id = #{cartId}
+                and openingDate = #{openingDate}
             """)
-    void cancelReturnPaymentCash(int cartId);
+    void cancelReturnPaymentCash(int cartId, String openingDate);
 
-    List<Integer> getPayedTotalAmount(String floor, String beginDate, String endDate);
+    List<Integer> getPayedTotalAmount(String floor, String openingDate);
 
-    List<Integer> getPayedTotalCnt(String floor, String beginDate, String endDate);
+    List<Integer> getPayedTotalCnt(String floor, String openingDate);
 
-    List<Integer> getPayedTotalDiscountAmount(String floor, String beginDate, String endDate);
+    List<Integer> getPayedTotalDiscountAmount(String floor, String openingDate);
 
-    List<Integer> getNumberOfReturns(String floor, String beginDate, String endDate);
+    List<Integer> getNumberOfReturns(String floor, String openingDate);
 
-    List<Integer> getAmountOfReturns(String floor, String beginDate, String endDate);
+    List<Integer> getAmountOfReturns(String floor, String openingDate);
 
-    int getOutstandingAmount(String floor, String beginDate, String endDate);
+    int getOutstandingAmount(String floor, String openingDate);
 
     @Select("""
             select count(distinct table_id) from CartItems
                 where delStatus = 0
-                and regDate > #{beginDate}
-                and regDate < #{endDate};
+                and openingDate = #{openingDate}
             """)
-    int getOutstandingTables(String floor, String beginDate, String endDate);
+    int getOutstandingTables(String floor, String openingDate);
 
     @Insert("""
             insert into deadlineSettlement

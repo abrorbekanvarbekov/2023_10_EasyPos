@@ -93,7 +93,6 @@ public class MemberController {
         List<Employee> employeeList = memberService.getEmployeeList(rq.getLoginedMemberId());
 
         String todayDate = dateFormatter.format(dateNow);
-
         model.addAttribute("todayDate", todayDate);
 
         if (employeeList.size() != 0) {

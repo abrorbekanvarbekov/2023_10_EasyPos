@@ -18,10 +18,9 @@ import java.io.IOException;
 @Getter
 public class Rq {
     private MemberService memberService;
-    private HomeMainService homeMainService;
-
     private int loginedMemberId;
     private String businessDate;
+    private String openingDate;
     private Members loginedMember;
     private Employee loginedEmployee;
     private int loginedEmployeeCode;
@@ -67,7 +66,9 @@ public class Rq {
             loginedEmployee = memberService.getEmployee(loginedEmployeeCode);
         }
 
+        String[] strArray = businessDate.split(" ");
         this.businessDate = businessDate;
+        this.openingDate = strArray[0];
         this.loginedEmployeeCode = loginedEmployeeCode;
         this.loginedEmployee = loginedEmployee;
         this.loginedMemberId = loginedMemberId;

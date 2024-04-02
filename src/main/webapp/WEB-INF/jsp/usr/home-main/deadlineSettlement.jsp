@@ -8,9 +8,9 @@
 <div class="deadlineSettlement-container">
     <div class="deadlineSettlement-top">
         <span>영업일자</span>
-        <span>${businessDate}</span>
+        <span>${rq.openingDate}</span>
         <span>개점일시</span>
-        <span>${openingTime}</span>
+        <span>${rq.businessDate.split(" ")[1]}</span>
         <span>담당자</span>
         <span>${rq.getLoginedEmployee().getName()}</span>
     </div>
@@ -340,7 +340,6 @@
                     const result3 = await showConfirmDialog("현금 시재 입력되지 않았습니다. 현금 시재를 입력하지 않은 채로 마감을 진행하시겠습니까?");
                     if (result3 == "true") {
                         $.get("/usr/home-main/setDeadlineSettlement", {
-                            openingDate: '${businessDate}',
                             openEmployeeName: '${rq.getLoginedEmployee().getName()}',
                             openEmployeeCode: '${rq.getLoginedEmployee().getEmployeeCode()}',
                             closeEmployeeName: '${rq.getLoginedEmployee().getName()}',

@@ -33,14 +33,6 @@ public interface OrderDao {
             """)
     List<CartItems> getCartItemsList(int tableId, int floor, String openingDate);
 
-    @Select("""
-            select ifnull(sum(CartItems.productSailPrice), 0) from CartItems
-                 where delStatus = 0
-                   and table_id = #{tabNum}
-                   and CartItems.floor_id = #{floor}
-            """)
-    int getDiscountSumAmount(int tabNum, int floor);
-
     // ==============================================================//
 
     @Select("""
@@ -98,18 +90,13 @@ public interface OrderDao {
                 from product as p
                 where p.id = #{productId}
             """)
-    void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName,
+    void insertCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName,
                          int tabId, int floor, int cart_id, String openingDate);
 
-    @Select("""
-            select * from product
-                 where id = #{productId} 
-            """)
-    Product getProductName(int productId);
 
     @Update("""
             update CartItems
-                 set updateDate = concat(#{businessDate}, curtime()),
+                 set updateDate = now(),
                      quantity = #{productCnt},
                      productSailPrice = #{productSailPrice},
                      productSumPrice = #{productPrices},
@@ -118,8 +105,9 @@ public interface OrderDao {
                  and product_id = #{productId}
                  and floor_id = #{floor}
                  and delStatus = 0
+                 and openingDate = #{openingDate}
             """)
-    int updateCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor);
+    int updateCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, String openingDate);
 
     // ==============================================================//
 
@@ -131,32 +119,6 @@ public interface OrderDao {
 
     // ==============================================================//
 
-    @Select("""
-            select ifnull(sum(c.productSumPrice), 0) as sumPrice
-                from CartItems as c
-                where c.floor_id = #{floor}
-                  and c.table_id = #{tabId}
-                  and c.delStatus = 0          
-            """)
-    int getTotalSumPrice(int tabId, int floor);
-
-    @Select("""
-              select count(*) from CartItems
-                where table_id = #{tabId}
-                and floor_id = #{floor}
-                and delStatus = 0
-            """)
-    int getTotalQuantity(int tabId, int floor);
-
-    @Select("""
-            select ifnull(sum(c.productSailPrice), 0) as sumSailPrice
-                from CartItems as c
-                where c.floor_id = #{floor}
-                  and c.table_id = #{tabId}
-                  and c.delStatus = 0  
-            """)
-    int getTotalSailPrice(int tabId, int floor);
-
     @Delete("""
             delete from Cart
             where tabId = #{tabId}
@@ -166,17 +128,19 @@ public interface OrderDao {
 
     @Select("""
             select * from paymentCash
-            where cart_id = #{cartId}
-            and tabId = #{tabNum}
-            and floor = #{floor};
+                where cart_id = #{cartId}
+                and tabId = #{tabNum}
+                and floor = #{floor}
+                and openingDate = #{openingDate};
             """)
-    List<paymentCash> getPaymentCashList(int tabNum, int floor, int cartId);
+    List<paymentCash> getPaymentCashList(int tabNum, int floor, int cartId, String openingDate);
 
     @Select("""
-            select cartAmountPaid from paymentCreditCart
-            where cart_id = #{cartId}
-            and tabId = #{tabNum}
-            and floor = #{floor};
+            select cartAmountPaid from paymentCreditCard
+                where cart_id = #{cartId}
+                and tabId = #{tabNum}
+                and floor = #{floor}
+                and openingDate = #{openingDate};
             """)
-    List<paymentCreditCart> getPaymentCartList(int tabNum, int floor, int cartId);
+    List<paymentCreditCard> getPaymentCartList(int tabNum, int floor, int cartId, String openingDate);
 }

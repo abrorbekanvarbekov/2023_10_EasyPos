@@ -57,9 +57,12 @@ public class PayController {
     @ResponseBody
     public ResultDate paymentCash(int floor, int tabId, int totalAmount, int splitAmount, int cashChangeAmount,
                                   int cashTotalSailAmount, int amountToBeReceivedCash, String isPrintReceipt, @RequestParam(defaultValue = "0") String authorizedNumber) {
+
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String openingDate = businessFullDate[0];
         Cart cart = payService.getCart(floor, tabId);
 
-        List<CartItems> cartItemsList = payService.getPaidCartItem(tabId, floor, cart.getId());
+        List<CartItems> cartItemsList = payService.getPaidCartItem(tabId, floor, cart.getId(), openingDate);
         if (isPrintReceipt.equals("true")) {
             int productSUmPrice = 0;
             System.out.println("     메뉴         단가        수량        금액");
@@ -83,30 +86,31 @@ public class PayController {
 
         if (splitAmount == 0 || splitAmount == amountToBeReceivedCash || splitAmount > amountToBeReceivedCash) {
             payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCash ? splitAmount : amountToBeReceivedCash,
-                    cashTotalSailAmount, cart.getId());
+                    cashTotalSailAmount, cart.getId(), openingDate);
 
-            paymentCreditCartAndCash paymentCartAndCash = payService.getExistPaymentCartAndCashItem(cart.getId());
-            if (paymentCartAndCash == null) {
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            if (paymentCardAndCash == null) {
                 payService.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCash ? splitAmount : amountToBeReceivedCash,
-                        cashTotalSailAmount, cart.getId());
+                        cashTotalSailAmount, cart.getId(), openingDate);
             } else {
                 payService.updatePaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCash ? splitAmount : amountToBeReceivedCash,
-                        cashTotalSailAmount, cart.getId());
+                        cashTotalSailAmount, cart.getId(), openingDate);
             }
 
-            payService.removePaidCartItem(floor, tabId);
-            payService.removeCart(floor, tabId);
+            payService.removePaidCartItem(floor, tabId, openingDate);
+            payService.removeCart(floor, tabId, openingDate);
             rq.leftAmount(0);
 
             return ResultDate.from("S-1", String.format("/?floor=%d", floor));
-        } else {
-            payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId());
 
-            paymentCreditCartAndCash paymentCartAndCash = payService.getExistPaymentCartAndCashItem(cart.getId());
-            if (paymentCartAndCash == null) {
-                payService.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId());
+        } else {
+            payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId(), openingDate);
+
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            if (paymentCardAndCash == null) {
+                payService.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId(), openingDate);
             } else {
-                payService.updatePaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId());
+                payService.updatePaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId(), openingDate);
             }
 
             rq.leftAmount(rq.getLeftAmount() + splitAmount);
@@ -144,10 +148,11 @@ public class PayController {
     public ResultDate paymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount,
                                         String CreditCartNumber, int cartTotalSailAmount, int amountToBeReceivedCart, String isPrintReceipt) {
 
-
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String openingDate = businessFullDate[0];
         Cart cart = payService.getCart(floor, tabId);
 
-        List<CartItems> cartItemsList = payService.getPaidCartItem(tabId, floor, cart.getId());
+        List<CartItems> cartItemsList = payService.getPaidCartItem(tabId, floor, cart.getId(), openingDate);
         if (isPrintReceipt.equals("true")) {
             int productSUmPrice = 0;
             System.out.println("     메뉴         단가        수량        금액");
@@ -171,29 +176,29 @@ public class PayController {
 
         if (splitAmount == 0 || splitAmount == amountToBeReceivedCart || splitAmount > amountToBeReceivedCart) {
             payService.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                    cartTotalSailAmount, CreditCartNumber, cart.getId());
+                    cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
 
-            paymentCreditCartAndCash paymentCartAndCash = payService.getExistPaymentCartAndCashItem(cart.getId());
-            if (paymentCartAndCash == null) {
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            if (paymentCardAndCash == null) {
                 payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                        cartTotalSailAmount, CreditCartNumber, cart.getId());
+                        cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
             } else {
                 payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                        cartTotalSailAmount, CreditCartNumber, cart.getId());
+                        cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
             }
 
-            payService.removePaidCartItem(floor, tabId);
-            payService.removeCart(floor, tabId);
+            payService.removePaidCartItem(floor, tabId, openingDate);
+            payService.removeCart(floor, tabId, openingDate);
             rq.leftAmount(0);
             return ResultDate.from("S-1", String.format("/?floor=%d", floor));
         } else {
-            payService.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId());
+            payService.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
 
-            paymentCreditCartAndCash paymentCartAndCash = payService.getExistPaymentCartAndCashItem(cart.getId());
-            if (paymentCartAndCash == null) {
-                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId());
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            if (paymentCardAndCash == null) {
+                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
             } else {
-                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId());
+                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
             }
 
             rq.leftAmount(rq.getLeftAmount() + splitAmount);
@@ -206,7 +211,10 @@ public class PayController {
     @RequestMapping("/usr/tables/orderPage/isExistCartItem")
     @ResponseBody
     public ResultDate isExistCartItem(int floor, int tabId) {
-        List<CartItems> cartItem = payService.getIsExistCartItem(floor, tabId);
+        String[] businessFullDate = rq.getBusinessDate().split(" ");
+        String openingDate = businessFullDate[0];
+
+        List<CartItems> cartItem = payService.getIsExistCartItem(floor, tabId, openingDate);
         if (cartItem.size() == 0) {
             return ResultDate.from("F-1", "실패", "false", cartItem);
         }

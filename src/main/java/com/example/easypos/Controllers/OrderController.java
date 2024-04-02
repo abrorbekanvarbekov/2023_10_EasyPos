@@ -44,17 +44,6 @@ public class OrderController {
         int tabNum = Integer.parseInt(tabId);
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String openingDate = businessFullDate[0];
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(openingDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-
-        String beginDate = rq.getBusinessDate();
-//            if (diffSec != 0) {
-//                businessDate = currentDate;
-//            }
-
-        String endDate = openingDate + " 23:59:59";
 
         if (floor <= 0 || floor > 3) {
             return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
@@ -85,8 +74,8 @@ public class OrderController {
         Cart cart = orderService.getCart(floor, tabNum, openingDate);
 
         if (cart != null) {
-            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId());
-            List<paymentCreditCart> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId());
+            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId(), openingDate);
+            List<paymentCreditCard> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId(), openingDate);
 
             if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
                 model.addAttribute("paymentCashList", paymentCashList);
@@ -134,20 +123,7 @@ public class OrderController {
                                 int tabId, String isPrintControl) throws ParseException {
 
         String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0] + " ";
         String openingDate = businessFullDate[0];
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(businessDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
-        String beginDate = rq.getBusinessDate();
-
-        // 만약에 영업일이 현재 날짜랑 안 맞을 때
-        if (diffSec != 0) {
-            businessDate = currentDate;
-        }
-
-        String endDate = businessDate + " 23:59:59";
 
         if (floor <= 0 || floor > 3) {
             return Util.jsHistoryBack("갯층 값이 잘 못 입력하였습니다.");
@@ -166,8 +142,7 @@ public class OrderController {
                 CartItems cartItem = orderService.getCartItem(productIdList.get(i), productNamesList.get(i), tabId, floor, openingDate);
 
                 if (cartItem == null || (productNamesList.get(i).startsWith("[S]"))) {
-                    System.out.println(businessDate);
-                    orderService.insertCartItems(businessDate, productIdList.get(i), productCntList.get(i),
+                    orderService.insertCartItems(productIdList.get(i), productCntList.get(i),
                             productSailPriceList.get(i), productPricesList.get(i), productNamesList.get(i), tabId, floor, cart.getId(), openingDate);
 
                     if (isPrintControl.equals("true")) {
@@ -185,8 +160,8 @@ public class OrderController {
                     int productSailPrice = cartItem.getProductSailPrice() + productSailPriceList.get(i);
                     int productPrice = cartItem.getProductSumPrice() + productPricesList.get(i);
 
-                    orderService.updateCartItems(businessDate, productIdList.get(i), productCnt, productSailPrice,
-                            productPrice, productNamesList.get(i), tabId, floor);
+                    orderService.updateCartItems(productIdList.get(i), productCnt, productSailPrice,
+                            productPrice, productNamesList.get(i), tabId, floor, openingDate);
 
                     if (isPrintControl.equals("true")) {
                         System.out.println("     [주문서]     ");
@@ -215,8 +190,9 @@ public class OrderController {
                 CartItems updateFreeProduct = orderService.getCartItem(updateProIdList.get(i), updateProName, tabId, floor, openingDate);
 
                 if (updateProduct != null || updateFreeProduct != null) {
-                    orderService.updateCartItems(businessDate, updateProIdList.get(i), updateProCntList.get(i), updateProSailPriceList.get(i),
-                            updateProPriceList.get(i), updateProNameList.get(i), tabId, floor);
+                    orderService.updateCartItems(updateProIdList.get(i), updateProCntList.get(i), updateProSailPriceList.get(i),
+                            updateProPriceList.get(i), updateProNameList.get(i), tabId, floor, openingDate);
+
                     int updateProCnt = updateProduct == null ? updateFreeProduct.getQuantity() + 1 : updateProduct.getQuantity();
                     if (isPrintControl.equals("true")) {
                         System.out.println("     [주문서]     ");
@@ -234,6 +210,7 @@ public class OrderController {
         if (delProductList.size() != 0) {
             for (int i = 0; i < delProductList.size(); i++) {
                 CartItems cancelProduct = orderService.getCartItem(delProductList.get(i), delProductNameList.get(i), tabId, floor, openingDate);
+
                 if (cancelProduct != null) {
                     orderService.cancelProduct(delProductList.get(i), delProductNameList.get(i), tabId, floor);
 
@@ -270,34 +247,6 @@ public class OrderController {
 
         Product product = orderService.getProductById(id);
         return ResultDate.from("s-1", "data 보내기 성공", "product", product);
-    }
-
-    // ==============================================================//
-
-    @RequestMapping("/usr/tables/getCartItemSumPrice")
-    @ResponseBody
-    public ResultDate getCartItemSize(int tabId, int floor) {
-
-        if (floor <= 0 || floor > 3) {
-            return ResultDate.from("F-1", "갯층 값이 잘 못 입력하였습니다.");
-        }
-
-        int totalSumPrice = orderService.getTotalSumPrice(tabId, floor);
-        return ResultDate.from("s-1", "data 보내기 성공", "totalSumPrice", totalSumPrice);
-    }
-
-    // ==============================================================//
-
-    @RequestMapping("/usr/tables/getProductTotalSumPriceAndTotalQuantity")
-    @ResponseBody
-    public ResultDate getProductTotalSumPriceAndTotalQuantity(int tabId, int floor) {
-        int totalQuantity = orderService.getTotalQuantity(tabId, floor);
-        int totalSumPrice = orderService.getTotalSumPrice(tabId, floor);
-        int totalSailPrice = orderService.getTotalSailPrice(tabId, floor);
-        return ResultDate.from("s-1", "data 보내기 성공",
-                "totalQuantity", totalQuantity,
-                "totalSumPrice", totalSumPrice + totalSailPrice,
-                "amountToPay", totalSumPrice - rq.getLeftAmount());
     }
 
     // ==============================================================//

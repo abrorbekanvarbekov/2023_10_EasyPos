@@ -68,7 +68,7 @@
             </ul>
             <ul class="receipt-return-list-body">
                 <c:forEach var="paymentCartAndCash" items="${paymentCartAndCashList}" varStatus="status">
-                    <c:set var="date" value="${paymentCartAndCash.regDate.split(' ')}"/>
+                    <c:set var="date" value="${rq.businessDate.split(' ')}"/>
                     <c:set var="time" value="${paymentCartAndCash.regDate.split(' ')}"/>
                     <li class="list-item  ${paymentCartAndCash.isReturn == 1? "text-red-400" : ""} ${paymentCartAndCash.isReturn == 2? "text-blue-400" : ""}"
                         data-value="${paymentCartAndCash.cart_id}"
@@ -186,6 +186,7 @@
             cartPrice.innerHTML = Number(cartPrice.innerHTML).toLocaleString();
         })
     }
+
     PutComma();
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -195,7 +196,7 @@
         let date = new Date();
         let today = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
 
-        beginDateInput.value = today;
+        beginDateInput.value = '${rq.businessDate.split(" ")[0]}';
         endDateInput.value = today;
     });
 
@@ -361,9 +362,9 @@
 
                 $.each(cartItems, (idx, cartItem) => {
                     cartItemsSumPrice += cartItem.productSumPrice
-                    let changeAmount = (cartItem.cashAmountPaid + cartItem.cartAmountPaid)- (cartItem.totalAmount - cartItem.discountAmount);
+                    let changeAmount = (cartItem.cashAmountPaid + cartItem.cartAmountPaid) - (cartItem.totalAmount - cartItem.discountAmount);
                     let VATAmount = parseInt(cartItemsSumPrice / 100 * 9.89)
-                    let date = cartItem.regDate.split(" ")[0]
+                    let date = "${rq.businessDate.split(' ')[0]}";
                     let time = cartItem.regDate.split(" ")[1]
 
                     receipt_main = `
@@ -396,7 +397,7 @@
                     <br>
                 `
                     let receiptSumPricePart = ``
-                    if(cartItem.cartAmountPaid != 0 && cartItem.cashAmountPaid == 0){
+                    if (cartItem.cartAmountPaid != 0 && cartItem.cashAmountPaid == 0) {
                         receiptSumPricePart = `
                             <span class="whitespace">합        계 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
                             <span class="whitespace">받 을 금 액 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
@@ -405,7 +406,7 @@
                             <br>
                             <span class="whitespace">결제수단별 결제 내역</span>
                         `
-                    }else if(cartItem.cartAmountPaid == 0 && cartItem.cashAmountPaid != 0){
+                    } else if (cartItem.cartAmountPaid == 0 && cartItem.cashAmountPaid != 0) {
                         receiptSumPricePart = `
                             <span class="whitespace">합        계 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
                             <span class="whitespace">받 을 금 액 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
@@ -414,7 +415,7 @@
                             <br>
                             <span class="whitespace">결제수단별 결제 내역</span>
                         `
-                    }else{
+                    } else {
                         receiptSumPricePart = `
                             <span class="whitespace">합        계 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
                             <span class="whitespace">받 을 금 액 :    \${itemIsReturnValue == 1? Number(-cartItemsSumPrice).toLocaleString() : cartItemsSumPrice.toLocaleString()}</span>
@@ -667,7 +668,7 @@
                     }, 2500);
                 }
             })
-        }else if(listLength != 0 && sumSalePrice != cartPayment){
+        } else if (listLength != 0 && sumSalePrice != cartPayment) {
             exampleFunction().then((result) => {
                 if (result == "true") {
                     let cartId = document.querySelector(".receipt-return-list-body > .checked").dataset.value

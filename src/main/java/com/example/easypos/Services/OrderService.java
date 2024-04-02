@@ -46,13 +46,13 @@ public class OrderService {
         orderDao.createCart(floor, tabId, openingDate);
     }
 
-    public void insertCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices,
+    public void insertCartItems(int productId, int productCnt, int productSailPrice, int productPrices,
                                 String productName, int tabId, int floor, int cart_id, String openingDate) {
-        orderDao.insertCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id, openingDate);
+        orderDao.insertCartItems(productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, cart_id, openingDate);
     }
 
-    public int updateCartItems(String businessDate, int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor) {
-        return orderDao.updateCartItems(businessDate, productId, productCnt, productSailPrice, productPrices, productName, tabId, floor);
+    public int updateCartItems(int productId, int productCnt, int productSailPrice, int productPrices, String productName, int tabId, int floor, String openingDate) {
+        return orderDao.updateCartItems(productId, productCnt, productSailPrice, productPrices, productName, tabId, floor, openingDate);
     }
 
     // ==============================================================//
@@ -63,30 +63,17 @@ public class OrderService {
 
     // ==============================================================//
 
-    public int getTotalSumPrice(int tabId, int floor) {
-        return orderDao.getTotalSumPrice(tabId, floor);
-    }
-
-    public int getTotalQuantity(int tabId, int floor) {
-        return orderDao.getTotalQuantity(tabId, floor);
-    }
-
-    public int getTotalSailPrice(int tabId, int floor) {
-        return orderDao.getTotalSailPrice(tabId, floor);
-    }
-
     public void removeCart(int tabId, int floor) {
         orderDao.removeCart(tabId, floor);
     }
 
-    public List<paymentCash> getPaymentCashList(int tabNum, int floor, int cart_id) {
-        return orderDao.getPaymentCashList(tabNum, floor, cart_id);
+    public List<paymentCash> getPaymentCashList(int tabNum, int floor, int cart_id, String openingDate) {
+        return orderDao.getPaymentCashList(tabNum, floor, cart_id, openingDate);
     }
 
-    public List<paymentCreditCart> getPaymentCartList(int tabNum, int floor, int cart_id) {
-        return orderDao.getPaymentCartList(tabNum, floor, cart_id);
+    public List<paymentCreditCard> getPaymentCartList(int tabNum, int floor, int cart_id, String openingDate) {
+        return orderDao.getPaymentCartList(tabNum, floor, cart_id, openingDate);
     }
-
 
     // ==============================================================//
 

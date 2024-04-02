@@ -25,7 +25,6 @@ public class HomeMainController {
     private DateTimeFormatter formatter;
     private SimpleDateFormat dateFormatter;
 
-
     @Autowired
     public HomeMainController(HomeMainService homeMainService, Rq rq) {
         this.homeMainService = homeMainService;
@@ -44,8 +43,8 @@ public class HomeMainController {
     //    ============================================================================= //
     @RequestMapping("/usr/home-main/salesHistory")
     public String salesHistory(Model model) {
-        String todayDate = dateFormatter.format(dateNow);
-        List<paymentCreditCartAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(todayDate + " 00:00:00", todayDate + " 23:59:59", "1");
+
+        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), "1");
         model.addAttribute("paymentCartAndCashList", paymentCartAndCashList);
         return "usr/home-main/salesHistory";
     }
@@ -55,14 +54,14 @@ public class HomeMainController {
     @ResponseBody
     public ResultDate getPaymentCartList(String beginDate, String endDate, String floor) {
 
-        List<paymentCreditCartAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(beginDate + " 00:00:00", endDate + " 23:59:59", floor);
+        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), floor);
         return ResultDate.from("S-1", "성공", "paymentCartAndCashList", paymentCartAndCashList);
     }
 
     @RequestMapping("/usr/home-main/getCartItemByCart_id")
     @ResponseBody
     public ResultDate getCartItemByCart_id(int cart_id) {
-        List<CartItems> cartItemsList = homeMainService.getCartItemsByCart_id(cart_id);
+        List<CartItems> cartItemsList = homeMainService.getCartItemsByCart_id(cart_id, rq.getOpeningDate());
         return ResultDate.from("S-1", "성공", "cartItemsList", cartItemsList);
     }
 
@@ -70,8 +69,7 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/receiptReturn")
     public String receiptReturn(Model model) {
-        String todayDate = dateFormatter.format(dateNow);
-        List<paymentCreditCartAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(todayDate + " 00:00:00", todayDate + " 23:59:59", "1");
+        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), "1");
         model.addAttribute("paymentCartAndCashList", paymentCartAndCashList);
         return "usr/home-main/receiptReturn";
     }
@@ -79,53 +77,35 @@ public class HomeMainController {
     @RequestMapping("/usr/home-main/productReturn")
     @ResponseBody
     public ResultDate<String> productReturn(int cartId) {
-        homeMainService.returnPaymentCartAndCash(cartId);
-        homeMainService.insertReturnPayment(cartId);
+        homeMainService.returnPaymentCartAndCash(cartId, rq.getOpeningDate());
+        homeMainService.insertReturnPayment(cartId, rq.getOpeningDate());
 
-        homeMainService.cancelReturnPaymentCart(cartId);
-        homeMainService.cancelReturnPaymentCash(cartId);
+        homeMainService.cancelReturnPaymentCart(cartId, rq.getOpeningDate());
+        homeMainService.cancelReturnPaymentCash(cartId, rq.getOpeningDate());
         return ResultDate.from("S-1", "/usr/home-main/homeMainPage");
     }
 
     //    ============================================================================= //
 
     @RequestMapping("/usr/home-main/deadlineSettlement")
-    public String deadlineSettlement(Model model) throws ParseException {
+    public String deadlineSettlement(Model model) {
 
         String floor = String.valueOf(rq.getFloor());
-        String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0];
-        String openingTime = businessFullDate[1];
-        String currentDate = dateFormatter.format(dateNow);
-        Date format1 = dateFormatter.parse(businessDate);
-        Date format2 = dateFormatter.parse(currentDate);
-        long diffSec = (format1.getTime() - format2.getTime()) / 1000; //초 차이
 
-        String beginDate = rq.getBusinessDate();
-
-        if (diffSec != 0) {
-            businessDate = currentDate;
-        }
-
-        String endDate = businessDate + " 23:59:59";
-
-
-        List<Integer> payedTotalAmount = homeMainService.getPayedTotalAmount(floor, beginDate, endDate);
-        List<Integer> payedTotalCnt = homeMainService.getPayedTotalCnt(floor, beginDate, endDate);
-        List<Integer> payedTotalDiscountAmount = homeMainService.getPayedTotalDiscountAmount(floor, beginDate, endDate);
-        List<Integer> numberOfReturns = homeMainService.getNumberOfReturns(floor, beginDate, endDate);
-        List<Integer> amountOfReturns = homeMainService.getAmountOfReturns(floor, beginDate, endDate);
-        int outstandingAmount = homeMainService.getOutstandingAmount(floor, beginDate, endDate);
-        int outstandingTables = homeMainService.getOutstandingTables(floor, beginDate, endDate);
+        List<Integer> payedTotalAmount = homeMainService.getPayedTotalAmount(floor, rq.getOpeningDate());
+        List<Integer> payedTotalCnt = homeMainService.getPayedTotalCnt(floor, rq.getOpeningDate());
+        List<Integer> payedTotalDiscountAmount = homeMainService.getPayedTotalDiscountAmount(floor, rq.getOpeningDate());
+        List<Integer> numberOfReturns = homeMainService.getNumberOfReturns(floor, rq.getOpeningDate());
+        List<Integer> amountOfReturns = homeMainService.getAmountOfReturns(floor, rq.getOpeningDate());
+        int outstandingAmount = homeMainService.getOutstandingAmount(floor, rq.getOpeningDate());
+        int outstandingTables = homeMainService.getOutstandingTables(floor, rq.getOpeningDate());
         int VAT_Amount = (payedTotalAmount.get(0) / 100) * 11;
 
-        StringBuffer businessDateToFormat = new StringBuffer(businessDate.replaceAll("-", ""));
+        StringBuffer businessDateToFormat = new StringBuffer(rq.getOpeningDate().replaceAll("-", ""));
         businessDateToFormat.insert(4, "년 ");
         businessDateToFormat.insert(8, "월 ");
         businessDateToFormat.insert(12, "일 ");
 
-        model.addAttribute("businessDate", businessDate);
-        model.addAttribute("openingTime", openingTime);
         model.addAttribute("businessDateToFormat", businessDateToFormat);
         model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
@@ -145,22 +125,19 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/setDeadlineSettlement")
     @ResponseBody
-    public ResultDate<String> setDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
-        String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String businessDate = businessFullDate[0];
-
+    public ResultDate<String> setDeadlineSettlement(String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
         try {
-            deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(openingDate);
+            deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(rq.getOpeningDate());
             if (deadlineSettlement == null) {
-                homeMainService.insertDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                homeMainService.insertDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
             } else {
-                homeMainService.updateDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                homeMainService.updateDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
             }
 
             rq.logout();
             rq.logoutToEmployee();
-            homeMainService.removeLeftCartItem(businessDate);
-            homeMainService.removeLeftCart(businessDate);
+            homeMainService.removeLeftCartItem(rq.getOpeningDate());
+            homeMainService.removeLeftCart(rq.getOpeningDate());
             return ResultDate.from("S-1", "/usr/member/loginPage");
         } catch (Exception e) {
             return ResultDate.from("F-1", e.getMessage());
