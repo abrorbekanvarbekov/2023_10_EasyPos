@@ -627,7 +627,7 @@
     <div class="manuPageRight">
         <ul class="productType-box">
             <c:forEach var="productType" items="${productTypes}" varStatus="idx">
-                <li onclick="getProductByProTypeName(this);"
+                <li onclick="getProductByProTypeName(this, null);" class="${idx.index == 0 ? 'selected' : ''}"
                     name="${productType.korName}"
                     id="productType_${productType.code}">
                     <button style="background-color: ${productType.color}" class="">${productType.korName}</button>
@@ -647,7 +647,8 @@
         </ul>
         <ul class="product-box">
             <c:forEach var="product" items="${products}">
-                <li id="productItem_${product.id}" onclick="selectMenuItem(this)"
+                <li id="productItem_${product.id}" style="background-color: ${product.color}"
+                    onclick="selectMenuItem(this)"
                     class="productItems">
                     <span class="w-full h-3/5 text-center" name="productName">${product.productKorName}</span>
                     <span class="text-red-400 pt-2 h-2/5 price" data-value="${product.price}"
@@ -662,8 +663,10 @@
                     <c:if test="${idx.index == 27}">
                         <li id="${idx.index}"
                             class="productItems ">
-                            <span class="material-symbols-outlined">arrow_back_ios</span>
-                            <span class="material-symbols-outlined ${products.size() > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                            <span onclick="${products.size() > 2 ? 'getProductByProTypeName(null, 1)' : ''}"
+                                  class="material-symbols-outlined ">arrow_back_ios</span>
+                            <span onclick="${products.size() > 2 ? 'getProductByProTypeName(null, 2)' : ''}"
+                                  class="material-symbols-outlined ${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                         </li>
                     </c:if>
                 </c:forEach>
@@ -672,19 +675,44 @@
     </div>
 
     <script>
-        function getProductByProTypeName(el) {
-            let productTypeCode = el.id.substring(el.id.indexOf("_") + 1);
-            let productTypeName = el.getAttribute("name");
+
+        let page = 1;
+        let totalPage = ${totalPage};
+
+        function getProductByProTypeName(el, btnName) {
+            let productTypeCode = "";
+            let productTypeName = "";
+            if (el != null) {
+                let beforeProType = document.querySelector(".productType-box li.selected")
+                beforeProType.classList.remove("selected");
+                productTypeCode = el.id.substring(el.id.indexOf("_") + 1);
+                productTypeName = el.getAttribute("name");
+                el.classList.add("selected");
+
+                page = 1;
+            } else {
+                let beforeProType = document.querySelector(".productType-box li.selected")
+                productTypeCode = beforeProType.id.substring(beforeProType.id.indexOf("_") + 1);
+                productTypeName = beforeProType.getAttribute("name");
+
+                if (btnName == 1 && page > 1) {
+                    page--;
+                } else if (btnName == 2 && page < totalPage) {
+                    page++;
+                }
+            }
 
             $.ajax({
                 url: "/usr/tables/detail/getProduct",
                 data: {
                     productTypeCode: productTypeCode,
-                    productTypeName: productTypeName
+                    productTypeName: productTypeName,
+                    page: page
                 },
                 method: "GET",
                 success: function (data) {
                     drawProductLi(data);
+                    totalPage = data.totalPage;
                 },
                 error: function (request, status, error) {
                     console.log(error)
@@ -696,12 +724,17 @@
         }
 
         function drawProductLi(data) {
+            let productList = data.productList;
+            let productCnt = data.productCnt;
+            let totalPage = data.totalPage;
+            let page = data.page;
+
             let liElement = "";
-            if (data.length != 0) {
-                for (let i = 0; i < data.length; i++) {
-                    let product = data[i];
+            if (productList.length != 0) {
+                for (let i = 0; i < productList.length; i++) {
+                    let product = productList[i];
                     liElement += `
-                     <li id="productItem_\${product.id}" onclick="selectMenuItem(this)"
+                     <li id="productItem_\${product.id}" style="background-color: \${product.color}"  onclick="selectMenuItem(this)"
                         class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
                         <span class="w-full h-3/5 text-center" name="productName">\${product.productKorName}</span>
                         <span class="text-red-400 pt-2 h-2/5 price" name="price" data-value="\${product.price}">\${product.price.toLocaleString()}원</span>
@@ -709,8 +742,8 @@
                 `
                 }
 
-                if (data.length <= 27) {
-                    for (let i = data.length + 1; i <= 27; i++) {
+                if (productList.length <= 27) {
+                    for (let i = productList.length + 1; i <= 27; i++) {
                         liElement += `
                          <li id="\${i}"
                             class="productItems ">
@@ -719,17 +752,20 @@
                         if (i == 27) {
                             liElement += `
                              <li id="\${i}"class="productItems ">
-                                <span class="material-symbols-outlined">arrow_back_ios</span>
-                                <span class="material-symbols-outlined \${data.length > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                                <span onclick="\${productCnt > 3 ? 'getProductByProTypeName(null, 1)' : ''}"
+                                    class="material-symbols-outlined \${page > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
+                                <span onclick="\${productCnt > 3 ? 'getProductByProTypeName(null, 2)' : ''}"
+                                    class="material-symbols-outlined \${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                              </li>
                             `
                         }
                     }
                 }
                 $(".manuPageRight .product-box").html(liElement);
+
             } else {
-                if (data.length <= 27) {
-                    for (let i = data.length + 1; i <= 27; i++) {
+                if (productList.length <= 27) {
+                    for (let i = productList.length + 1; i <= 27; i++) {
                         liElement += `
                              <li id="\${i}"
                                 class="productItems flex ">
@@ -739,7 +775,7 @@
                             liElement += `
                              <li id="\${i}"class="productItems ">
                                 <span class="material-symbols-outlined">arrow_back_ios</span>
-                                <span class="material-symbols-outlined \${data.length > 27 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                                <span class="material-symbols-outlined \${productCnt > 10 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                              </li>
                             `
                         }

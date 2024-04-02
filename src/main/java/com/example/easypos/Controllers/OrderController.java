@@ -15,9 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class OrderController {
@@ -39,11 +37,9 @@ public class OrderController {
     }
 
     @RequestMapping("/usr/tables/detail")
-    public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, Model model) throws ParseException {
+    public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, @RequestParam(defaultValue = "1") int page, Model model) {
 
         int tabNum = Integer.parseInt(tabId);
-        String[] businessFullDate = rq.getBusinessDate().split(" ");
-        String openingDate = businessFullDate[0];
 
         if (floor <= 0 || floor > 3) {
             return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
@@ -51,12 +47,19 @@ public class OrderController {
 
         List<ProductType> productTypes = orderService.getProductTypes();
         List<Product> products = new ArrayList<>();
+        int productCnt = 0;
+        int proItemInPage = 3;
+        int limitFrom = (page - 1) * proItemInPage;
+
         if (productTypes.size() != 0) {
-            products = orderService.getProductList(productTypes.get(0).getCode(), productTypes.get(0).getKorName());
+            productCnt = orderService.getProductCnt(productTypes.get(0).getCode());
+            products = orderService.getProductList(productTypes.get(0).getCode(), productTypes.get(0).getKorName(), limitFrom, proItemInPage);
         }
 
-        List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, openingDate);
+        int totalPage = (int) Math.ceil((double) productCnt / proItemInPage);
 
+
+        List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, rq.getOpeningDate());
         int totalQuantity = 0;
         int totalPrice = 0;
         int discountSumAMount = 0;
@@ -71,11 +74,11 @@ public class OrderController {
             receiveAmount = (totalPrice - discountSumAMount);
         }
 
-        Cart cart = orderService.getCart(floor, tabNum, openingDate);
+        Cart cart = orderService.getCart(floor, tabNum, rq.getOpeningDate());
 
         if (cart != null) {
-            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId(), openingDate);
-            List<paymentCreditCard> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId(), openingDate);
+            List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId(), rq.getOpeningDate());
+            List<paymentCreditCard> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId(), rq.getOpeningDate());
 
             if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
                 model.addAttribute("paymentCashList", paymentCashList);
@@ -92,16 +95,28 @@ public class OrderController {
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("discountSumAMount", discountSumAMount);
         model.addAttribute("receiveAmount", receiveAmount);
+        model.addAttribute("totalPage", totalPage);
         return "/usr/table/detail";
     }
 
     // ==============================================================//
     @RequestMapping("/usr/tables/detail/getProduct")
     @ResponseBody
-    public ResponseEntity getProductList(String productTypeCode, String productTypeName) {
+    public ResponseEntity getProductList(String productTypeCode, String productTypeName, @RequestParam(defaultValue = "1") int page) {
 
-        List<Product> productList = orderService.getProductList(productTypeCode, productTypeName);
-        return ResponseEntity.ok().body(productList);
+        int productCnt = orderService.getProductCnt(productTypeCode);
+        int proItemInPage = 3;
+        int limitFrom = (page == 0 ? 1 : page - 1) * proItemInPage;
+        int totalPage = (int) Math.ceil((double) productCnt / proItemInPage);
+
+        List<Product> productList = orderService.getProductList(productTypeCode, productTypeName, limitFrom, proItemInPage);
+        Map<String, Object> context = new HashMap<>();
+        context.put("productList", productList);
+        context.put("productCnt", productCnt);
+        context.put("totalPage", totalPage);
+        context.put("page", page);
+
+        return ResponseEntity.ok().body(context);
     }
     // ==============================================================//
 

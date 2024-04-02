@@ -20,8 +20,12 @@ public class OrderService {
         return orderDao.getProductTypes();
     }
 
-    public List<Product> getProductList(String productTypeCode, String productTypeName) {
-        return orderDao.getProductList(productTypeCode, productTypeName);
+    public int getProductCnt(String productTypeCode) {
+        return orderDao.getProductCnt(productTypeCode);
+    }
+
+    public List<Product> getProductList(String productTypeCode, String productTypeName, int limitFrom, int proItemInPage) {
+        return orderDao.getProductList(productTypeCode, productTypeName, limitFrom, proItemInPage);
     }
 
     public List<CartItems> getCartItemsList(int tableId, int floor, String openingDate) {
@@ -74,6 +78,7 @@ public class OrderService {
     public List<paymentCreditCard> getPaymentCartList(int tabNum, int floor, int cart_id, String openingDate) {
         return orderDao.getPaymentCartList(tabNum, floor, cart_id, openingDate);
     }
+
 
     // ==============================================================//
 

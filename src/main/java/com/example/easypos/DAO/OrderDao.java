@@ -13,12 +13,19 @@ public interface OrderDao {
     List<ProductType> getProductTypes();
 
     @Select("""
-            select p.* from `${productTypeCode}` as i
+            select count(*) from `${productTypeCode}`
+             """)
+    int getProductCnt(String productTypeCode);
+
+    @Select("""
+            select p.id, p.price, p.productKorName, i.color 
+            from `${productTypeCode}` as i
                      inner join product as p
                      on i.productCode = p.productCode
                 where `code` = #{productTypeCode}
+                limit #{limitFrom}, #{proItemInPage}
             """)
-    List<Product> getProductList(String productTypeCode, String productTypeName);
+    List<Product> getProductList(String productTypeCode, String productTypeName, int limitFrom, int proItemInPage);
 
     @Select("""
             select p.id, c.*
@@ -143,4 +150,6 @@ public interface OrderDao {
                 and openingDate = #{openingDate};
             """)
     List<paymentCreditCard> getPaymentCartList(int tabNum, int floor, int cartId, String openingDate);
+
+
 }

@@ -919,7 +919,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     align-items: center;
     width: 14%;
     height: 25%;
-    background-color: aqua;
+    /*background-color: aqua;*/
     border: 1px solid darkgray;
     cursor: pointer;
     padding: 1%;
@@ -946,6 +946,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     height: 100%;
     border-right: 1px solid darkgray;
     font-size: clamp(1.3rem, 2.2vw, 2.2rem);
+    cursor: pointer;
 }
 
 .product-box li:nth-child(28) > span:active {
@@ -960,6 +961,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     width: 50%;
     height: 100%;
     font-size: clamp(1.3rem, 2.2vw, 2.2rem);
+    cursor: pointer;
 }
 
 .product-box li {
