@@ -48,7 +48,7 @@ public class OrderController {
         List<ProductType> productTypes = orderService.getProductTypes();
         List<Product> products = new ArrayList<>();
         int productCnt = 0;
-        int proItemInPage = 3;
+        int proItemInPage = 27;
         int limitFrom = (page - 1) * proItemInPage;
 
         if (productTypes.size() != 0) {
@@ -57,7 +57,6 @@ public class OrderController {
         }
 
         int totalPage = (int) Math.ceil((double) productCnt / proItemInPage);
-
 
         List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, rq.getOpeningDate());
         int totalQuantity = 0;
@@ -105,7 +104,7 @@ public class OrderController {
     public ResponseEntity getProductList(String productTypeCode, String productTypeName, @RequestParam(defaultValue = "1") int page) {
 
         int productCnt = orderService.getProductCnt(productTypeCode);
-        int proItemInPage = 3;
+        int proItemInPage = 27;
         int limitFrom = (page == 0 ? 1 : page - 1) * proItemInPage;
         int totalPage = (int) Math.ceil((double) productCnt / proItemInPage);
 

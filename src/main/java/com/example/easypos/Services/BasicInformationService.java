@@ -165,15 +165,19 @@ public class BasicInformationService {
         return basicInformationDao.getProductTypeList(searchKeyword);
     }
 
-    public int addProductType(List<String> productTypeKorNameList, List<String> productTypeEngNameList, List<String> productTypeColorList) {
+    public int addProductType(List<String> newProTypeSequenceNumList, List<String> productTypeKorNameList,
+                              List<String> productTypeEngNameList, List<String> productTypeColorList) {
         int result = 0;
         for (int i = 0; i < productTypeKorNameList.size(); i++) {
             int productTypeCode = basicInformationDao.getProductTypeListSize();
             String productTypeKorName = productTypeKorNameList.get(i);
             String productTypeEngName = productTypeEngNameList.get(i);
             String productTypeColor = productTypeColorList.get(i);
+            int sequenceNum = Integer.parseInt(newProTypeSequenceNumList.get(i));
 
-            result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName, productTypeColor);
+            result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName,
+                    productTypeColor, sequenceNum);
+
             if (result == 1) {
                 String proTypeCode = String.format("%03d", productTypeCode + 1);
                 ProductType productType = basicInformationDao.getProductType(proTypeCode, productTypeKorName);
@@ -188,7 +192,8 @@ public class BasicInformationService {
                         "                    `code`      varchar(50)  not null,\n" +
                         "                    korName     varchar(100) not null,\n" +
                         "                    productCode varchar(50)  not null,\n" +
-                        "                    color       varchar(50)  not null\n" +
+                        "                    color       varchar(50)  not null,\n" +
+                        "                    sequenceNum varchar(50)  not null\n" +
                         "                );";
                 basicInformationDao.createAndDropTable(createSql);
             }
@@ -196,20 +201,20 @@ public class BasicInformationService {
         return result;
     }
 
-    public int updateProductType(List<String> updateProTypeIdList, List<String> updateProTypeKorNameList, List<String> updateProTypeEngNameList, List<String> updateProTypeColorList) {
+    public int updateProductType(List<String> updateProductTypeCodeList, List<String> updateProTypeKorNameList, List<String> updateProTypeEngNameList, List<String> updateProTypeColorList) {
         int result = 0;
         for (int i = 0; i < updateProTypeKorNameList.size(); i++) {
-            int productTypeId = Integer.parseInt(updateProTypeIdList.get(i));
+            int productTypeCode = Integer.parseInt(updateProductTypeCodeList.get(i));
             String updateProTypeKorName = updateProTypeKorNameList.get(i);
             String updateProTypeEngName = updateProTypeEngNameList.get(i);
             String updateProTypeColor = updateProTypeColorList.get(i);
-            result = basicInformationDao.updateProductType(productTypeId, updateProTypeKorName, updateProTypeEngName, updateProTypeColor);
+            result = basicInformationDao.updateProductType(productTypeCode, updateProTypeKorName, updateProTypeEngName, updateProTypeColor);
         }
         return result;
     }
 
-    public List<Product> getProducts(String productTypeId) {
-        return basicInformationDao.getProducts(productTypeId);
+    public List<Product> getProducts(String productTypeCode) {
+        return basicInformationDao.getProducts(productTypeCode);
     }
 
     public int delProductTypes(List<String> delProTypeIdList) {
@@ -232,7 +237,9 @@ public class BasicInformationService {
             for (int i = 0; i < productCodeList.size(); i++) {
                 Product isDuplicatePro = basicInformationDao.getDuplicatePro(productCodeList.get(i), productTypeId);
                 if (isDuplicatePro == null) {
-                    result = basicInformationDao.appendProForTypeItem(productCodeList.get(i), productTypeId, productTypeColor);
+                    List<Product> productLength = basicInformationDao.getProducts(productTypeId);
+                    int sequenceNum = productLength.size() + 1;
+                    result = basicInformationDao.appendProForTypeItem(productCodeList.get(i), productTypeId, productTypeColor, sequenceNum);
                 }
             }
         }
@@ -240,13 +247,14 @@ public class BasicInformationService {
     }
 
 
-    public int updateProducts(List<String> updateProductCodeList, List<String> updateProductColorList, String selectProTypeCode) {
+    public int updateProducts(List<String> updateProductCodeList, List<String> updateProSequenceNumList, List<String> updateProductColorList, String selectProTypeCode) {
         int result = 0;
         if (updateProductCodeList.size() != 0) {
             for (int i = 0; i < updateProductCodeList.size(); i++) {
                 String productCode = updateProductCodeList.get(i);
+                String proSequenceNum = updateProSequenceNumList.get(i);
                 String productNewColor = updateProductColorList.get(i);
-                result = basicInformationDao.updateProducts(productCode, productNewColor, selectProTypeCode);
+                result = basicInformationDao.updateProducts(productCode, proSequenceNum, productNewColor, selectProTypeCode);
             }
         }
         return result;

@@ -6,7 +6,7 @@
 
 <div class="businessDate">
     <span>> 담당자: &nbsp;&nbsp; ${loginedEmployeeName}</span>
-    <span>> 영업일자: &nbsp; &nbsp; ${businessDate}</span>
+    <span>> 영업일자: &nbsp; &nbsp; ${rq.businessDate}</span>
     <span>> 포스번호 : &nbsp; &nbsp; 1</span>
 </div>
 <div class="floors">

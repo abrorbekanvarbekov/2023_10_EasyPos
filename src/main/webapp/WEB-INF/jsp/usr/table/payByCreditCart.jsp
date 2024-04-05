@@ -166,7 +166,7 @@
 
         if (amountPay < amountToBeReceived == true) {
             setTimeout(function () {
-                $.get("/usr/tables/orderPage/paymentCreditCart", {
+                $.get("/usr/tables/orderPage/paymentCreditCard", {
                     tabId:${tabId},
                     floor: ${floor},
                     totalAmount: ${totalAmount},
@@ -182,7 +182,7 @@
         }else{
             setTimeout(function () {
                 exampleFunction().then((result) => {
-                    $.get("/usr/tables/orderPage/paymentCreditCart", {
+                    $.get("/usr/tables/orderPage/paymentCreditCard", {
                         tabId:${tabId},
                         floor: ${floor},
                         totalAmount: ${totalAmount},

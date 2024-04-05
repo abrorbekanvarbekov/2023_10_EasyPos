@@ -19,7 +19,7 @@
                           onclick="doWindowClose();">power_settings_new</span>
                 </c:if>
                 <c:if test="${pageName != '메인메뉴'}">
-                    <span class="material-symbols-outlined text-5xl" onclick="history.back();">close</span>
+                    <span class="material-symbols-outlined text-5xl" onclick="location.replace('/')">close</span>
                 </c:if>
             </a>
         </li>

@@ -91,7 +91,7 @@
             where korName LIKE CONCAT('%', #{searchKeyword}, '%')
             or engName LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        order by id ASC
+        order by sequenceNum ASC
     </select>
 
 </mapper>

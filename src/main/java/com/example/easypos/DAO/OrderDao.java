@@ -9,6 +9,7 @@ import java.util.List;
 public interface OrderDao {
     @Select("""
             select * from productType
+            order by sequenceNum
             """)
     List<ProductType> getProductTypes();
 
@@ -23,6 +24,7 @@ public interface OrderDao {
                      inner join product as p
                      on i.productCode = p.productCode
                 where `code` = #{productTypeCode}
+                order by i.sequenceNum
                 limit #{limitFrom}, #{proItemInPage}
             """)
     List<Product> getProductList(String productTypeCode, String productTypeName, int limitFrom, int proItemInPage);

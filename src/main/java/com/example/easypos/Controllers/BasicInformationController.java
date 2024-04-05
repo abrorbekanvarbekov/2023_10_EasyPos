@@ -227,11 +227,12 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/addProductTypes")
     @ResponseBody
-    public ResponseEntity addProductTypes(@RequestParam(defaultValue = " ") List<String> productTypeKorNameList,
+    public ResponseEntity addProductTypes(@RequestParam(defaultValue = " ") List<String> newProTypeSequenceNumList,
+                                          @RequestParam(defaultValue = " ") List<String> productTypeKorNameList,
                                           @RequestParam(defaultValue = " ") List<String> productTypeEngNameList,
                                           @RequestParam(defaultValue = " ") List<String> productTypeColorList) {
 
-        int result = basicInformationService.addProductType(productTypeKorNameList, productTypeEngNameList, productTypeColorList);
+        int result = basicInformationService.addProductType(newProTypeSequenceNumList, productTypeKorNameList, productTypeEngNameList, productTypeColorList);
 
         if (result == 1) {
             return ResponseEntity.ok().build();
@@ -243,13 +244,14 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/updateProductTypes")
     @ResponseBody
-    public ResponseEntity updateProductTypes(@RequestParam(defaultValue = " ") List<String> updateProTypeIdList,
+    public ResponseEntity updateProductTypes(@RequestParam(defaultValue = " ") List<String> updateProductTypeCodeList,
+                                             @RequestParam(defaultValue = " ") List<String> updateProTypeSequenceNumList,
                                              @RequestParam(defaultValue = " ") List<String> updateProTypeKorNameList,
                                              @RequestParam(defaultValue = " ") List<String> updateProTypeEngNameList,
                                              @RequestParam(defaultValue = " ") List<String> updateProTypeColorList) {
 
-        int result = basicInformationService.updateProductType(updateProTypeIdList, updateProTypeKorNameList, updateProTypeEngNameList, updateProTypeColorList);
-
+        int result = basicInformationService.updateProductType(updateProductTypeCodeList, updateProTypeKorNameList, updateProTypeEngNameList, updateProTypeColorList);
+        System.out.println(updateProTypeSequenceNumList);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
@@ -271,8 +273,8 @@ public class BasicInformationController {
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/getProducts")
     @ResponseBody
-    public ResponseEntity getProducts(String productTypeId) {
-        List<Product> productList = basicInformationService.getProducts(productTypeId);
+    public ResponseEntity getProducts(String productTypeCode) {
+        List<Product> productList = basicInformationService.getProducts(productTypeCode);
         return ResponseEntity.ok().body(productList);
     }
 
@@ -290,9 +292,11 @@ public class BasicInformationController {
     @RequestMapping("/usr/basic-information/touchKeyManagement/updateProducts")
     @ResponseBody
     public ResponseEntity updateProducts(@RequestParam List<String> updateProductCodeList,
+                                         @RequestParam List<String> updateProSequenceNumList,
                                          @RequestParam List<String> updateProductColorList,
-                                         String selectProTypeCode) {
-        int result = basicInformationService.updateProducts(updateProductCodeList, updateProductColorList, selectProTypeCode);
+                                                            String selectProTypeCode) {
+
+        int result = basicInformationService.updateProducts(updateProductCodeList, updateProSequenceNumList, updateProductColorList, selectProTypeCode);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {

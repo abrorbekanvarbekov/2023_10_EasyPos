@@ -135,7 +135,6 @@ public class HomeMainController {
             }
 
             rq.logout();
-            rq.logoutToEmployee();
             homeMainService.removeLeftCartItem(rq.getOpeningDate());
             homeMainService.removeLeftCart(rq.getOpeningDate());
             return ResultDate.from("S-1", "/usr/member/loginPage");

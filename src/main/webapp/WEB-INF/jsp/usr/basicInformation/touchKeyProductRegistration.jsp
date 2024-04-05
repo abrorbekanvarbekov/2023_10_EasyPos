@@ -14,7 +14,7 @@
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
-                <button onclick="saveProductType();" class="btn btn-active btn-sm pl-2">저장</button>
+                <button onclick="saveChanges();" class="btn btn-active btn-sm pl-2">저장</button>
                 <button onclick="delProductTypeAndProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
                 <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
@@ -29,8 +29,8 @@
             <div class="productType-main-left">
                 <div class="productType-sort-buttons">
                     <button class="btn btn-active btn-xs">맨위로</button>
-                    <button class="btn btn-active btn-xs">위로</button>
-                    <button class="btn btn-active btn-xs">아래로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveUp();">위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveDown();">아래로</button>
                     <button class="btn btn-active btn-xs">맨아래로</button>
                     <button class="btn btn-active btn-xs">순번정렬</button>
                     <button class="btn btn-active btn-xs">소분류+</button>
@@ -46,15 +46,18 @@
                     <span>권한구분</span>
                     <span>터치키색</span>
                 </div>
-                <ul class="productType-list-container productType-list-con-left"></ul>
+                <div class="product-type-container">
+                    <ul class="proTypeNumAndCode"></ul>
+                    <ul class="productType-list-container productType-list-con-left"></ul>
+                </div>
             </div>
             <div class="productType-main-right">
                 <div class="productType-sort-buttons">
-                    <button class="btn btn-active btn-xs">맨위로</button>
-                    <button class="btn btn-active btn-xs">위로</button>
-                    <button class="btn btn-active btn-xs">아래로</button>
-                    <button class="btn btn-active btn-xs">맨아래로</button>
-                    <button class="btn btn-active btn-xs">순번정렬</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToTop()">맨위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveUp()">위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveDown()">아래로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToBottom()">맨아래로</button>
+                    <button class="btn btn-active btn-xs" onclick="sortList()">순번정렬</button>
                     <span class="material-symbols-outlined btn btn-active btn-xs ml-1 "
                           onclick="openMsgBox();">add</span>
                 </div>
@@ -72,7 +75,10 @@
                     <span>권한구분</span>
                     <span>터치키색</span>
                 </div>
-                <ul class="productType-list-container productType-list-con-right"></ul>
+                <div class="product-container">
+                    <ul class="productNumAndCode"></ul>
+                    <ul class="productType-list-container productType-list-con-right"></ul>
+                </div>
             </div>
         </div>
     </div>
@@ -128,11 +134,62 @@
         </button>
     </div>
 </div>
-<script>
 
+<script>
+    <%--  productMovement  --%>
+
+    function moveUp() {
+        let list = document.querySelector(".productType-list-con-left");
+        let selectedItem = list.querySelector('.checked');
+        if (selectedItem && selectedItem.previousElementSibling) {
+            let previousItem = selectedItem.previousElementSibling;
+            list.insertBefore(selectedItem, previousItem);
+        }
+    }
+
+    function moveDown() {
+        let list = document.querySelector(".productType-list-con-left");
+        let selectedItem = list.querySelector('.checked');
+        if (selectedItem && selectedItem.nextElementSibling) {
+            let nextItem = selectedItem.nextElementSibling.nextElementSibling;
+            console.log(selectedItem)
+            console.log(nextItem)
+            list.insertBefore(selectedItem, nextItem);
+        }
+    }
+
+    function moveToTop() {
+        let list = document.querySelector(".productType-list-con-right");
+        let selectedItem = list.querySelector('.checked');
+        if (selectedItem) {
+            list.insertBefore(selectedItem, list.firstElementChild);
+        }
+    }
+
+    function moveToBottom() {
+        let list = document.querySelector(".productType-list-con-right");
+        let selectedItem = list.querySelector('.checked');
+        if (selectedItem) {
+            list.appendChild(selectedItem);
+        }
+    }
+
+    function sortList() {
+        let list = document.querySelector(".productType-list-con-right");
+        let items = list.getElementsByTagName("li");
+        let sortedItems = Array.from(items).sort(function (a, b) {
+            return a.textContent.localeCompare(b.textContent);
+        });
+        sortedItems.forEach(function (item) {
+            list.appendChild(item);
+        });
+    }
+
+    <%----%>
 
     function getProductTypeList() {
         $(".productType-list-container").css("display", "flex");
+        $(".proTypeNumAndCode").css("display", "flex");
 
         let searchKeyword = $(".touch-classification-name > div > input")[0].value
         $.get("/usr/basic-information/touchKeyManagement/getProductType", {
@@ -140,24 +197,29 @@
             },
             function (data) {
                 if (data.length != 0) {
-                    let productTypeLi = "";
+                    let proTypeNumAndCode = "";
+                    let proTypeList = "";
                     $.each(data, (idx, value) => {
-                        productTypeLi += `
-                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}" id="productType_\${value.id}">
+                        proTypeNumAndCode += `
+                            <li >
                                 <span><input type="checkbox" id="product-type-checkbox" value="\${value.id}"></span>
-                                <span>\${value.id}</span>
+                                <span>\${idx + 1}</span>
+                            </li>
+                        `
+                        proTypeList += `
+                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}" id="proTypeList_\${value.code}" sequenceNum="\${idx + 1}">
                                 <span>\${value.code}</span>
                                 <span>
-                                    <input id="proTypeKorName_\${value.id}" type="text" value="\${value.korName}"
+                                    <input id="proTypeKorName_\${value.code}" type="text" value="\${value.korName}"
                                             onclick="mine()" onchange="updateProductType(this.id)">
                                 </span>
                                 <span>
-                                    <input id="proTypeEngName_\${value.id}" type="text" value="\${value.engName}"
+                                    <input id="proTypeEngName_\${value.code}" type="text" value="\${value.engName}"
                                             onclick="mine()" onchange="updateProductType(this.id)">
                                 </span>
                                 <span>\${value.authDivision}</span>
                                 <span style="background-color: \${value.color}">
-                                    <select id="proTypeColorBox_\${value.id}" onchange="updateProductType(this.id)"
+                                    <select id="proTypeColorBox_\${value.code}" onchange="updateProductType(this.id)"
                                         class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
                                       <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
                                       <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
@@ -171,7 +233,9 @@
                             </li>
                         `
                     })
-                    $(".productType-list-con-left").html(productTypeLi);
+
+                    $(".proTypeNumAndCode").html(proTypeNumAndCode);
+                    $(".productType-list-con-left").html(proTypeList);
                     clickEventForProType("productType-list-con-left", "productType");
                 } else {
                     let msgBox = `
@@ -179,6 +243,7 @@
                             <span>검색하신 정보가 존재하지 않습니다.</span>
                         </div>
                         `
+                    $(".proTypeNumAndCode").empty();
                     $(".productType-list-con-left").html(msgBox);
                     $(".productType-list-con-right").html(msgBox);
                 }
@@ -186,14 +251,20 @@
     }
 
     function addProductTypeLi() {
-        let display = $(".productType-main-left .productType-list-container").css("display");
+        let display = $(".productType-main-left div:nth-child(3) > .productType-list-con-left").css("display");
+        $(".productType-main-left div:nth-child(3) > .proTypeNumAndCode").css("display");
         let productTypeLen = $(".productType-list-con-left li").length
 
         if (display == "flex") {
-            let productTypeLi = `
-                <li class="productType newProType">
+            let proTypeNumAndCode = `
+                <li >
                     <span><input type="checkbox"></span>
                     <span>\${productTypeLen + 1}</span>
+                </li>
+            `
+
+            let proTypeList = `
+                <li class="productType newProType" sequenceNum="\${productTypeLen + 1}">
                     <span></span>
                     <span>
                         <input type="text">
@@ -213,65 +284,77 @@
                         </select>
                     </span>
                 </li>
-            `
+             `
             if (productTypeLen != 0) {
-                $(".productType-list-con-left").append(productTypeLi);
+                $(".proTypeNumAndCode").append(proTypeNumAndCode);
+                $(".productType-list-con-left").append(proTypeList);
             } else {
-                $(".productType-list-con-left").html(productTypeLi);
+                $(".proTypeNumAndCode").html(proTypeNumAndCode);
+                $(".productType-list-con-left").html(proTypeList);
             }
-        } else if (display == "none") {
+        } else if (display == "block") {
             alert("조회 후 추가하세요.");
         }
     }
 
     function updateProductType(el) {
         if (el) {
-            let listId = "#productType_".concat(el.substring(el.indexOf("_") + 1));
-            let selectedLi = document.querySelector(listId);
-            selectedLi.classList.add("update-proType-item");
+            let listId = "#proTypeList_".concat(el.substring(el.indexOf("_") + 1));
+            let listLi = document.querySelector(listId);
+            listLi.classList.add("update-proType-item");
         }
     }
 
     function getProductList(productType) {
-        let productTypeId = productType.children[2].textContent;
+        $(".productNumAndCode").css("display", "flex");
+        let productTypeCode = productType.id.substring(productType.id.indexOf("_") + 1);
+
         $.get("/usr/basic-information/touchKeyManagement/getProducts", {
-            productTypeId: productTypeId
+            productTypeCode: productTypeCode
         }, function (data) {
             if (data.length != 0) {
-                let productLi = "";
+                let productNumAndCode = "";
+                let productList = "";
                 $.each(data, (idx, value) => {
                     let ordinalNum = (idx + 1).toString();
-                    productLi += `
-                    <li class="product \${idx+1 == 1 ? 'checked' : ''}" id="product_\${value.productCode}">
-                        <span><input type="checkbox" id="product-checkbox" value="\${value.productCode}"></span>
-                        <span>\${ordinalNum.padStart(3, "0")}</span>
-                        <span>\${value.productCode}</span>
-                        <span>\${value.productKorName}</span>
-                        <span>\${value.price}</span>
-                        <span>매장</span>
-                        <span style="background-color: \${value.color}">
-                            <select id="productColorBox_\${value.productCode}" class="select select-bordered select-sm w-full max-w-xs"
-                                style="background-color: \${value.color}" onchange="updateProduct(this.id)">
-                              <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
-                              <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
-                              <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
-                              <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
-                              <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
-                              <option value="salmon" \${value.color == 'salmon' ? 'selected' : ''}>살구</option>
-                              <option value="yellow" \${value.color == 'yellow' ? 'selected' : ''}>연노랑</option>
-                            </select>
-                        </span>
-                    </li>
+                    productNumAndCode += `
+                        <li>
+                            <span><input type="checkbox" id="product-checkbox" value="\${value.productCode}"></span>
+                            <span>\${ordinalNum.padStart(3, "0")}</span>
+                        </li>
+                        `
+                    productList += `
+                        <li class="product \${idx+1 == 1 ? 'checked' : ''}" id="product_\${value.productCode}" sequenceNum="\${ordinalNum.padStart(3, '0')}">
+                            <span>\${value.productCode}</span>
+                            <span>\${value.productKorName}</span>
+                            <span>\${value.price}</span>
+                            <span>매장</span>
+                            <span style="background-color: \${value.color}">
+                                <select id="productColorBox_\${value.productCode}" class="select select-bordered select-sm w-full max-w-xs"
+                                    style="background-color: \${value.color}" onchange="updateProduct(this.id)">
+                                  <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
+                                  <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
+                                  <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
+                                  <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
+                                  <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
+                                  <option value="salmon" \${value.color == 'salmon' ? 'selected' : ''}>살구</option>
+                                  <option value="yellow" \${value.color == 'yellow' ? 'selected' : ''}>연노랑</option>
+                                </select>
+                            </span>
+                        </li>
                     `
                 })
-                $(".productType-list-con-right").html(productLi);
+
+                $(".productNumAndCode").html(productNumAndCode);
+                $(".productType-list-con-right").html(productList);
                 clickEventForProType("productType-list-con-right", "product");
             } else {
                 let msgBox = `
                         <div class="is-empty-msg">
-                            <span>검색하신 정보가 존재하지 않습니다.</span>
+                            <div>검색하신 정보가 존재하지 않습니다.</div>
                         </div>
                         `
+                $(".productNumAndCode").empty();
                 $(".productType-list-con-right").html(msgBox);
             }
         }, "json")
@@ -303,15 +386,37 @@
                 element.style.color = "red";
                 element.classList.add("checked");
                 element.classList.add("selected");
-
                 areaName == "productType-list-con-left" ? getProductList(element) : "";
             })
         })
     }
 
-    function saveProductType() {
+    function clickEventForSearchProList(areaName, elName) {
+        let listItemLastItem = $(`.\${areaName} .\${elName}.checked`)[0]
+        listItemLastItem.style.backgroundColor = "rgb(243, 243, 243)"
+        listItemLastItem.style.color = "red"
+        listItemLastItem.classList.add("checked")
+
+        $(`.\${areaName} .\${elName}`).each((idx, element) => {
+            element.addEventListener("click", function () {
+                let lastCheckedEl = document.querySelector(`.\${areaName} .\${elName}.checked`);
+                lastCheckedEl.style.backgroundColor = "inherit";
+                lastCheckedEl.style.color = "black";
+                lastCheckedEl.classList.remove("checked");
+                lastCheckedEl.classList.remove("selected");
+
+                element.style.backgroundColor = "rgb(243, 243, 243)";
+                element.style.color = "red";
+                element.classList.add("checked");
+                element.classList.add("selected");
+                areaName == "productType-list-con-left" ? getProductList(element) : "";
+            })
+        })
+    }
+
+    function saveChanges() {
         let newProTypeLen = $(".productType-list-con-left > .newProType").length;
-        let updateProTypeLen = $(".productType-list-con-left > .update-proType-item").length;
+        let updateProTypeLen = $(".productType-list-con-left > li.update-proType-item").length;
         let updateProLen = $(".productType-list-con-right > .update-pro-item").length;
 
         if (newProTypeLen == 0 && updateProTypeLen == 0 && updateProLen == 0) {
@@ -319,16 +424,19 @@
         }
 
         if (newProTypeLen != 0) {
+            let newProTypeSequenceNumList = [];
             let newProTypeKorNameList = [];
             let newProTypeEngNameList = [];
             let newProTypeColorList = [];
 
             $(".productType-list-con-left > .newProType").each((idx, el) => {
-                const newProTypeKorName = el.children[3].children[0].value;
+                const newProTypeSequenceNum = el.getAttribute("sequenceNum");
+                newProTypeSequenceNumList.push(newProTypeSequenceNum);
+                const newProTypeKorName = el.children[1].children[0].value;
                 newProTypeKorNameList.push(newProTypeKorName);
-                const newProTypeEngName = el.children[4].children[0].value;
+                const newProTypeEngName = el.children[2].children[0].value;
                 newProTypeEngNameList.push(newProTypeEngName);
-                const newProTypeColorBox = el.children[6].children[0];
+                const newProTypeColorBox = el.children[4].children[0];
                 const newProTypeColor = newProTypeColorBox.options[newProTypeColorBox.selectedIndex].value;
                 newProTypeColorList.push(newProTypeColor);
             })
@@ -336,6 +444,7 @@
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/addProductTypes",
                 data: {
+                    newProTypeSequenceNumList: newProTypeSequenceNumList.join(","),
                     productTypeKorNameList: newProTypeKorNameList.join(","),
                     productTypeEngNameList: newProTypeEngNameList.join(","),
                     productTypeColorList: newProTypeColorList.join(",")
@@ -353,22 +462,25 @@
                     getProductTypeList();
                 }
             })
-
         }
 
         if (updateProTypeLen != 0) {
-            let updateProductTypeIdList = [];
+            let updateProductTypeCodeList = [];
+            let updateProTypeSequenceNumList = [];
             let updateProTypeKorNameList = [];
             let updateProTypeEngNameList = [];
             let updateProTypeColorList = [];
-            $(".productType-list-con-left > .update-proType-item").each((idx, el) => {
-                const updateProTypeId = el.id.substring(el.id.indexOf("_") + 1);
-                updateProductTypeIdList.push(updateProTypeId);
-                const updateProTypeKorName = el.children[3].children[0].value;
+
+            $(".productType-list-con-left > li.update-proType-item").each((idx, el) => {
+                const updateProTypeCode = el.id.substring(el.id.indexOf("_") + 1);
+                updateProductTypeCodeList.push(updateProTypeCode);
+                const updateProTypeSequenceNum = el.getAttribute("sequenceNum");
+                updateProTypeSequenceNumList.push(updateProTypeSequenceNum);
+                const updateProTypeKorName = el.children[1].children[0].value;
                 updateProTypeKorNameList.push(updateProTypeKorName);
-                const updateProTypeEngName = el.children[4].children[0].value;
+                const updateProTypeEngName = el.children[2].children[0].value;
                 updateProTypeEngNameList.push(updateProTypeEngName);
-                const updateProTypeColorBox = el.children[6].children[0];
+                const updateProTypeColorBox = el.children[4].children[0];
                 const updateProTypeColor = updateProTypeColorBox.options[updateProTypeColorBox.selectedIndex].value;
                 updateProTypeColorList.push(updateProTypeColor);
             })
@@ -376,7 +488,8 @@
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/updateProductTypes",
                 data: {
-                    updateProTypeIdList: updateProductTypeIdList.join(","),
+                    updateProductTypeCodeList: updateProductTypeCodeList.join(","),
+                    updateProTypeSequenceNumList: updateProTypeSequenceNumList.join(","),
                     updateProTypeKorNameList: updateProTypeKorNameList.join(","),
                     updateProTypeEngNameList: updateProTypeEngNameList.join(","),
                     updateProTypeColorList: updateProTypeColorList.join(",")
@@ -394,19 +507,21 @@
                     getProductTypeList();
                 }
             })
-
         }
 
         if (updateProLen != 0) {
-            let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
-            let selectProTypeCode = selectProTypeItem.children[2].textContent;
+            let selectProTypeItem = $(".productType-list-con-left li.selected ")[0];
+            let selectProTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
+            let updateProSequenceNumList = [];
             let updateProductCodeList = [];
             let updateProductColorList = [];
 
-            $(".productType-list-con-right > .update-pro-item").each((idx, el) => {
+            $(".productType-list-con-right > li.update-pro-item").each((idx, el) => {
                 const updateProductCode = el.id.substring(el.id.indexOf("_") + 1);
                 updateProductCodeList.push(updateProductCode);
-                const updateProColorBox = el.children[6].children[0];
+                const updateProSequenceNum = el.getAttribute("sequenceNum");
+                updateProSequenceNumList.push(updateProSequenceNum);
+                const updateProColorBox = el.children[4].children[0];
                 const updateProColor = updateProColorBox.options[updateProColorBox.selectedIndex].value;
                 updateProductColorList.push(updateProColor);
             })
@@ -415,6 +530,7 @@
                 url: "/usr/basic-information/touchKeyManagement/updateProducts",
                 data: {
                     updateProductCodeList: updateProductCodeList.join(","),
+                    updateProSequenceNumList: updateProSequenceNumList.join(","),
                     updateProductColorList: updateProductColorList.join(","),
                     selectProTypeCode: selectProTypeCode
                 },
@@ -461,7 +577,7 @@
 
         if (delProductCodeList != 0) {
             let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
-            let productTypeCode = selectProTypeItem.children[2].textContent;
+            let productTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
 
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
@@ -541,14 +657,14 @@
 
                 $(`.search-pro-list-container`).html(productListItem);
 
-                clickEventForProType("search-pro-list-container", "product");
+                clickEventForSearchProList("search-pro-list-container", "product");
                 let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
 
                 scrollToSelectedItem(listItemFirstItem)
             } else {
                 let msgBox = `
                     <div class="is-empty-msg">
-                        <span>검색하신 정보가 존재하지 않습니다.</span>
+                        <div>검색하신 정보가 존재하지 않습니다.</div>
                     </div>
                 `
                 $(`.search-pro-list-container`).html(msgBox);
@@ -561,9 +677,9 @@
 
         if (productListLength != 0) {
             let selectProductItem = $(".search-pro-list-container li span:nth-child(1) > input:checked").map((index, el) => el.value).toArray();
-            let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
-            let selectProTypeItemCode = selectProTypeItem.children[2].textContent;
-            let selectProTypeColorBox = selectProTypeItem.children[6].children[0];
+            let selectProTypeItem = $(".productType-list-con-left li.selected ")[0];
+            let selectProTypeItemCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
+            let selectProTypeColorBox = selectProTypeItem.children[4].children[0];
             let selectProTypeColor = selectProTypeColorBox.options[selectProTypeColorBox.selectedIndex].value;
 
             if (selectProductItem.length != 0 && productListLength > 0) {

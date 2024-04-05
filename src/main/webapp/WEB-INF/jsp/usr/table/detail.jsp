@@ -663,9 +663,9 @@
                     <c:if test="${idx.index == 27}">
                         <li id="${idx.index}"
                             class="productItems ">
-                            <span onclick="${products.size() > 2 ? 'getProductByProTypeName(null, 1)' : ''}"
+                            <span onclick="${products.size() > 27 ? 'getProductByProTypeName(null, 1)' : ''}"
                                   class="material-symbols-outlined ">arrow_back_ios</span>
-                            <span onclick="${products.size() > 2 ? 'getProductByProTypeName(null, 2)' : ''}"
+                            <span onclick="${products.size() > 27 ? 'getProductByProTypeName(null, 2)' : ''}"
                                   class="material-symbols-outlined ${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                         </li>
                     </c:if>
@@ -752,9 +752,9 @@
                         if (i == 27) {
                             liElement += `
                              <li id="\${i}"class="productItems ">
-                                <span onclick="\${productCnt > 3 ? 'getProductByProTypeName(null, 1)' : ''}"
+                                <span onclick="\${productCnt > 27 ? 'getProductByProTypeName(null, 1)' : ''}"
                                     class="material-symbols-outlined \${page > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
-                                <span onclick="\${productCnt > 3 ? 'getProductByProTypeName(null, 2)' : ''}"
+                                <span onclick="\${productCnt > 27 ? 'getProductByProTypeName(null, 2)' : ''}"
                                     class="material-symbols-outlined \${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                              </li>
                             `

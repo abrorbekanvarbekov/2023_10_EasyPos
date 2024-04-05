@@ -211,12 +211,13 @@ public interface BasicInformationDao {
             set regDate      = now(),
                 updateDate   = now(),
                 `code`       = lpad(#{productTypeCode}, '3', '0'),
+                sequenceNum = #{sequenceNum},
                 korName      = #{productTypeKorName},
                 engName      = #{productTypeEngName},
                 authDivision = '매장',
                 color        = #{productTypeColor};
             """)
-    int addProductType(int productTypeCode, String productTypeKorName, String productTypeEngName, String productTypeColor);
+    int addProductType(int productTypeCode, String productTypeKorName, String productTypeEngName, String productTypeColor, int sequenceNum);
 
     @Update("""
             update productType
@@ -224,9 +225,9 @@ public interface BasicInformationDao {
                     korName    = #{updateProTypeKorName},
                     engName    = #{updateProTypeEngName},
                     color      = #{updateProTypeColor}
-                where id = #{productTypeId};
+                where code = #{productTypeCode};
             """)
-    int updateProductType(int productTypeId, String updateProTypeKorName, String updateProTypeEngName, String updateProTypeColor);
+    int updateProductType(int productTypeCode, String updateProTypeKorName, String updateProTypeEngName, String updateProTypeColor);
 
     @Delete("""
             delete from productType
@@ -236,11 +237,12 @@ public interface BasicInformationDao {
 
     @Select("""
             select p.productCode, p.productKorName, p.price, i.color, p.id
-             from `${productTypeId}` as i
+             from `${productTypeCode}` as i
                 inner join product as p
-                    on p.productCode = i.productCode;
+                    on p.productCode = i.productCode
+                order by sequenceNum asc               
             """)
-    List<Product> getProducts(String productTypeId);
+    List<Product> getProducts(String productTypeCode);
 
     @Select("""
             select * from `${productTypeId}`
@@ -248,22 +250,15 @@ public interface BasicInformationDao {
             """)
     Product getDuplicatePro(String productCode, String productTypeId);
 
-    @Update("""
-            update product
-                set updateDate = now(),
-                    productType = #{productTypeId},
-                    color = #{productTypeColor}
-                where id = #{productId}
-            """)
-    int addTypeForProduct(int productId, String productTypeId, String productTypeColor);
 
     @Update("""
             update `${selectProTypeCode}`
             set updateDate = now(),
-                color = #{productNewColor}
+                color = #{productNewColor},
+                sequenceNum = #{proSequenceNum}
             where productCode = #{productCode}
             """)
-    int updateProducts(String productCode, String productNewColor, String selectProTypeCode);
+    int updateProducts(String productCode, String proSequenceNum, String productNewColor, String selectProTypeCode);
 
     @Delete("""
             delete from `${productTypeCode}`
@@ -285,9 +280,9 @@ public interface BasicInformationDao {
     ProductType getProductTypeById(int delProductTypeId);
 
     @Insert("""
-            insert into `${productTypeCode}` (regDate, updateDate, `code`, korName, productCode, color)
-                    select now(), now(), `code`, korName, #{productCode}, #{productTypeColor} from productType
+            insert into `${productTypeCode}` (regDate, updateDate, sequenceNum, `code`, korName, productCode, color)
+                    select now(), now(), #{sequenceNum}, `code`, korName, #{productCode}, #{productTypeColor} from productType
                     where `code` = #{productTypeCode};
             """)
-    int appendProForTypeItem(String productCode, String productTypeCode, String productTypeColor);
+    int appendProForTypeItem(String productCode, String productTypeCode, String productTypeColor, int sequenceNum);
 }

@@ -16,6 +16,7 @@ public class ProductType {
     private String regDate;
     private String updateDate;
     private String code;
+    private String sequenceNum;
     private String korName;
     private String engName;
     private String authDivision;

@@ -121,10 +121,8 @@ public class Rq {
     public void logout() {
         this.session.removeAttribute("loginedMemberId");
         this.loginedMember = null;
-    }
-
-    public void logoutToEmployee() {
         this.session.removeAttribute("loginedEmployee");
+        this.businessDate = "";
     }
 
     public void floor(int floor) {

@@ -30,7 +30,7 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String Tables(Model model, @RequestParam(defaultValue = "1") int floor) throws ParseException {
+    public String Tables(Model model, @RequestParam(defaultValue = "1") int floor) {
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String openingDate = businessFullDate[0];
 
@@ -105,7 +105,7 @@ public class HomeController {
 // ==============================================================//
 
     @RequestMapping("/usr/main/salesSummary")
-    public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) throws ParseException {
+    public String salesSummary(@RequestParam(defaultValue = "전체") String floor, Model model) {
 
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String openingDate = businessFullDate[0];

@@ -120,9 +120,9 @@ public class PayController {
 
     // ==================================================================//
 
-    @RequestMapping("/usr/tables/orderPage/payByCreditCart")
-    public String payByCreditCart(int AmountToBeReceivedCart, int CartTotalAmount, int CartSplitAmount,
-                                  int CartTotalSailAmount, int floor, int tabId, Model model) {
+    @RequestMapping("/usr/tables/orderPage/payByCreditCard")
+    public String payByCreditCart(int AmountToBeReceivedCard, int CardTotalAmount, int CardSplitAmount,
+                                  int CardTotalSailAmount, int floor, int tabId, Model model) {
         String CreditCartNumber = Util.getCreditCartNumbers();
         String CreditCartCompany = Util.getCreditCartCompany();
         String CreditCartValidYear = Util.getCreditCartValidTHRU();
@@ -134,16 +134,16 @@ public class PayController {
         model.addAttribute("CreditCartCompany", CreditCartCompany);
         model.addAttribute("CreditCartValidYear", CreditCartValidYear);
         model.addAttribute("CreditCartValidMonth", CreditCartValidMonth);
-        model.addAttribute("amountToBeReceivedCart", AmountToBeReceivedCart);
-        model.addAttribute("totalAmount", CartTotalAmount);
-        model.addAttribute("splitAmount", CartSplitAmount);
-        model.addAttribute("cartTotalSailAmount", CartTotalSailAmount);
+        model.addAttribute("amountToBeReceivedCart", AmountToBeReceivedCard);
+        model.addAttribute("totalAmount", CardTotalAmount);
+        model.addAttribute("splitAmount", CardSplitAmount);
+        model.addAttribute("cartTotalSailAmount", CardTotalSailAmount);
         return "/usr/table/payByCreditCart";
     }
 
     // ==================================================================//
 
-    @RequestMapping("/usr/tables/orderPage/paymentCreditCart")
+    @RequestMapping("/usr/tables/orderPage/paymentCreditCard")
     @ResponseBody
     public ResultDate paymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount,
                                         String CreditCartNumber, int cartTotalSailAmount, int amountToBeReceivedCart, String isPrintReceipt) {

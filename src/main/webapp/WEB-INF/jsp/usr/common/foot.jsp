@@ -4,12 +4,12 @@
 
 <div class="footerFeed">
     <ul>
-        <li class="payByCreditCartBtn">
-            <form action="/usr/tables/orderPage/payByCreditCart" method="post" name="do-pay-creditCart-form">
-                <input type="hidden" name="AmountToBeReceivedCart" value=""/>
-                <input type="hidden" name="CartTotalSailAmount" value=""/>
-                <input type="hidden" name="CartTotalAmount" value=""/>
-                <input type="hidden" name="CartSplitAmount" value=""/>
+        <li class="payByCreditCardBtn">
+            <form action="/usr/tables/orderPage/payByCreditCard" method="post" name="do-pay-creditCard-form">
+                <input type="hidden" name="AmountToBeReceivedCard" value=""/>
+                <input type="hidden" name="CardTotalSailAmount" value=""/>
+                <input type="hidden" name="CardTotalAmount" value=""/>
+                <input type="hidden" name="CardSplitAmount" value=""/>
                 <input type="hidden" name="floor" value="${rq.floor}"/>
                 <input type="hidden" name="tabId" value="${param.tabId}"/>
             </form>
@@ -83,28 +83,28 @@
 <script>
 
 
-    $(".payByCreditCartBtn").click(function () {
+    $(".payByCreditCardBtn").click(function () {
         let cartItemsList = $(".tbody li")
         if (cartItemsList.length == 0) {
-            $(".payByCreditCartBtn > a").removeAttr("href")
+            $(".payByCreditCardBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
         } else {
             let amountToPay = parseInt(document.querySelector(".amountToPay").innerHTML)
             let totalAmount = parseInt(document.querySelector(".ProductsTotalSumPrice").value)
             let splitAmount = document.querySelector(".numberFeed > input").value
-            let cartTotalSailAmount = parseInt(document.querySelector(".discountAmount").innerHTML)
+            let cardTotalSailAmount = parseInt(document.querySelector(".discountAmount").innerHTML)
 
 
             if (parseInt(splitAmount) == 0) {
                 $(".order-msg-box > .msg-tag").html("결제할 금액을 확인해주세요!");
             } else {
-                $('input[name=AmountToBeReceivedCart]').val(amountToPay)
-                $('input[name=CartTotalAmount]').val(totalAmount)
-                $('input[name=CartSplitAmount]').val(splitAmount == "" ? 0 : parseInt(splitAmount))
-                $('input[name=CartTotalSailAmount]').val(cartTotalSailAmount)
+                $('input[name=AmountToBeReceivedCard]').val(amountToPay)
+                $('input[name=CardTotalAmount]').val(totalAmount)
+                $('input[name=CardSplitAmount]').val(splitAmount == "" ? 0 : parseInt(splitAmount))
+                $('input[name=CardTotalSailAmount]').val(cardTotalSailAmount)
                 // ==========================================================//
                 doInsertProduct();
-                $('form[name=do-pay-creditCart-form]').submit();
+                $('form[name=do-pay-creditCard-form]').submit();
             }
 
         }
@@ -113,7 +113,7 @@
     $(".payByCashBtn").click(function () {
         let cartItemsList = $(".tbody li")
         if (cartItemsList.length == 0) {
-            $(".payByCreditCartBtn > a").removeAttr("href")
+            $(".payByCreditCardBtn > a").removeAttr("href")
             $(".payByCashBtn > a").removeAttr("href")
         } else {
             let amountToPay = parseInt(document.querySelector(".amountToPay").innerHTML);
@@ -177,7 +177,7 @@
     })
 
     function doInsertProduct() {
-
+        let result = false;
         $.get("/usr/tables/orderPage/isExistCartItem", {
             floor:${rq.floor},
             tabId:${param.tabId}
@@ -191,22 +191,33 @@
                 const productPrices = $('.tbody li.newProduct').map((index, el) => el.children[3].value).toArray();
                 const productNames = $('.tbody li.newProduct').map((index, el) => el.children[1].value).toArray();
 
-                $.get("/usr/tables/insertProduct", {
-                    productIdList: productIds.join(","),
-                    productCntList: productCnts.join(","),
-                    productSailPriceList: productSailPrices.join(","),
-                    productPricesList: productPrices.join(","),
-                    productNamesList: productNames.join(","),
-                    floor: ${rq.floor},
-                    tabId: ${param.tabId},
-                    isPrintControl: "true"
-                }, function (data) {
+                $.ajax({
+                    url: "/usr/tables/insertProduct",
+                    data: {
+                        productIdList: productIds.join(","),
+                        productCntList: productCnts.join(","),
+                        productSailPriceList: productSailPrices.join(","),
+                        productPricesList: productPrices.join(","),
+                        productNamesList: productNames.join(","),
+                        floor: ${rq.floor},
+                        tabId: ${param.tabId},
+                        isPrintControl: "true"
+                    },
+                    method: "POST",
+                    success: function (data) {
+                    },
+                    error: function (request, status, error) {
 
-                }, "json")
+                    },
+                    complete: function () {
+
+                    }
+                })
             }
 
         }, "json")
 
+        return result;
     }
 
 </script>
