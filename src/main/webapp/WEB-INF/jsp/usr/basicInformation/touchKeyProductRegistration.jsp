@@ -28,12 +28,12 @@
         <div class="productType-center-box">
             <div class="productType-main-left">
                 <div class="productType-sort-buttons">
-                    <button class="btn btn-active btn-xs">맨위로</button>
-                    <button class="btn btn-active btn-xs" onclick="moveUp();">위로</button>
-                    <button class="btn btn-active btn-xs" onclick="moveDown();">아래로</button>
-                    <button class="btn btn-active btn-xs">맨아래로</button>
-                    <button class="btn btn-active btn-xs">순번정렬</button>
-                    <button class="btn btn-active btn-xs">소분류+</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToTop('productType-list-con-left')">맨위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveUp('productType-list-con-left');">위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveDown('productType-list-con-left');">아래로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToBottom('productType-list-con-left')">맨아래로
+                    </button>
+                    <button class="btn btn-active btn-xs" onclick="sortList('productType-list-con-left')">순번정렬</button>
                     <span onclick="addProductTypeLi();"
                           class="material-symbols-outlined btn btn-active btn-xs ml-1 ">add</span>
                 </div>
@@ -53,11 +53,12 @@
             </div>
             <div class="productType-main-right">
                 <div class="productType-sort-buttons">
-                    <button class="btn btn-active btn-xs" onclick="moveToTop()">맨위로</button>
-                    <button class="btn btn-active btn-xs" onclick="moveUp()">위로</button>
-                    <button class="btn btn-active btn-xs" onclick="moveDown()">아래로</button>
-                    <button class="btn btn-active btn-xs" onclick="moveToBottom()">맨아래로</button>
-                    <button class="btn btn-active btn-xs" onclick="sortList()">순번정렬</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToTop('productType-list-con-right')">맨위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveUp('productType-list-con-right')">위로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveDown('productType-list-con-right')">아래로</button>
+                    <button class="btn btn-active btn-xs" onclick="moveToBottom('productType-list-con-right')">맨아래로
+                    </button>
+                    <button class="btn btn-active btn-xs" onclick="sortList('productType-list-con-right')">순번정렬</button>
                     <span class="material-symbols-outlined btn btn-active btn-xs ml-1 "
                           onclick="openMsgBox();">add</span>
                 </div>
@@ -137,9 +138,11 @@
 
 <script>
     <%--  productMovement  --%>
+    let isUpdate = false;
 
-    function moveUp() {
-        let list = document.querySelector(".productType-list-con-left");
+    function moveUp(areaName) {
+        isUpdate = true;
+        let list = document.querySelector(`.\${areaName}`);
         let selectedItem = list.querySelector('.checked');
         if (selectedItem && selectedItem.previousElementSibling) {
             let previousItem = selectedItem.previousElementSibling;
@@ -147,35 +150,37 @@
         }
     }
 
-    function moveDown() {
-        let list = document.querySelector(".productType-list-con-left");
+    function moveDown(areaName) {
+        isUpdate = true;
+        let list = document.querySelector(`.\${areaName}`);
         let selectedItem = list.querySelector('.checked');
         if (selectedItem && selectedItem.nextElementSibling) {
             let nextItem = selectedItem.nextElementSibling.nextElementSibling;
-            console.log(selectedItem)
-            console.log(nextItem)
             list.insertBefore(selectedItem, nextItem);
         }
     }
 
-    function moveToTop() {
-        let list = document.querySelector(".productType-list-con-right");
+    function moveToTop(areaName) {
+        isUpdate = true;
+        let list = document.querySelector(`.\${areaName}`);
         let selectedItem = list.querySelector('.checked');
         if (selectedItem) {
             list.insertBefore(selectedItem, list.firstElementChild);
         }
     }
 
-    function moveToBottom() {
-        let list = document.querySelector(".productType-list-con-right");
+    function moveToBottom(areaName) {
+        isUpdate = true;
+        let list = document.querySelector(`.\${areaName}`);
         let selectedItem = list.querySelector('.checked');
         if (selectedItem) {
             list.appendChild(selectedItem);
         }
     }
 
-    function sortList() {
-        let list = document.querySelector(".productType-list-con-right");
+    function sortList(areaName) {
+        isUpdate = true;
+        let list = document.querySelector(`.\${areaName}`);
         let items = list.getElementsByTagName("li");
         let sortedItems = Array.from(items).sort(function (a, b) {
             return a.textContent.localeCompare(b.textContent);
@@ -201,7 +206,7 @@
                     let proTypeList = "";
                     $.each(data, (idx, value) => {
                         proTypeNumAndCode += `
-                            <li >
+                            <li id="\${idx}">
                                 <span><input type="checkbox" id="product-type-checkbox" value="\${value.id}"></span>
                                 <span>\${idx + 1}</span>
                             </li>
@@ -318,8 +323,8 @@
                 $.each(data, (idx, value) => {
                     let ordinalNum = (idx + 1).toString();
                     productNumAndCode += `
-                        <li>
-                            <span><input type="checkbox" id="product-checkbox" value="\${value.productCode}"></span>
+                        <li id="\${idx}">
+                            <span><input type="checkbox" id="product-checkbox"  value="\${value.productCode}"></span>
                             <span>\${ordinalNum.padStart(3, "0")}</span>
                         </li>
                         `
@@ -419,8 +424,75 @@
         let updateProTypeLen = $(".productType-list-con-left > li.update-proType-item").length;
         let updateProLen = $(".productType-list-con-right > .update-pro-item").length;
 
-        if (newProTypeLen == 0 && updateProTypeLen == 0 && updateProLen == 0) {
+        if (newProTypeLen == 0 && updateProTypeLen == 0 && updateProLen == 0 && isUpdate == false) {
             alert("터치키은(는) 변경된 사항이 없습니다.");
+            return;
+        }
+
+        let proTypeNumAndCode = $(".proTypeNumAndCode");
+        let proTypeNumAndCodeLiIdxList = [];
+        let proTypeProCodeList = [];
+
+        $(".productType-list-con-left li").each((idx, el) => {
+            const proNumAndCodeLiIdx = proTypeNumAndCode[0].children[idx].id;
+            const productProCode = el.id.substring(el.id.indexOf("_") + 1);
+            proTypeNumAndCodeLiIdxList.push(proNumAndCodeLiIdx);
+            proTypeProCodeList.push(productProCode);
+        })
+
+        if (proTypeNumAndCodeLiIdxList.length != 0) {
+
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/updateProTypeSequenceNum",
+                method: "POST",
+                data: {
+                    proTypeCodeList: proTypeProCodeList.join(","),
+                    proTypeSequenceNumLIst: proTypeNumAndCodeLiIdxList.join(",")
+                },
+                success: function (data) {
+                    getProductTypeList();
+                },
+                error: function (request, status, error) {
+                    getProductTypeList();
+                },
+                complete: function () {
+                    getProductTypeList();
+                }
+            })
+        }
+
+        let productNumAndCode = $(".productNumAndCode");
+        let proNumAndCodeLiIdxList = [];
+        let productProCodeList = [];
+
+        $(".productType-list-con-right li").each((idx, el) => {
+            const proNumAndCodeLiId = productNumAndCode[0].children[idx].id;
+            const productProCode = el.id.substring(el.id.indexOf("_") + 1);
+            proNumAndCodeLiIdxList.push(proNumAndCodeLiId);
+            productProCodeList.push(productProCode);
+        })
+
+        if (proNumAndCodeLiIdxList.length != 0) {
+            let selectProTypeItem = $(".productType-list-con-left li.checked ")[0];
+            let selectProTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
+            $.ajax({
+                url: "/usr/basic-information/touchKeyManagement/updateProductsSequenceNum",
+                method: "POST",
+                data: {
+                    productProCodeList: productProCodeList.join(","),
+                    proSequenceNumLIst: proNumAndCodeLiIdxList.join(","),
+                    selectProTypeCode: selectProTypeCode
+                },
+                success: function (data) {
+                    getProductList(selectProTypeItem);
+                },
+                error: function (request, status, error) {
+                    getProductList(selectProTypeItem);
+                },
+                complete: function () {
+                    getProductList(selectProTypeItem);
+                }
+            })
         }
 
         if (newProTypeLen != 0) {
@@ -510,7 +582,7 @@
         }
 
         if (updateProLen != 0) {
-            let selectProTypeItem = $(".productType-list-con-left li.selected ")[0];
+            let selectProTypeItem = $(".productType-list-con-left li.checked ")[0];
             let selectProTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
             let updateProSequenceNumList = [];
             let updateProductCodeList = [];
@@ -548,6 +620,7 @@
                 }
             })
         }
+
     }
 
     function delProductTypeAndProduct() {

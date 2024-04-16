@@ -229,6 +229,14 @@ public interface BasicInformationDao {
             """)
     int updateProductType(int productTypeCode, String updateProTypeKorName, String updateProTypeEngName, String updateProTypeColor);
 
+    @Update("""
+            update productType
+                set updateDate = now(),
+                    sequenceNum    = #{sequenceNum}
+                where code = #{productTypeCode};
+            """)
+    int updateProTypeSequenceNum(int sequenceNum, String productTypeCode);
+
     @Delete("""
             delete from productType
                 where id = #{delProductTypeId};             
@@ -260,6 +268,14 @@ public interface BasicInformationDao {
             """)
     int updateProducts(String productCode, String proSequenceNum, String productNewColor, String selectProTypeCode);
 
+    @Update("""
+            update `${selectProTypeCode}`
+            set updateDate = now(),
+                sequenceNum = #{sequenceNum}
+            where productCode = #{productCode}
+            """)
+    int updateProductsSequenceNum(int sequenceNum, String productCode, String selectProTypeCode);
+
     @Delete("""
             delete from `${productTypeCode}`
                 where productCode = #{delProductCode};
@@ -285,4 +301,5 @@ public interface BasicInformationDao {
                     where `code` = #{productTypeCode};
             """)
     int appendProForTypeItem(String productCode, String productTypeCode, String productTypeColor, int sequenceNum);
+
 }

@@ -213,6 +213,18 @@ public class BasicInformationService {
         return result;
     }
 
+    public int updateProTypeSequenceNum(List<String> proTypeCodeList, List<String> proTypeSequenceNumLIst) {
+        int result = 0;
+        if (proTypeCodeList.size() != 0) {
+            for (int i = 0; i < proTypeCodeList.size(); i++) {
+                int sequenceNum = Integer.parseInt(proTypeSequenceNumLIst.get(i));
+                String productTypeCode = proTypeCodeList.get(i);
+                result = basicInformationDao.updateProTypeSequenceNum(sequenceNum, productTypeCode);
+            }
+        }
+        return result;
+    }
+
     public List<Product> getProducts(String productTypeCode) {
         return basicInformationDao.getProducts(productTypeCode);
     }
@@ -260,6 +272,18 @@ public class BasicInformationService {
         return result;
     }
 
+    public int updateProductsSequenceNum(List<String> proSequenceNumLIst, List<String> productProCodeList, String selectProTypeCode) {
+        int result = 0;
+        if (proSequenceNumLIst.size() != 0) {
+            for (int i = 0; i < proSequenceNumLIst.size(); i++) {
+                int sequenceNum = Integer.parseInt(proSequenceNumLIst.get(i));
+                String productCode = productProCodeList.get(i);
+                result = basicInformationDao.updateProductsSequenceNum(sequenceNum, productCode, selectProTypeCode);
+            }
+        }
+        return result;
+    }
+
     public int delTypeForProducts(List<String> delProductCodeList, String productTypeCode) {
         int result = 0;
         for (int i = 0; i < delProductCodeList.size(); i++) {
@@ -267,6 +291,5 @@ public class BasicInformationService {
         }
         return result;
     }
-
 
 }

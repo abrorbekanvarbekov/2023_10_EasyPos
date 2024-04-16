@@ -251,13 +251,28 @@ public class BasicInformationController {
                                              @RequestParam(defaultValue = " ") List<String> updateProTypeColorList) {
 
         int result = basicInformationService.updateProductType(updateProductTypeCodeList, updateProTypeKorNameList, updateProTypeEngNameList, updateProTypeColorList);
-        System.out.println(updateProTypeSequenceNumList);
+
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/updateProTypeSequenceNum")
+    @ResponseBody
+    public ResponseEntity updateProTypeSequenceNum(@RequestParam List<String> proTypeCodeList,
+                                                   @RequestParam List<String> proTypeSequenceNumLIst) {
+
+        int result = basicInformationService.updateProTypeSequenceNum(proTypeCodeList, proTypeSequenceNumLIst);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @RequestMapping("/usr/basic-information/touchKeyManagement/delProductTypes")
     @ResponseBody
@@ -294,9 +309,23 @@ public class BasicInformationController {
     public ResponseEntity updateProducts(@RequestParam List<String> updateProductCodeList,
                                          @RequestParam List<String> updateProSequenceNumList,
                                          @RequestParam List<String> updateProductColorList,
-                                                            String selectProTypeCode) {
+                                         String selectProTypeCode) {
 
         int result = basicInformationService.updateProducts(updateProductCodeList, updateProSequenceNumList, updateProductColorList, selectProTypeCode);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping("/usr/basic-information/touchKeyManagement/updateProductsSequenceNum")
+    @ResponseBody
+    public ResponseEntity updateProductsSequenceNum(@RequestParam List<String> proSequenceNumLIst,
+                                                    @RequestParam List<String> productProCodeList,
+                                                    String selectProTypeCode) {
+
+        int result = basicInformationService.updateProductsSequenceNum(proSequenceNumLIst, productProCodeList, selectProTypeCode);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
