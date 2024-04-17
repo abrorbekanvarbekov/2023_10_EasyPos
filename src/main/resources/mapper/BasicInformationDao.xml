@@ -85,7 +85,7 @@
     </select>
 
     <select id="getProductTypeList" resultType="productType">
-        select id, `code`, korName, engName, authDivision,color
+        select id, `code`, korName, engName, authDivision,color,sequenceNum
         from productType
         <if test="searchKeyword != ''">
             where korName LIKE CONCAT('%', #{searchKeyword}, '%')

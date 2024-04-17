@@ -244,7 +244,7 @@ public interface BasicInformationDao {
     int delProductTypes(int delProductTypeId);
 
     @Select("""
-            select p.productCode, p.productKorName, p.price, i.color, p.id
+            select p.productCode, p.productKorName, p.price, i.color, p.id, i.sequenceNum
              from `${productTypeCode}` as i
                 inner join product as p
                     on p.productCode = i.productCode

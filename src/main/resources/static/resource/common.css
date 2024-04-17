@@ -2723,29 +2723,32 @@ a {
     cursor: default;
 }
 
-/*.touch-product-reg {*/
-/*    display: flex;*/
-/*    position: relative;*/
-/*    width: 98%;*/
-/*    height: 100%;*/
-/*    left: 2%;*/
-/*    top: 0%;*/
-/*    transition: left 0.5s, background-color 0.5s;*/
-/*    background-color: #FFFFFF;*/
-/*    cursor: default;*/
-/*}*/
+.touch-product-location {
+    display: flex;
+    position: relative;
+    width: 98%;
+    height: 100%;
+    left: 2%;
+    top: 0%;
+    transition: left 0.5s, background-color 0.5s;
+    background-color: #FFFFFF;
+    cursor: default;
+}
+
 
 .side-bar:hover ~ .basicInformation-left,
 .side-bar:hover ~ .product-lookUp-page,
 .side-bar:hover ~ .add-product-page,
-.side-bar:hover ~ .touch-product-reg {
+.side-bar:hover ~ .touch-product-reg,
+.side-bar:hover ~ .touch-product-location {
     left: 17%;
     width: 83%;
 }
 
 .productClassificationPage,
 .product-lookUp-container,
-.touch-product-reg-container {
+.touch-product-reg-container,
+.touch-product-location-con {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -2754,7 +2757,8 @@ a {
 
 .classification-top,
 .product-lookUp-top,
-.touch-product-reg-top {
+.touch-product-reg-top,
+.touch-product-loc-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2762,7 +2766,7 @@ a {
     height: 6%;
     padding: 0.5% 1%;
     border-bottom: 1px solid rgba(169, 169, 169, .3);
-    font-size: clamp(0.7rem, 1.3vw, 2rem);
+    font-size: clamp(0.7rem, 1vw, 2rem);
 }
 
 .classification-top > div:nth-child(1) {
@@ -2773,7 +2777,8 @@ a {
 
 .classification-top > div:nth-child(2),
 .product-lookUp-top > div:nth-child(2),
-.touch-product-reg-top > div:nth-child(2) {
+.touch-product-reg-top > div:nth-child(2),
+.touch-product-loc-top > div:nth-child(2) {
     display: flex;
     justify-content: end;
     align-items: center;
@@ -2783,7 +2788,8 @@ a {
 
 .classification-top > div:nth-child(2) > button:not(:nth-child(1)),
 .product-lookUp-top > div:nth-child(2) > button:not(:nth-child(1)),
-.touch-product-reg-top > div:nth-child(2) > button:not(:nth-child(1)) {
+.touch-product-reg-top > div:nth-child(2) > button:not(:nth-child(1)),
+.touch-product-loc-top > div:nth-child(2) > button:not(:nth-child(1)) {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
@@ -2797,7 +2803,8 @@ a {
 
 .classification-top > div:nth-child(2) > button:nth-child(1),
 .product-lookUp-top > div:nth-child(2) > button:nth-child(1),
-.touch-product-reg-top > div:nth-child(2) > button:nth-child(1) {
+.touch-product-reg-top > div:nth-child(2) > button:nth-child(1),
+.touch-product-loc-top > div:nth-child(2) > button:nth-child(1) {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: nowrap;
@@ -2809,7 +2816,6 @@ a {
     border-right: 1px solid white;
     font-size: clamp(0.7rem, 1vw, 2rem);
 }
-
 
 .classification-middle > ul {
     display: flex;
@@ -3723,3 +3729,211 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     cursor: default;
 }
 
+
+/* ==================== 터치키 상품관리 (위치) ===================*/
+.touch-product-location-con > .touch-location-classification {
+    display: flex;
+    align-items: center;
+    padding: 0% 1%;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px solid #DADADC;
+    font-size: clamp(0.7rem, 1.2vw, 2rem);
+}
+
+.touch-location-classification > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 65%;
+    padding-left: 2%;
+    background-color: #ebebeb;
+}
+
+.touch-location-classification > div span {
+    display: flex;
+    align-items: center;
+    width: 6%;
+    height: 100%;
+    text-align: center;
+    font-size: clamp(0.7rem, 1vw, 2rem);
+}
+
+.touch-location-classification > div select {
+    outline: none;
+    width: 3.6%;
+    height: 57%;
+    font-size: clamp(0.7rem, 1vw, 2rem);
+}
+
+.touch-location-classification > div p {
+    text-align: center;
+    width: 2%;
+    height: 57%;
+}
+
+.touch-product-location-con > div:nth-child(3),
+.touch-product-location-con > div:nth-child(6) {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 1%;
+    font-size: clamp(0.6rem, 1vw, 2rem);
+}
+
+.t-l-classification-info,
+.t-l-product-info {
+    display: flex;
+    align-items: center;
+    padding: 0% 1%;
+    width: 100%;
+    height: 6%;
+    border-bottom: 1px solid #DADADC;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+}
+
+.t-l-classification-info > div,
+.t-l-product-info > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    padding-left: 2%;
+    background-color: #ebebeb;
+}
+
+.t-l-classification-info > div span:nth-child(-n+2),
+.t-l-product-info > div span:nth-child(-n+2) {
+    width: 3%;
+    height: 50%;
+}
+
+.t-l-classification-info > div span:nth-child(n+3):nth-child(-n+5),
+.t-l-product-info > div span:nth-child(n+3):nth-child(-n+5) {
+    width: 5%;
+    height: 56%;
+}
+
+.t-l-product-info > div span:nth-child(7) {
+    text-align: right;
+    width: 2%;
+    height: 50%;
+    margin-left: 2%;
+    padding-left: 0.05rem;
+    padding-right: 0.1rem;
+}
+
+.t-l-classification-info > div span:nth-child(7),
+.t-l-product-info > div span:nth-child(8) {
+    text-align: right;
+    width: 8%;
+    height: 50%;
+    margin-right: 1%;
+}
+
+.t-l-classification-info > div input,
+.t-l-product-info > div input {
+    outline: none;
+    width: 12%;
+    height: 55%;
+}
+
+.t-l-classification-info > div select,
+.t-l-product-info > div select {
+    width: 12%;
+    height: 50%;
+    line-height: 1rem;
+    min-height: 1.5rem;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+    margin-right: 2%;
+}
+
+.t-l-classification-info > div button,
+.t-l-product-info > div button {
+    width: 5%;
+    height: 50%;
+    line-height: 1rem;
+    min-height: 1.5rem;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+}
+
+.t-l-classification-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 20%;
+    border-bottom: 1px solid gray;
+    padding: 0% 1%;
+}
+
+.t-l-product-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 35%;
+    padding: 0% 1%;
+}
+
+
+.t-l-classification-list {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    align-content: baseline;
+}
+
+.t-l-product-list {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    align-content: baseline;
+}
+
+.t-l-classification-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 12.28%;
+    height: 33.3%;
+    border: 1px solid darkgray;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+    padding: 1%;
+    cursor: default;
+}
+
+.t-l-product-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 12.28%;
+    height: 20%;
+    border: 1px solid darkgray;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+    padding: 1%;
+    cursor: default;
+}
+
+
+.t-l-classification-list span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2%;
+    height: 33.3%;
+    border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+}
+
+.t-l-product-list span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2%;
+    height: 20%;
+    border-bottom: 1px solid darkgray;
+    border-top: 1px solid darkgray;
+}

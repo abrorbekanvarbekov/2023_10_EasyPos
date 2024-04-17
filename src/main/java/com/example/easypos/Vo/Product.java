@@ -21,6 +21,7 @@ public class Product {
     private String productKorName;
     private String productEngName;
     private String color;
+    private String sequenceNum;
     private int price;
     private int costPrice;
     private int quantity;
