@@ -123,8 +123,8 @@
                     let proTypeList = "";
                     $.each(data, (idx, value) => {
                         proTypeList += `
-                            <span><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
+                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li  draggable="true"  style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
                                 \${value.code} \${value.korName}
                             </li>
                         `
@@ -132,8 +132,8 @@
                     if (data.length <= 13) {
                         for (let i = data.length + 1; i <= 13; i++) {
                             proTypeList += `
-                            <span><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li></li>
+                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li ></li>
                             `
                         }
                     }
@@ -156,6 +156,46 @@
                         element.classList.add("checked");
                     })
                 })
+
+                const items = document.querySelectorAll(".t-l-classification-list li");
+
+                items.forEach((item) => {
+
+                    item.addEventListener("dragstart", (e) => {
+                        e.target.classList.add("dragstart");
+                    });
+
+                    item.addEventListener("dragover", (els) => {
+                        els.preventDefault();
+                    });
+
+                    item.addEventListener("drop", (el) => {
+                        el.preventDefault();
+                        let dropEl = el.target;
+                        let dragstartEl = $(".t-l-classification-list .dragstart")[0];
+
+                        if (dropEl.textContent == "") {
+                            dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
+                            dropEl.setAttribute("draggable", true)
+                            dropEl.innerHTML = dragstartEl.innerHTML;
+
+                            dragstartEl.innerHTML = "";
+                            dragstartEl.style.backgroundColor = "inherit";
+                            dragstartEl.classList.remove("dragstart");
+                        } else {
+                            let dropElBeforeText = dropEl.innerHTML.trim();
+                            let dropElBeforeColor = dropEl.style.backgroundColor.trim();
+                            dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
+                            dropEl.setAttribute("draggable", true)
+                            dropEl.innerHTML = dragstartEl.innerHTML;
+
+                            dragstartEl.innerHTML = dropElBeforeText;
+                            dragstartEl.style.backgroundColor = dropElBeforeColor;
+                            dragstartEl.classList.remove("dragstart");
+                        }
+                    });
+                })
+
             }, "json")
     }
 
@@ -181,12 +221,12 @@
         $.get("/usr/basic-information/touchKeyManagement/getProducts", {
             productTypeCode: proTypeCode
         }, function (data) {
+            let productList = "";
             if (data.length != 0) {
-                let productList = "";
                 $.each(data, (idx, value) => {
                     productList += `
-                        <span><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                        <li style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
+                        <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                        <li draggable="true" style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
                             \${value.productCode} \${value.productKorName}
                         </li>
                     `
@@ -195,10 +235,18 @@
                 if (data.length <= 27) {
                     for (let i = data.length + 1; i <= 27; i++) {
                         productList += `
-                            <span><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
                             <li></li>
                             `
                     }
+                }
+                $(".t-l-product-list").html(productList);
+            } else {
+                for (let i = 0; i <= 27; i++) {
+                    productList += `
+                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li></li>
+                            `
                 }
                 $(".t-l-product-list").html(productList);
             }
@@ -222,6 +270,45 @@
                     element.style.borderBottom = "2px solid blue";
                     element.classList.add("checked");
                 })
+            });
+
+            const items = document.querySelectorAll(".t-l-product-list li");
+
+            items.forEach((item) => {
+
+                item.addEventListener("dragstart", (e) => {
+                    e.target.classList.add("dragstart");
+                });
+
+                item.addEventListener("dragover", (els) => {
+                    els.preventDefault();
+                });
+
+                item.addEventListener("drop", (el) => {
+                    el.preventDefault();
+                    let dropEl = el.target;
+                    let dragstartEl = $(".t-l-product-list .dragstart")[0];
+
+                    if (dropEl.textContent == "") {
+                        dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
+                        dropEl.setAttribute("draggable", true)
+                        dropEl.innerHTML = dragstartEl.innerHTML;
+
+                        dragstartEl.innerHTML = "";
+                        dragstartEl.style.backgroundColor = "inherit";
+                        dragstartEl.classList.remove("dragstart");
+                    } else {
+                        let dropElBeforeText = dropEl.innerHTML.trim();
+                        let dropElBeforeColor = dropEl.style.backgroundColor.trim();
+                        dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
+                        dropEl.setAttribute("draggable", true)
+                        dropEl.innerHTML = dragstartEl.innerHTML;
+
+                        dragstartEl.innerHTML = dropElBeforeText;
+                        dragstartEl.style.backgroundColor = dropElBeforeColor;
+                        dragstartEl.classList.remove("dragstart");
+                    }
+                });
             })
         }, "json")
     }
