@@ -3905,6 +3905,29 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     cursor: default;
 }
 
+.t-l-classification-list li:last-child,
+.t-l-product-list li:last-child {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.t-l-classification-list li:last-child span:first-child,
+.t-l-product-list li:last-child span:first-child {
+    width: 50%;
+    height: 100%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    border: none;
+}
+
+.t-l-classification-list li:last-child span:last-child,
+.t-l-product-list li:last-child span:last-child {
+    width: 50%;
+    height: 100%;
+    font-size: clamp(1rem, 2vw, 3rem);
+    border: none;
+}
+
 .t-l-product-list li {
     display: flex;
     justify-content: space-between;

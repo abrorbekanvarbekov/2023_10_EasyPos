@@ -21,32 +21,44 @@
         <div class="touch-location-classification">
             <div>
                 <span>터치키분류</span>
-                <select class="select select-bordered select-xs w-full max-w-xs">
+                <select class="select select-bordered select-xs w-full max-w-xs" id="proTypeWidthNum">
                     <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option selected value="7">7</option>
                 </select>
                 <p>*</p>
-                <select class="select select-bordered select-xs w-full max-w-xs">
+                <select class="select select-bordered select-xs w-full max-w-xs" id="proTypeHeightNum">
                     <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
+                    <option selected value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
                 </select>
                 <span class="ml-6">상품분류</span>
-                <select class="select select-bordered select-xs w-full max-w-xs">
+                <select class="select select-bordered select-xs w-full max-w-xs" id="productWidthNum">
                     <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option selected value="7">7</option>
                 </select>
                 <p>*</p>
-                <select class="select select-bordered select-xs w-full max-w-xs">
+                <select class="select select-bordered select-xs w-full max-w-xs" id="productHeightNum">
                     <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option selected value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
                 </select>
             </div>
         </div>
@@ -115,6 +127,12 @@
 <script>
     function getProTypeList() {
         let searchKeyword = "";
+        let widthLen = document.getElementById("proTypeWidthNum").options[document.getElementById("proTypeWidthNum").selectedIndex].value;
+        let heightLen = document.getElementById("proTypeHeightNum").options[document.getElementById("proTypeHeightNum").selectedIndex].value;
+        let spanWidth = ((100 / widthLen) / 100 * 15).toFixed(3);
+        let liWidth = ((100 / widthLen) - spanWidth).toFixed(3);
+        let itemLens = widthLen * heightLen - 1;
+        let lastLiLen = 100 / widthLen;
         $.get("/usr/basic-information/touchKeyManagement/getProductType", {
                 searchKeyword: searchKeyword
             },
@@ -123,20 +141,27 @@
                     let proTypeList = "";
                     $.each(data, (idx, value) => {
                         proTypeList += `
-                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li  draggable="true"  style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
+                            <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
                                 \${value.code} \${value.korName}
                             </li>
                         `
                     })
-                    if (data.length <= 13) {
-                        for (let i = data.length + 1; i <= 13; i++) {
+                    if (data.length <= itemLens) {
+                        for (let i = data.length + 1; i <= itemLens; i++) {
                             proTypeList += `
-                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li ></li>
+                            <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li style="width: \${liWidth}%" ></li>
                             `
                         }
                     }
+
+                    proTypeList += `
+                        <li style="width: \${lastLiLen}%; border-left: none" >
+                            <span class="material-symbols-outlined btn btn-xs">arrow_left</span>
+                            <span class="material-symbols-outlined btn btn-xs">arrow_right</span>
+                        </li>
+                    `
                     $(".t-l-classification-list").html(proTypeList);
                 }
 
@@ -172,25 +197,22 @@
                     item.addEventListener("drop", (el) => {
                         el.preventDefault();
                         let dropEl = el.target;
-                        let dragstartEl = $(".t-l-classification-list .dragstart")[0];
+                        let dragstartEl = document.querySelector(".t-l-classification-list .dragstart");
+                        let parentEl = document.querySelector(".t-l-classification-list")
+                        let newIndex = Array.prototype.indexOf.call(parentEl.children, dragstartEl);
+                        let dropIndex = Array.prototype.indexOf.call(parentEl.children, dropEl);
 
-                        if (dropEl.textContent == "") {
-                            dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
-                            dropEl.setAttribute("draggable", true)
-                            dropEl.innerHTML = dragstartEl.innerHTML;
-
-                            dragstartEl.innerHTML = "";
-                            dragstartEl.style.backgroundColor = "inherit";
+                        if (newIndex < dropIndex) {
+                            let sibling = parentEl.children[dropIndex];
+                            parentEl.insertBefore(dragstartEl, sibling);
+                            let sibling2 = parentEl.children[newIndex];
+                            parentEl.insertBefore(dropEl, sibling2)
                             dragstartEl.classList.remove("dragstart");
-                        } else {
-                            let dropElBeforeText = dropEl.innerHTML.trim();
-                            let dropElBeforeColor = dropEl.style.backgroundColor.trim();
-                            dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
-                            dropEl.setAttribute("draggable", true)
-                            dropEl.innerHTML = dragstartEl.innerHTML;
-
-                            dragstartEl.innerHTML = dropElBeforeText;
-                            dragstartEl.style.backgroundColor = dropElBeforeColor;
+                        } else if (newIndex > dropIndex) {
+                            let sibling2 = parentEl.children[newIndex];
+                            parentEl.insertBefore(dropEl, sibling2)
+                            let sibling = parentEl.children[dropIndex];
+                            parentEl.insertBefore(dragstartEl, sibling);
                             dragstartEl.classList.remove("dragstart");
                         }
                     });
@@ -217,6 +239,12 @@
         $(".pro-type-name-input").val(proTypeName);
         $(".pro-type-sequenceNum").html(proTypeSeqNum);
 
+        let widthLen = document.getElementById("productWidthNum").options[document.getElementById("productWidthNum").selectedIndex].value;
+        let heightLen = document.getElementById("productHeightNum").options[document.getElementById("productHeightNum").selectedIndex].value;
+        let spanWidth = ((100 / widthLen) / 100 * 15).toFixed(3);
+        let liWidth = ((100 / widthLen) - spanWidth).toFixed(3);
+        let itemLens = widthLen * heightLen - 1;
+        let lastLiLen = 100 / widthLen;
 
         $.get("/usr/basic-information/touchKeyManagement/getProducts", {
             productTypeCode: proTypeCode
@@ -225,29 +253,45 @@
             if (data.length != 0) {
                 $.each(data, (idx, value) => {
                     productList += `
-                        <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                        <li draggable="true" style="background-color: \${value.color}" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
+                        <span draggable="false" style="width: \${spanWidth}%"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                        <li draggable="true" style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
                             \${value.productCode} \${value.productKorName}
                         </li>
                     `
                 })
 
-                if (data.length <= 27) {
-                    for (let i = data.length + 1; i <= 27; i++) {
+                if (data.length <= itemLens) {
+                    for (let i = data.length + 1; i <= itemLens; i++) {
                         productList += `
-                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li></li>
+                            <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li style="width: \${liWidth}%"></li>
                             `
                     }
                 }
+
+                productList += `
+                        <li style="width: \${lastLiLen}%; border-left: none" >
+                            <span class="material-symbols-outlined btn btn-xs">arrow_left</span>
+                            <span class="material-symbols-outlined btn btn-xs">arrow_right</span>
+                        </li>
+                    `
+
                 $(".t-l-product-list").html(productList);
             } else {
-                for (let i = 0; i <= 27; i++) {
+                for (let i = 0; i <= itemLens; i++) {
                     productList += `
-                            <span draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li></li>
+                            <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                            <li style="width: \${liWidth}%"></li>
                             `
                 }
+
+                productList += `
+                        <li style="width: \${lastLiLen}%; border-left: none" >
+                            <span class="material-symbols-outlined btn btn-xs">arrow_left</span>
+                            <span class="material-symbols-outlined btn btn-xs">arrow_right</span>
+                        </li>
+                    `
+
                 $(".t-l-product-list").html(productList);
             }
 
@@ -287,25 +331,22 @@
                 item.addEventListener("drop", (el) => {
                     el.preventDefault();
                     let dropEl = el.target;
-                    let dragstartEl = $(".t-l-product-list .dragstart")[0];
+                    let dragstartEl = document.querySelector(".t-l-product-list .dragstart");
+                    let parentEl = document.querySelector(".t-l-product-list")
+                    let newIndex = Array.prototype.indexOf.call(parentEl.children, dragstartEl);
+                    let dropIndex = Array.prototype.indexOf.call(parentEl.children, dropEl);
 
-                    if (dropEl.textContent == "") {
-                        dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
-                        dropEl.setAttribute("draggable", true)
-                        dropEl.innerHTML = dragstartEl.innerHTML;
-
-                        dragstartEl.innerHTML = "";
-                        dragstartEl.style.backgroundColor = "inherit";
+                    if (newIndex < dropIndex) {
+                        let sibling = parentEl.children[dropIndex];
+                        parentEl.insertBefore(dragstartEl, sibling);
+                        let sibling2 = parentEl.children[newIndex];
+                        parentEl.insertBefore(dropEl, sibling2)
                         dragstartEl.classList.remove("dragstart");
-                    } else {
-                        let dropElBeforeText = dropEl.innerHTML.trim();
-                        let dropElBeforeColor = dropEl.style.backgroundColor.trim();
-                        dropEl.style.backgroundColor = dragstartEl.style.backgroundColor;
-                        dropEl.setAttribute("draggable", true)
-                        dropEl.innerHTML = dragstartEl.innerHTML;
-
-                        dragstartEl.innerHTML = dropElBeforeText;
-                        dragstartEl.style.backgroundColor = dropElBeforeColor;
+                    } else if (newIndex > dropIndex) {
+                        let sibling2 = parentEl.children[newIndex];
+                        parentEl.insertBefore(dropEl, sibling2)
+                        let sibling = parentEl.children[dropIndex];
+                        parentEl.insertBefore(dragstartEl, sibling);
                         dragstartEl.classList.remove("dragstart");
                     }
                 });
