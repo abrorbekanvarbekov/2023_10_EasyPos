@@ -302,4 +302,13 @@ public interface BasicInformationDao {
             """)
     int appendProForTypeItem(String productCode, String productTypeCode, String productTypeColor, int sequenceNum);
 
+    @Update("""
+            update productType
+            set updateDate = now(),
+                sequenceNum = #{sequenceNum},
+                korName = #{proTypeName},
+                color = #{proTypeColor}
+            where code = #{proTypeCode}
+            """)
+    int updateProductTypes(int sequenceNum, String proTypeCode, String proTypeName, String proTypeColor);
 }

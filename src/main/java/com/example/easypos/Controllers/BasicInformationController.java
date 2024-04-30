@@ -344,4 +344,39 @@ public class BasicInformationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @RequestMapping("/usr/basic-information/touchKeyLocation/updateProductTypes")
+    @ResponseBody
+    public ResponseEntity updateProductTypes(@RequestParam List<String> proTypeSeqNumList,
+                                             @RequestParam List<String> proTypeCodesList,
+                                             @RequestParam List<String> proTypeNamesList,
+                                             @RequestParam List<String> proTypeColorsList) {
+
+        System.out.println(proTypeSeqNumList);
+        System.out.println(proTypeCodesList);
+        int result = basicInformationService.updateProductTypes(proTypeSeqNumList, proTypeCodesList, proTypeNamesList, proTypeColorsList);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+//        return ResponseEntity.ok().build();
+    }
+
+
+    @RequestMapping("/usr/basic-information/touchKeyLocation/updateProducts")
+    @ResponseBody
+    public ResponseEntity updateProduct(@RequestParam List<String> productSeqNumList,
+                                        @RequestParam List<String> productCodesList,
+                                        @RequestParam List<String> productColorsList,
+                                        String selectedProTypeCode) {
+
+        int result = basicInformationService.updateProducts(productCodesList, productSeqNumList, productColorsList, selectedProTypeCode);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

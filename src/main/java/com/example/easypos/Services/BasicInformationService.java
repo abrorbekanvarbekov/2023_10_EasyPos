@@ -292,4 +292,17 @@ public class BasicInformationService {
         return result;
     }
 
+    public int updateProductTypes(List<String> proTypeSeqNumList, List<String> proTypeCodesList, List<String> proTypeNamesList, List<String> proTypeColorsList) {
+        int result = 0;
+        if (proTypeCodesList.size() != 0) {
+            for (int i = 0; i < proTypeCodesList.size(); i++) {
+                int sequenceNum = Integer.parseInt(proTypeSeqNumList.get(i));
+                String proTypeCode = proTypeCodesList.get(i);
+                String proTypeName = proTypeNamesList.get(i);
+                String proTypeColor = proTypeColorsList.get(i);
+                result = basicInformationDao.updateProductTypes(sequenceNum, proTypeCode, proTypeName, proTypeColor);
+            }
+        }
+        return result;
+    }
 }

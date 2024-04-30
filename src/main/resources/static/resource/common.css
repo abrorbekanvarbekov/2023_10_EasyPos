@@ -3811,7 +3811,7 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
 .t-l-classification-info > div span:nth-child(n+3):nth-child(-n+5),
 .t-l-product-info > div span:nth-child(n+3):nth-child(-n+5) {
     width: 5%;
-    height: 56%;
+    height: 50%;
 }
 
 .t-l-product-info > div span:nth-child(7) {
@@ -3835,7 +3835,8 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
 .t-l-product-info > div input {
     outline: none;
     width: 12%;
-    height: 55%;
+    height: 50%;
+    text-align: left;
 }
 
 .t-l-classification-info > div select,
@@ -3904,6 +3905,7 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     padding: 1%;
     cursor: default;
 }
+
 
 .t-l-classification-list li:last-child,
 .t-l-product-list li:last-child {

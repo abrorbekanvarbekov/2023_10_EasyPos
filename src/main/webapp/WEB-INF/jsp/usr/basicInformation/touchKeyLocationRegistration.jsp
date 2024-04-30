@@ -14,8 +14,8 @@
                     <span class="material-symbols-outlined">search</span>
                     <span>조회</span>
                 </button>
-                <button onclick="saveChanges();" class="btn btn-active btn-sm pl-2">저장</button>
-                <button onclick="delProductTypeAndProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="saveUpdateInfo()" class="btn btn-active btn-sm pl-2">저장</button>
+                <button onclick="" class="btn btn-active btn-sm pl-2">삭제</button>
             </div>
         </div>
         <div class="touch-location-classification">
@@ -75,7 +75,7 @@
                 <span>분류명</span>
                 <input type="text" value="" class="pro-type-name-input">
                 <span>터치색</span>
-                <select class="select select-bordered select-sm w-full max-w-xs">
+                <select class="select select-bordered select-sm w-full max-w-xs" id="proType-color-selector">
                     <option value="orange">오랜지</option>
                     <option value="lightblue">연파랑</option>
                     <option value="lightgreen">연녹</option>
@@ -84,7 +84,7 @@
                     <option value="salmon">살구</option>
                     <option value="yellow">연노랑</option>
                 </select>
-                <button class="btn btn-active btn-sm pl-2">적용</button>
+                <button class="btn btn-active btn-sm pl-2" onclick="addAndUpdateProType()">적용</button>
             </div>
         </div>
         <div class="t-l-classification-box">
@@ -103,10 +103,10 @@
                 <span>분류코드</span>
                 <span class="product-code"></span>
                 <span>분류명</span>
-                <input type="text" value="" class="product-name-input">
+                <input type="submit" value="" class="product-name-input">
                 <span class="material-symbols-outlined btn btn-active btn-xs">add</span>
                 <span>터치색</span>
-                <select class="select select-bordered select-sm w-full max-w-xs">
+                <select class="select select-bordered select-sm w-full max-w-xs" id="product-color-selector">
                     <option value="orange">오랜지</option>
                     <option value="lightblue">연파랑</option>
                     <option value="lightgreen">연녹</option>
@@ -115,7 +115,7 @@
                     <option value="salmon">살구</option>
                     <option value="yellow">연노랑</option>
                 </select>
-                <button class="btn btn-active btn-sm pl-2">적용</button>
+                <button class="btn btn-active btn-sm pl-2" onclick="addAndUpdateProduct();">적용</button>
             </div>
         </div>
         <div class="t-l-product-box">
@@ -125,7 +125,13 @@
 </div>
 
 <script>
+    let selectElement1 = document.getElementById("proType-color-selector");
+    let selectElement2 = document.getElementById("product-color-selector");
+    selectElement1.selectedIndex = -1; // 선택된 옵션을 없앱니다.
+    selectElement2.selectedIndex = -1; // 선택된 옵션을 없앱니다.
+
     function getProTypeList() {
+        $(".t-l-product-list").empty();
         let searchKeyword = "";
         let widthLen = document.getElementById("proTypeWidthNum").options[document.getElementById("proTypeWidthNum").selectedIndex].value;
         let heightLen = document.getElementById("proTypeHeightNum").options[document.getElementById("proTypeHeightNum").selectedIndex].value;
@@ -137,29 +143,30 @@
                 searchKeyword: searchKeyword
             },
             function (data) {
-                if (data.length != 0) {
+                if (data.length <= itemLens) {
                     let proTypeList = "";
                     $.each(data, (idx, value) => {
                         proTypeList += `
                             <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
+                            <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
                                 \${value.code} \${value.korName}
                             </li>
                         `
                     })
+
                     if (data.length <= itemLens) {
                         for (let i = data.length + 1; i <= itemLens; i++) {
                             proTypeList += `
                             <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li style="width: \${liWidth}%" ></li>
+                            <li style="width: \${liWidth}%" sequenceNum="\${i-1}"></li>
                             `
                         }
                     }
 
                     proTypeList += `
-                        <li style="width: \${lastLiLen}%; border-left: none" >
-                            <span class="material-symbols-outlined btn btn-xs">arrow_left</span>
-                            <span class="material-symbols-outlined btn btn-xs">arrow_right</span>
+                        <li style="width: \${lastLiLen}%; border-left: none" draggable="false">
+                            <span draggable="false" class="material-symbols-outlined btn btn-xs">arrow_left</span>
+                            <span draggable="false" class="material-symbols-outlined btn btn-xs">arrow_right</span>
                         </li>
                     `
                     $(".t-l-classification-list").html(proTypeList);
@@ -201,17 +208,23 @@
                         let parentEl = document.querySelector(".t-l-classification-list")
                         let newIndex = Array.prototype.indexOf.call(parentEl.children, dragstartEl);
                         let dropIndex = Array.prototype.indexOf.call(parentEl.children, dropEl);
+                        let dropElSeqNum = dropEl.getAttribute("sequenceNum");
+                        let dragstartElSeqNum = dragstartEl.getAttribute("sequenceNum");
 
                         if (newIndex < dropIndex) {
                             let sibling = parentEl.children[dropIndex];
+                            sibling.setAttribute("sequenceNum", dragstartElSeqNum);
                             parentEl.insertBefore(dragstartEl, sibling);
                             let sibling2 = parentEl.children[newIndex];
+                            dragstartEl.setAttribute("sequenceNum", dropElSeqNum);
                             parentEl.insertBefore(dropEl, sibling2)
                             dragstartEl.classList.remove("dragstart");
                         } else if (newIndex > dropIndex) {
                             let sibling2 = parentEl.children[newIndex];
+                            dragstartEl.setAttribute("sequenceNum", dropElSeqNum);
                             parentEl.insertBefore(dropEl, sibling2)
                             let sibling = parentEl.children[dropIndex];
+                            dropEl.setAttribute("sequenceNum", dragstartElSeqNum);
                             parentEl.insertBefore(dragstartEl, sibling);
                             dragstartEl.classList.remove("dragstart");
                         }
@@ -234,10 +247,13 @@
         let proTypeCode = productType.id;
         let proTypeName = productType.getAttribute("name");
         let proTypeSeqNum = productType.getAttribute("sequenceNum");
+        let proTypeBackColor = productType.style.backgroundColor;
+
         $(".pro-type-code").html(proTypeCode);
         $(".pro-type-name").html(proTypeCode + "ㅡ" + proTypeName);
         $(".pro-type-name-input").val(proTypeName);
         $(".pro-type-sequenceNum").html(proTypeSeqNum);
+        $('#proType-color-selector').val(proTypeBackColor).prop("selected", true);
 
         let widthLen = document.getElementById("productWidthNum").options[document.getElementById("productWidthNum").selectedIndex].value;
         let heightLen = document.getElementById("productHeightNum").options[document.getElementById("productHeightNum").selectedIndex].value;
@@ -254,7 +270,7 @@
                 $.each(data, (idx, value) => {
                     productList += `
                         <span draggable="false" style="width: \${spanWidth}%"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                        <li draggable="true" style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
+                        <li class="productItem" draggable="true" style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
                             \${value.productCode} \${value.productKorName}
                         </li>
                     `
@@ -264,13 +280,13 @@
                     for (let i = data.length + 1; i <= itemLens; i++) {
                         productList += `
                             <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li style="width: \${liWidth}%"></li>
+                            <li style="width: \${liWidth}%" sequenceNum="\${i-1}"></li>
                             `
                     }
                 }
 
                 productList += `
-                        <li style="width: \${lastLiLen}%; border-left: none" >
+                        <li style="width: \${lastLiLen}%; border-left: none" draggable="false">
                             <span class="material-symbols-outlined btn btn-xs">arrow_left</span>
                             <span class="material-symbols-outlined btn btn-xs">arrow_right</span>
                         </li>
@@ -281,7 +297,7 @@
                 for (let i = 0; i <= itemLens; i++) {
                     productList += `
                             <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li style="width: \${liWidth}%"></li>
+                            <li style="width: \${liWidth}%" ></li>
                             `
                 }
 
@@ -306,10 +322,12 @@
                     let productCode = element.id;
                     let productName = element.getAttribute("name");
                     let productSeqNum = element.getAttribute("sequenceNum");
+                    let productBackColor = element.style.backgroundColor;
+
                     $(".product-code").html(productCode);
                     $(".product-name-input").val(productName);
                     $(".product-sequenceNum").html(productSeqNum);
-
+                    $("#product-color-selector").val(productBackColor).prop("selected", true);
                     element.style.borderRight = "2px solid blue";
                     element.style.borderBottom = "2px solid blue";
                     element.classList.add("checked");
@@ -335,23 +353,134 @@
                     let parentEl = document.querySelector(".t-l-product-list")
                     let newIndex = Array.prototype.indexOf.call(parentEl.children, dragstartEl);
                     let dropIndex = Array.prototype.indexOf.call(parentEl.children, dropEl);
+                    let dropElSeqNum = dropEl.getAttribute("sequenceNum");
+                    let dragstartElSeqNum = dragstartEl.getAttribute("sequenceNum");
 
                     if (newIndex < dropIndex) {
                         let sibling = parentEl.children[dropIndex];
+                        sibling.setAttribute("sequenceNum", dragstartElSeqNum);
                         parentEl.insertBefore(dragstartEl, sibling);
                         let sibling2 = parentEl.children[newIndex];
+                        dragstartEl.setAttribute("sequenceNum", dropElSeqNum);
                         parentEl.insertBefore(dropEl, sibling2)
                         dragstartEl.classList.remove("dragstart");
                     } else if (newIndex > dropIndex) {
                         let sibling2 = parentEl.children[newIndex];
+                        dragstartEl.setAttribute("sequenceNum", dropElSeqNum);
                         parentEl.insertBefore(dropEl, sibling2)
                         let sibling = parentEl.children[dropIndex];
+                        dropEl.setAttribute("sequenceNum", dragstartElSeqNum);
                         parentEl.insertBefore(dragstartEl, sibling);
                         dragstartEl.classList.remove("dragstart");
                     }
                 });
             })
         }, "json")
+    }
+
+    function addAndUpdateProType() {
+        let proTypeLength = document.querySelectorAll(".t-l-classification-list li").length
+        let selectedProType = document.querySelector(".t-l-classification-list li.checked")
+
+        if (proTypeLength != 0 && selectedProType != null) {
+            let nameToModify = document.querySelector(".t-l-classification-info > div:first-child > input").value
+            let colorToModify = document.querySelector(".t-l-classification-info > div:first-child > select")
+                .options[document.querySelector(".t-l-classification-info > div:first-child > select").selectedIndex].value;
+
+            selectedProType.setAttribute("name", nameToModify);
+            selectedProType.textContent = selectedProType.textContent.trim().substring(0, 4) + nameToModify;
+            selectedProType.style.backgroundColor = colorToModify;
+        }
+    }
+
+    function addAndUpdateProduct() {
+        let productLength = document.querySelectorAll(".t-l-product-list li").length
+        let selectedProduct = document.querySelector(".t-l-product-list li.checked")
+
+        if (productLength != 0 && selectedProduct != null) {
+            let nameToModify = document.querySelector(".t-l-product-info > div:first-child > input").value
+            let colorToModify = document.querySelector(".t-l-product-info > div:first-child > select")
+                .options[document.querySelector(".t-l-product-info > div:first-child > select").selectedIndex].value;
+
+            selectedProduct.setAttribute("name", nameToModify);
+            selectedProduct.textContent = selectedProduct.textContent.trim().substring(0, 7) + nameToModify;
+            selectedProduct.style.backgroundColor = colorToModify;
+        }
+    }
+
+    function saveUpdateInfo() {
+        let proTypeListLength = document.querySelectorAll(".t-l-classification-list li").length
+
+        if (proTypeListLength != 0) {
+            let result = confirm("저장하시겠습니까?");
+            if (result) {
+                let proTypeSeqNumList = []
+                let proTypeCodesList = []
+                let proTypeNamesList = []
+                let proTypeColorsList = []
+                document.querySelectorAll(".t-l-classification-list li.proTypeItem").forEach((element) => {
+                    proTypeSeqNumList.push(element.getAttribute("sequenceNum"));
+                    proTypeCodesList.push(element.id);
+                    proTypeNamesList.push(element.getAttribute("name"));
+                    proTypeColorsList.push(element.style.backgroundColor);
+                })
+                $.ajax({
+                    url: "/usr/basic-information/touchKeyLocation/updateProductTypes",
+                    method: "POST",
+                    data: {
+                        proTypeSeqNumList: proTypeSeqNumList.join(","),
+                        proTypeCodesList: proTypeCodesList.join(","),
+                        proTypeNamesList: proTypeNamesList.join(","),
+                        proTypeColorsList: proTypeColorsList.join(",")
+                    },
+                    success: function (data) {
+                        getProTypeList();
+                    },
+                    error: function (request, status, error) {
+
+                    },
+                    complete: function () {
+
+                    }
+                })
+
+                let productListLength = document.querySelectorAll(".t-l-product-list li").length
+
+                if (productListLength != 0) {
+                    let productSeqNumList = []
+                    let productCodesList = []
+                    let productColorsList = []
+                    let selectedProTypeCode = document.querySelector(".t-l-classification-list li.checked").id
+                    document.querySelectorAll(".t-l-product-list li.productItem").forEach((element) => {
+                        productSeqNumList.push(element.getAttribute("sequenceNum"));
+                        productCodesList.push(element.id);
+                        productColorsList.push(element.style.backgroundColor);
+                    })
+
+                    $.ajax({
+                        url: "/usr/basic-information/touchKeyManagement/updateProducts",
+                        method: "POST",
+                        data: {
+                            updateProductCodeList: productCodesList.join(","),
+                            updateProSequenceNumList: productSeqNumList.join(","),
+                            updateProductColorList: productColorsList.join(","),
+                            selectProTypeCode: selectedProTypeCode
+                        },
+                        success: function (data) {
+                            getProTypeList();
+                        },
+                        error: function (request, status, error) {
+
+                        },
+                        complete: function () {
+
+                        }
+                    })
+                }
+            } else {
+                getProTypeList();
+            }
+        }
     }
 
 </script>
