@@ -44,7 +44,7 @@
                             <span class="material-symbols-outlined">subdirectory_arrow_right</span>
                             <a href="#">터치키상품등록</a>
                         </li>
-                        <li>
+                        <li onclick="touchKeyLocation();" id="touchKeyLocation">
                             <span class="material-symbols-outlined">subdirectory_arrow_right</span>
                             <a href="#">터치키상품등록(위치)</a>
                         </li>
@@ -85,12 +85,12 @@
     </div>
 
     <%-- ====================== 상품관리  ======================== --%>
-    <%--        <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-    <%--        <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-    <%--        <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+    <%@include file="../basicInformation/salesInformationManagement.jsp" %>
+    <%@include file="../basicInformation/productSearchPage.jsp" %>
+    <%@include file="../basicInformation/productRegistrationPage.jsp" %>
 
     <%-- ====================== 터치키상품 관리  ======================== --%>
-<%--    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>--%>
+    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>
     <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>
 </div>
 
@@ -111,6 +111,9 @@
         $("#touchKeyRegistration").css("color", "#FFFFFF");
         $(".touch-product-reg").css("display", "none");
 
+        $("#touchKeyLocation").css("color", "#FFFFFF");
+        $(".touch-product-location").css("display", "none");
+
         $(".touch-product-reg").load(location.href + ' .touch-product-reg');
         $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
         $(".add-product-page").load(location.href + ' .add-product-page');
@@ -127,6 +130,9 @@
 
         $("#touchKeyRegistration").css("color", "#FFFFFF");
         $(".touch-product-reg").css("display", "none");
+
+        $("#touchKeyLocation").css("color", "#FFFFFF");
+        $(".touch-product-location").css("display", "none");
 
         $("#productLookUp").css("color", "#FBD3AD");
         $(".product-lookUp-page").css("display", "flex")
@@ -155,6 +161,9 @@
 
         $("#touchKeyRegistration").css("color", "#FFFFFF")
         $(".touch-product-reg").css("display", "none");
+
+        $("#touchKeyLocation").css("color", "#FFFFFF");
+        $(".touch-product-location").css("display", "none");
 
         $("#addProductPage").css("color", "#FBD3AD");
         $(".add-product-page").css("display", "flex")
@@ -187,6 +196,9 @@
         $("#addProductPage").css("color", "#FFFFFF");
         $(".add-product-page").css("display", "none");
 
+        $("#touchKeyLocation").css("color", "#FFFFFF");
+        $(".touch-product-location").css("display", "none");
+
         $("#touchKeyRegistration").css("color", "#FBD3AD");
         $(".touch-product-reg").css("display", "flex");
 
@@ -203,6 +215,29 @@
 
     // ==============================================================//
 
+    function touchKeyLocation() {
+        $(".basicInformation-left").css("display", "none")
+        $("#classificationManagement").css("color", "#FFFFFF");
+
+        $("#productLookUp").css("color", "#FFFFFF")
+        $(".product-lookUp-page").css("display", "none");
+
+        $("#addProductPage").css("color", "#FFFFFF");
+        $(".add-product-page").css("display", "none");
+
+        $("#touchKeyRegistration").css("color", "#FFFFFF");
+        $(".touch-product-reg").css("display", "none");
+
+        $("#touchKeyLocation").css("color", "#FBD3AD");
+        $(".touch-product-location").css("display", "flex");
+
+        $(".basicInformation-left").load(location.href + ' .basicInformation-left');
+        $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
+        $(".add-product-page").load(location.href + ' .add-product-page');
+        $(".touch-product-reg").load(location.href + ' .touch-product-reg');
+
+        $(".touch-product-location").unwrap();
+    }
 
     function mine() {
         $(event.target).select();

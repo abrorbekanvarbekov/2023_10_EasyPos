@@ -2684,13 +2684,6 @@ a {
     color: #FBD3AD;
 }
 
-/*.side-bar > .menu-box ul > li > a:not(:only-child)::after {*/
-/*    content: "[+]"*/
-/*}*/
-
-/*.side-bar > .menu-box ul > li:hover > a:not(:only-child)::after {*/
-/*    content: "[-]"*/
-/*}*/
 
 .side-bar > .menu-box > ul ul {
     display: none;
@@ -2712,7 +2705,7 @@ a {
 .product-lookUp-page,
 .add-product-page,
 .touch-product-reg {
-    display: flex;
+    display: none;
     position: relative;
     width: 98%;
     height: 92%;
@@ -2724,7 +2717,7 @@ a {
 }
 
 .touch-product-location {
-    display: flex;
+    display: none;
     position: relative;
     width: 98%;
     height: 100%;
