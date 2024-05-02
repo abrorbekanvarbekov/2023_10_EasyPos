@@ -360,7 +360,6 @@
         let smallClassificationCode = smallClassificationSelect.options[smallClassificationSelect.selectedIndex].value;
         let searchCategory = searchCategorySelect.options[searchCategorySelect.selectedIndex].textContent;
         let productName = document.querySelector(`.\${pageName} div > .product-nameOrCode-input`).value;
-
         $.get("/usr/basic-information/productSearch", {
             bigClassificationCode: bigClassificationCode,
             middleClassificationCode: middleClassificationCode,
@@ -606,7 +605,6 @@
         if (selectedEl != null) {
             let smallCName = selectedOption.options[selectedOption.selectedIndex].textContent;
             let smallCId = selectedOption.options[selectedOption.selectedIndex].id;
-
             selectedEl.children[5].textContent = smallCName;
             selectedEl.children[5].setAttribute("data-value", smallCId);
         }
@@ -695,10 +693,10 @@
                                     <span data-value="\${bigCCode}">\${bigCName}</span>
                                     <span data-value="\${middleCCode}">\${middleCName}</span>
                                     <span data-value="\${smallCCode}">\${smallCName}</span>
-                                    <span><input type="text"></span>
-                                    <span><input type="text"></span>
-                                    <span><input type="text"></span>
-                                    <span><input type="text"></span>
+                                    <span><input type="text"  onfocus="mine()"></span>
+                                    <span><input type="text"  onfocus="mine()"></span>
+                                    <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
+                                    <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
                                     <span></span>
                                 </li>
                                 `

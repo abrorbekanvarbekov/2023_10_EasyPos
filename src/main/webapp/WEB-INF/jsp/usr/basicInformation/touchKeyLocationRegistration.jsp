@@ -145,13 +145,26 @@
             function (data) {
                 if (data.length <= itemLens) {
                     let proTypeList = "";
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].sequenceNum != i) {
+                            data.splice(i, 0, "null")
+                        }
+                    }
+
                     $.each(data, (idx, value) => {
-                        proTypeList += `
-                            <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                            <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
-                                \${value.code} \${value.korName}
-                            </li>
-                        `
+                        if (value != "null") {
+                            proTypeList += `
+                                <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                                <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
+                                    \${value.code} \${value.korName}
+                                </li>
+                            `
+                        } else {
+                            proTypeList += `
+                                <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                                <li style="width: \${liWidth}%" sequenceNum="\${idx}"></li>
+                            `
+                        }
                     })
 
                     if (data.length <= itemLens) {

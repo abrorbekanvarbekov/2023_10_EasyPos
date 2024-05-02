@@ -353,15 +353,12 @@ public class BasicInformationController {
                                              @RequestParam List<String> proTypeNamesList,
                                              @RequestParam List<String> proTypeColorsList) {
 
-        System.out.println(proTypeSeqNumList);
-        System.out.println(proTypeCodesList);
         int result = basicInformationService.updateProductTypes(proTypeSeqNumList, proTypeCodesList, proTypeNamesList, proTypeColorsList);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
-//        return ResponseEntity.ok().build();
     }
 
 
