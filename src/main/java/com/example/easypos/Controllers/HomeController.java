@@ -2,6 +2,7 @@ package com.example.easypos.Controllers;
 
 import com.example.easypos.Services.HomeService;
 import com.example.easypos.Vo.*;
+import org.apache.catalina.util.ToStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,8 +98,8 @@ public class HomeController {
 
     @RequestMapping("/usr/tables/update")
     @ResponseBody
-    public String Update(int elPosX, int elPosY, int number, int floor) {
-        homeService.updateTablePos(elPosX, elPosY, number, floor);
+    public String Update(int elPosX, int elPosY, String tableName, int floor) {
+        homeService.updateTablePos(elPosX, elPosY, tableName, floor);
         return "";
     }
 

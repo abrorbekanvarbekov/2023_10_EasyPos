@@ -2,6 +2,7 @@ package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.Product;
 import com.example.easypos.Vo.ProductType;
+import com.example.easypos.Vo.Table;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -311,4 +312,10 @@ public interface BasicInformationDao {
             where code = #{proTypeCode}
             """)
     int updateProductTypes(int sequenceNum, String proTypeCode, String proTypeName, String proTypeColor);
+
+    @Select("""
+            select * from `table`
+                where `table`.floor = #{floor}
+            """)
+    List<Table> getTables(int floor);
 }

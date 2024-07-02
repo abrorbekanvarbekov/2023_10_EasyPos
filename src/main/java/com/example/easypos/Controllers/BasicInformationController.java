@@ -376,4 +376,14 @@ public class BasicInformationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    //    ============== 기타 관리 테이블 배치 ===========//
+
+    @RequestMapping("/usr/basic-information/otherManagement/tablesArrangement")
+    @ResponseBody
+    public ResponseEntity tablesArrangement(int floor) {
+        List<Table> tables = basicInformationService.getTables(floor);
+        return ResponseEntity.ok(tables);
+    }
 }

@@ -2717,7 +2717,7 @@ a {
 }
 
 .touch-product-location {
-    display: none;
+    display: flex;
     position: relative;
     width: 98%;
     height: 100%;
@@ -2733,7 +2733,8 @@ a {
 .side-bar:hover ~ .product-lookUp-page,
 .side-bar:hover ~ .add-product-page,
 .side-bar:hover ~ .touch-product-reg,
-.side-bar:hover ~ .touch-product-location {
+.side-bar:hover ~ .touch-product-location,
+.side-bar:hover ~ .other-management-page {
     left: 17%;
     width: 83%;
 }
@@ -2771,7 +2772,8 @@ a {
 .classification-top > div:nth-child(2),
 .product-lookUp-top > div:nth-child(2),
 .touch-product-reg-top > div:nth-child(2),
-.touch-product-loc-top > div:nth-child(2) {
+.touch-product-loc-top > div:nth-child(2),
+.other-management-top > div:nth-child(2) {
     display: flex;
     justify-content: end;
     align-items: center;
@@ -2782,7 +2784,8 @@ a {
 .classification-top > div:nth-child(2) > button:not(:nth-child(1)),
 .product-lookUp-top > div:nth-child(2) > button:not(:nth-child(1)),
 .touch-product-reg-top > div:nth-child(2) > button:not(:nth-child(1)),
-.touch-product-loc-top > div:nth-child(2) > button:not(:nth-child(1)) {
+.touch-product-loc-top > div:nth-child(2) > button:not(:nth-child(1)),
+.other-management-top > div:nth-child(2) > button:not(:nth-child(1)) {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
@@ -2797,7 +2800,8 @@ a {
 .classification-top > div:nth-child(2) > button:nth-child(1),
 .product-lookUp-top > div:nth-child(2) > button:nth-child(1),
 .touch-product-reg-top > div:nth-child(2) > button:nth-child(1),
-.touch-product-loc-top > div:nth-child(2) > button:nth-child(1) {
+.touch-product-loc-top > div:nth-child(2) > button:nth-child(1),
+.other-management-top > div:nth-child(2) > button:nth-child(1) {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: nowrap;
@@ -3954,4 +3958,191 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
     height: 20%;
     border-bottom: 1px solid darkgray;
     border-top: 1px solid darkgray;
+}
+
+
+/*========= Other Management ======================*/
+
+.other-management-page {
+    display: flex;
+    position: relative;
+    width: 98%;
+    height: 100%;
+    left: 2%;
+    top: 0%;
+    transition: left 0.5s, background-color 0.5s;
+    background-color: #FFFFFF;
+    cursor: default;
+}
+
+.other-management-con {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.other-management-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 6%;
+    padding: 0.5% 1%;
+    border-bottom: 1px solid rgba(169, 169, 169, .3);
+    font-size: clamp(0.7rem, 1vw, 2rem);
+}
+
+.other-management-main {
+    display: flex;
+    width: 80%;
+    height: 80%;
+    margin: 1%;
+}
+
+.other-management-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 100%;
+    margin-right: 0.3%;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+}
+
+.other-management-buttons > div:first-child {
+    width: 100%;
+    height: 5%;
+    text-align: end;
+}
+
+.other-management-buttons > div:nth-child(2) {
+    width: 100%;
+    height: 23%;
+    margin: 1%;
+    border-top: 2px solid red;
+}
+
+.other-management-buttons > div:nth-child(2) > div:nth-child(1) {
+    display: flex;
+    width: 100%;
+    height: 23%;
+    background-color: #E7E9EE;
+}
+
+.other-management-buttons > div:nth-child(2) > div:nth-child(1) > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    border-right: 1px solid darkgray;
+}
+
+.other-management-buttons > div:nth-child(2) > div:not(:nth-child(1)) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 20%;
+    padding: 1%;
+}
+
+
+.other-management-buttons > div:nth-child(2) > div:not(:nth-child(1)) > input {
+    width: 48%;
+    height: 98%;
+    outline: none;
+    border: 1px solid #E7E9EE;
+}
+
+.other-management-buttons > div:nth-child(2) > div:not(:nth-child(1)) > select {
+    width: 48%;
+    height: 98%;
+    outline: none;
+    border: 1px solid #E7E9EE;
+}
+
+.other-management-buttons > div:nth-child(3) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60%;
+}
+
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    height: 100%;
+}
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(1) button {
+    color: black;
+    background-color: #E7E9ED;
+    font-size: clamp(0.7rem, .9vw, 2rem);
+}
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    height: 100%;
+}
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(2) div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 6%;
+}
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(2) > span:not(:nth-child(4)) {
+    width: 100%;
+    height: 5%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.other-management-buttons > div:nth-child(3) > div:nth-child(2) > span:nth-child(4) {
+    width: 40%;
+    height: 12%;
+    border: 1px solid gray;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30%;
+}
+
+.other-management-tables {
+    display: flex;
+    position: relative;
+    width: 80%;
+    height: 100%;
+    border: 1px dashed gray;
+}
+
+.other-management-tables > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 11%;
+}
+
+.other-management-tables > li:nth-child(1) {
+    top: 0;
+    left: 10px;
+    /*background-color: #2B7ABB;*/
+}
+
+.other-management-tables > li:nth-child(2) {
+    top: 100px;
+    left: 80px;
+    /*background-color: #FBD3AD;*/
+}
+
+.other-management-tables > li:nth-child(3) {
+    top: 50px;
+    left: 60px;
+    /*background-color: #575B6D;*/
 }

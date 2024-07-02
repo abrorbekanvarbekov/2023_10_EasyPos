@@ -3,6 +3,7 @@ package com.example.easypos.Services;
 import com.example.easypos.DAO.BasicInformationDao;
 import com.example.easypos.Vo.Product;
 import com.example.easypos.Vo.ProductType;
+import com.example.easypos.Vo.Table;
 import com.example.easypos.VoBasicInformation.productBigClassification;
 import com.example.easypos.VoBasicInformation.productMiddleClassification;
 import com.example.easypos.VoBasicInformation.productSmallClassification;
@@ -304,5 +305,10 @@ public class BasicInformationService {
             }
         }
         return result;
+    }
+
+    //    =========== 테이블 배치 ===================//
+    public List<Table> getTables(int floor) {
+        return basicInformationDao.getTables(floor);
     }
 }

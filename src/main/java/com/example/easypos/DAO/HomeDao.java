@@ -62,10 +62,10 @@ public interface HomeDao {
             set updateDate = now(),
                 `left` = #{elPosX},
                  top = #{elPosY}
-            where number = #{number}
+            where tableName = #{tableName}
             and floor = #{floor}
             """)
-    void updateTablePos(int elPosX, int elPosY, int number, int floor);
+    void updateTablePos(int elPosX, int elPosY, String tableName, int floor);
 
     // ==============================================================//
     List<Integer> getPayedTotalAmount(String floor, String openingDate);

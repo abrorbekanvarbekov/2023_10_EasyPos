@@ -41,8 +41,8 @@ public class HomeService {
 
     // ==============================================================//
 
-    public void updateTablePos(int elPosX, int elPosY, int number, int floor) {
-        homeDao.updateTablePos(elPosX, elPosY, number, floor);
+    public void updateTablePos(int elPosX, int elPosY, String tableName, int floor) {
+        homeDao.updateTablePos(elPosX, elPosY, tableName, floor);
     }
 
     // ==============================================================//

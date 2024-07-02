@@ -48,7 +48,7 @@ if (HomeContainer != null) {
         $.get('/usr/tables/update', {
             elPosX: tableEl.offsetLeft,
             elPosY: tableEl.offsetTop,
-            number: tableId.substring(tableId.indexOf("_") + 1),
+            tableName: tableId,
             floor: floor
         }, function (data) {
             console.log("성공")

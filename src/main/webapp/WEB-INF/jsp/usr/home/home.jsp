@@ -20,22 +20,22 @@
 <div class="container- homeRightFeed">
     <div class="tables-box">
         <c:forEach var="table" items="${tables}">
-            <a href="usr/tables/detail?tabId=${table.number}&floor=${param.floor}"
-               class="tables text-sm" id="table_${table.number}"
+            <a href="usr/tables/detail?tabId=${table.tableName}&floor=${param.floor}"
+               class="tables text-sm" id="${table.tableName}"
                draggable="true"
                floor="${floor}"
                style="width: ${table.width}; height: ${table.height}; top: ${table.top}; left: ${table.left}">
-                <div class="tableGroupNum" id="groupNum_${table.number}"></div>
-                <div class="flex flex-col h-full w-full items-center mt-2 overflow-hidden" id="${table.number}">
-                    <span class="${cartItems != null ? "text-red-400" : ""}">${table.number}번</span>
+                <div class="tableGroupNum" id="groupNum_${table.tableName}"></div>
+                <div class="flex flex-col h-full w-full items-center mt-2 overflow-hidden" id="${table.tableName}">
+                    <span class="${cartItems != null ? "text-red-400" : ""}">${table.tableName}</span>
                     <c:forEach var="priceSum" items="${priceSumList}">
-                        <c:if test="${priceSum.table_id == table.number}">
+                        <c:if test="${priceSum.table_id == table.tableName}">
                             <span class="text-blue-400 asd"
-                                  id="table_${table.number}sumPrice">${priceSum.priceSum}</span>
+                                  id="table_${table.tableName}sumPrice">${priceSum.priceSum}</span>
                         </c:if>
                     </c:forEach>
                     <c:forEach var="cartItem" items="${cartItems}">
-                        <c:if test="${cartItem.table_id==table.number}">
+                        <c:if test="${cartItem.table_id==table.tableName}">
                             <div>
                                 <span class="pr-2">${cartItem.productName}</span>
                                 <span>${cartItem.quantity}</span>
