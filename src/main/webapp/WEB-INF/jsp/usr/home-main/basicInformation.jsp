@@ -85,13 +85,16 @@
     </div>
 
     <%-- ====================== 상품관리  ======================== --%>
-<%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-<%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-<%--    <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
+    <%--        <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
 
-<%--    &lt;%&ndash; ====================== 터치키상품 관리  ======================== &ndash;%&gt;--%>
-<%--    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>--%>
-<%--    <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>--%>
+    <%--    &lt;%&ndash; ====================== 터치키상품 관리  ======================== &ndash;%&gt;--%>
+    <%--    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>--%>
+    <%--    <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>--%>
 
     <%-- ====================== 기타 관리  ======================== --%>
     <%@include file="../basicInformation/otherManagement.jsp" %>

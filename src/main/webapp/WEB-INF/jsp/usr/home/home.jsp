@@ -27,7 +27,7 @@
                style="width: ${table.width}; height: ${table.height}; top: ${table.top}; left: ${table.left}">
                 <div class="tableGroupNum" id="groupNum_${table.tableName}"></div>
                 <div class="flex flex-col h-full w-full items-center mt-2 overflow-hidden" id="${table.tableName}">
-                    <span class="${cartItems != null ? "text-red-400" : ""}">${table.tableName}</span>
+                    <span class="${cartItems != null ? "text-red-400" : ""}">${table.tableName}번</span>
                     <c:forEach var="priceSum" items="${priceSumList}">
                         <c:if test="${priceSum.table_id == table.tableName}">
                             <span class="text-blue-400 asd"

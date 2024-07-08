@@ -38,7 +38,7 @@ public class OrderController {
 
     @RequestMapping("/usr/tables/detail")
     public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, @RequestParam(defaultValue = "1") int page, Model model) {
-
+        System.out.println(tabId);
         int tabNum = Integer.parseInt(tabId);
 
         if (floor <= 0 || floor > 3) {

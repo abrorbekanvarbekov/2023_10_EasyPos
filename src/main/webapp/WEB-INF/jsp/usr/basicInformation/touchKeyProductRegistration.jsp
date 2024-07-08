@@ -730,7 +730,11 @@
 
                 $(`.search-pro-list-container`).html(productListItem);
 
+<<<<<<< HEAD
                 clickEventForSearchProList("search-pro-list-container", "product");
+=======
+                clickEventForProType("search-pro-list-container", "product");
+>>>>>>> parent of 128e99e (detail page 기능들 재들 재적화 했음)
                 let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
 
                 scrollToSelectedItem(listItemFirstItem)
