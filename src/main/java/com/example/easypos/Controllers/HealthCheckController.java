@@ -30,7 +30,7 @@ public class HealthCheckController {
     }
 
     @GetMapping("/env")
-    public ResponseEntity<?> getEnv(){
-        return ResponseEntity.ok(env);
+    public String getEnv(){
+        return "/usr/member/loginPage";
     }
 }
