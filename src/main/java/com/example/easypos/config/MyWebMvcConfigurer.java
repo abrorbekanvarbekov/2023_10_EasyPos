@@ -41,7 +41,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/usr/tables/orderPage/payByCash")
                 .addPathPatterns("/usr/home-main/deadlineSettlement");
         registry.addInterceptor(needEmployeeLoginInterceptor)
-                .addPathPatterns("/")
+//                .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
                 .addPathPatterns("/usr/tables/detail")
                 .addPathPatterns("/usr/home/homeMainPage")
