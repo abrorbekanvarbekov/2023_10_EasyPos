@@ -2,13 +2,15 @@ package com.example.easypos.Controllers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-@RestController
+@Controller
 public class HealthCheckController {
     @Value("${server.env}")
     private String env;
@@ -29,8 +31,8 @@ public class HealthCheckController {
         return ResponseEntity.ok(responseData);
     }
 
-    @GetMapping("/env")
-    public ResponseEntity<?> getEnv(){
-        return ResponseEntity.ok(env);
+    @RequestMapping("/env")
+    public String getEnv(){
+        return "/usr/test/test";
     }
 }
