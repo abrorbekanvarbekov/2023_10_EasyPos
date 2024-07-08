@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Controller
+@RestController
 public class HealthCheckController {
     @Value("${server.env}")
     private String env;
@@ -31,8 +31,8 @@ public class HealthCheckController {
         return ResponseEntity.ok(responseData);
     }
 
-    @RequestMapping("/env")
-    public String getEnv(){
-        return "/usr/test/test";
+    @GetMapping("/env")
+    public ResponseEntity<?> getEnv(){
+        return ResponseEntity.ok(env);
     }
 }
