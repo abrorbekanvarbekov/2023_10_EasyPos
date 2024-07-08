@@ -30,7 +30,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/favicon.ico")
                 .excludePathPatterns("/resource/**");
         registry.addInterceptor(needLoginInterceptor)
-                .addPathPatterns("/")
+//                .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
                 .addPathPatterns("/usr/member/employeeListPage")
                 .addPathPatterns("/usr/tables/detail")
