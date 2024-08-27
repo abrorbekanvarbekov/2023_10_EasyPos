@@ -16,9 +16,9 @@ public class paymentCreditCardAndCash {
     private int tabId;
     private int floor;
     private int totalAmount;
-    private int CartAmountPaid;
-    private int sumCartAmountPaid;
-    private int CashAmountPaid;
+    private int cardAmountPaid;
+    private int sumCardAmountPaid;
+    private int cashAmountPaid;
     private int sumCashAmountPaid;
     private int discountAmount;
     private int cart_id;

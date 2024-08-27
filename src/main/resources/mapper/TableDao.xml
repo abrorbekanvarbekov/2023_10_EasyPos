@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.easypos.DAO.HomeDao">
     <select id="getPayedTotalAmount" resultType="int">
-        select ifnull(sum(payCard.CartAmountPaid), 0)
+        select ifnull(sum(payCard.CardAmountPaid), 0)
         from paymentCreditCardAndCash as payCard
         <if test="floor == '전체'">
             where payCard.isReturn = 0
@@ -49,7 +49,7 @@
     </select>
 
     <select id="getPayedTotalCnt" resultType="int">
-        select ifnull(count(case when payCard.CartAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
+        select ifnull(count(case when payCard.CardAmountPaid > 0 then 1 end), 0) as cartPaidAllCtn
         from paymentCreditCardAndCash as payCard
         <if test="floor == '전체'">
             where payCard.isReturn = 0
@@ -119,7 +119,7 @@
     </select>
 
     <select id="getNumberOfReturns" resultType="int">
-        select ifnull(count(case when payCard.CartAmountPaid > 0 then 1 end), 0) as returnItemCnt
+        select ifnull(count(case when payCard.CardAmountPaid > 0 then 1 end), 0) as returnItemCnt
         from paymentCreditCardAndCash as payCard
         <if test="floor == '전체'">
             where payCard.isReturn = 1
@@ -165,7 +165,7 @@
     </select>
 
     <select id="getAmountOfReturns" resultType="int">
-        select ifnull(sum(payCard.CartAmountPaid), 0)
+        select ifnull(sum(payCard.CardAmountPaid), 0)
         from paymentCreditCardAndCash as payCard
         <if test="floor == '전체'">
             where payCard.isReturn = 1

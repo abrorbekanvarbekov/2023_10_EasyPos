@@ -21,5 +21,4 @@ public class ProductType {
     private String engName;
     private String authDivision;
     private String color;
-    private ArrayList<String> colorList;
 }

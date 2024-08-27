@@ -83,8 +83,8 @@
                         현금결제 : ${paymentCash.cashAmountPaid} <br>
                     </c:forEach>
 
-                    <c:forEach var="paymentCart" items="${paymentCartList}">
-                        카드결제 : ${paymentCart.cartAmountPaid} <br>
+                    <c:forEach var="paymentCard" items="${paymentCardList}">
+                        카드결제 : ${paymentCard.cardAmountPaid} <br>
                     </c:forEach>
                 </div>
             </div>

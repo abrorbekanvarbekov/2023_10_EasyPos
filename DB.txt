@@ -6,154 +6,30 @@ create table `table`
 (
     id          int unsigned     not null primary key auto_increment,
     regDate     datetime         not null,
-    updateDate  datetime         not null,
-    `number`    int unsigned     not null,
+    updateDate  datetime,
+    tableName   varchar(30)      not null,
     width       int unsigned     not null,
     height      int unsigned     not null,
     `left`      int unsigned     not null,
     `top`       int unsigned     not null,
     `authLevel` tinyint unsigned not null default 1 comment '권한 라벨 (일반 = 1, 관리자 = 3)',
+    floor       int unsigned     not null,
+    bgColor     varchar(50)      not null default '#BFE4FF',
     delStatus   tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
     delDate     datetime comment '삭제 날짜'
 );
 
-alter table `table`
-    add column floor int unsigned not null;
 
 insert into `table`
 set regDate    = now(),
     updateDate = now(),
-    `number`   = 1,
+    tableName  = 1,
     width      = 100,
     height     = 100,
     `left`     = 0,
     top        = 0,
-    floor      = 1;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 2,
-    width      = 100,
-    height     = 100,
-    `left`     = 120,
-    top        = 0,
-    floor      = 1;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 3,
-    width      = 100,
-    height     = 100,
-    `left`     = 240,
-    top        = 0,
-    floor      = 1;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 4,
-    width      = 100,
-    height     = 100,
-    `left`     = 360,
-    top        = 0,
-    floor      = 1;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 1;
-
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 2;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 2;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 2;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 2;
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 2;
-
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 3;
-
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 3;
-
-
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    `number`   = 5,
-    width      = 100,
-    height     = 100,
-    `left`     = 480,
-    top        = 0,
-    floor      = 3;
-
+    floor      = 1,
+    bgColor    = '#BFE4FF';
 
 
 create table productType
@@ -161,12 +37,12 @@ create table productType
     id           int unsigned     not null primary key auto_increment,
     regDate      datetime         not null,
     updateDate   datetime         not null,
+    sequenceNum  int              not null,
     `code`       varchar(50)      not null,
-    korName      varchar(100)     not null,
-    engName      varchar(100)     not null,
-    authDivision varchar(100)     not null,
+    korName      varchar(50)      not null,
+    engName      varchar(50)      not null,
+    authDivision varchar(50)      not null,
     color        varchar(50)      not null,
-    colorList    json             not null,
     delStatus    tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
     delDate      datetime comment '삭제 날짜'
 );
@@ -176,93 +52,11 @@ insert into productType
 set regDate      = now(),
     updateDate   = now(),
     `code`       = lpad(1, '3', '0'),
+    sequenceNum  = 0,
     korName      = '메인메뉴/주류',
     engName      = '',
     authDivision = '매장',
-    color        = '연녹',
-    colorList    = '[
-      "오랜지",
-      "연노랑",
-      "연파란",
-      "핑크",
-      "실구",
-      "연녹",
-      "연빨강"
-    ]';
-
-insert into productType
-set regDate      = now(),
-    updateDate   = now(),
-    `code`       = lpad(2, '3', '0'),
-    korName      = '사이드메뉴',
-    engName      = '',
-    authDivision = '매장',
-    color        = '핑크',
-    colorList    = '[
-      "오랜지",
-      "연노랑",
-      "연파란",
-      "핑크",
-      "실구",
-      "연녹",
-      "연빨강"
-    ]';
-
-insert into productType
-set regDate      = now(),
-    updateDate   = now(),
-    `code`       = lpad(3, '3', '0'),
-    korName      = '세트메뉴',
-    engName      = '',
-    authDivision = '매장',
-    color        = '연파랑',
-    colorList    = '[
-      "오랜지",
-      "연노랑",
-      "연파랑",
-      "핑크",
-      "실구",
-      "연녹",
-      "연빨강"
-    ]';
-
-
-insert into productType
-set regDate      = now(),
-    updateDate   = now(),
-    `code`       = lpad(4, '3', '0'),
-    korName      = '막걸리/제조과일소주',
-    engName      = '',
-    authDivision = '매장',
-    color        = '연노랑',
-    colorList    = '[
-      "오랜지",
-      "연노랑",
-      "연파란",
-      "핑크",
-      "실구",
-      "연녹",
-      "연빨강"
-    ]';
-
-
-insert into productType
-set regDate      = now(),
-    updateDate   = now(),
-    `code`       = lpad(5, '3', '0'),
-    korName      = '사케/증류식/하이볼',
-    engName      = '',
-    authDivision = '매장',
-    color        = '오랜지',
-    colorList    = '[
-      "오랜지",
-      "연노랑",
-      "연파란",
-      "핑크",
-      "실구",
-      "연녹",
-      "연빨강"
-    ]';
+    color        = 'lightgreen';
 
 
 create table product
@@ -271,23 +65,16 @@ create table product
     regDate                  datetime         not null,
     updateDate               datetime         not null,
     productCode              varchar(50)      not null,
-    bigClassificationName    varchar(100)     not null,
-    middleClassificationName varchar(100)     not null,
-    smallClassificationName  varchar(100)     not null,
-    productKorName           varchar(100)     not null,
-    productEngName           varchar(100)     not null default '',
+    bigClassificationCode    varchar(20)      not null,
+    middleClassificationCode varchar(20)      not null,
+    smallClassificationCode  varchar(20)      not null,
+    productKorName           varchar(50)      not null,
+    productEngName           varchar(50)      not null default '',
     price                    int              not null,
     costPrice                int              not null default 0,
     delStatus                tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
     delDate                  datetime comment '삭제 날짜'
 );
-
-alter table product
-    change column bigClassificationName bigClassificationCode varchar(100) not null;
-alter table product
-    change column middleClassificationName middleClassificationCode varchar(100) not null;
-alter table product
-    change column smallClassificationName smallClassificationCode varchar(100) not null;
 
 
 insert into product
@@ -302,85 +89,40 @@ set regDate                  = now(),
     price                    = 25000,
     costPrice                = 0;
 
-select *
-from productType;
-
 
 
 create table Cart
 (
-    id         int unsigned not null primary key auto_increment,
-    regDate    datetime     not null,
-    updateDate datetime     not null,
-    cart_id    int unsigned not null
+    id          int unsigned not null primary key auto_increment,
+    regDate     datetime     not null,
+    updateDate  datetime     not null,
+    tabId       int unsigned not null,
+    floor       int unsigned not null,
+    openingDate varchar(50)  not null,
+    delStatus   int unsigned not null default 0,
+    delDate     datetime     null
 );
+
 
 create table CartItems
 (
-    id         int unsigned     not null primary key auto_increment,
-    regDate    datetime         not null,
-    updateDate datetime         not null,
-    product_id int              not null,
-    table_id   int              not null,
-    quantity   int              not null,
-    delStatus  tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
-    delDate    datetime comment '삭제 날짜'
+    id               int unsigned     not null primary key auto_increment,
+    regDate          datetime         not null,
+    updateDate       datetime         not null,
+    openingDate      varchar(50)      not null,
+    product_id       int              not null,
+    table_id         int              not null,
+    productSailPrice int              not null,
+    productName      varchar(50)      not null,
+    productSumPrice  int              not null,
+    productPrice     int              not null,
+    floor_id         int              not null,
+    quantity         int              not null,
+    cart_id          int              not null,
+    isReturn         int              not null default 0,
+    delStatus        tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
+    delDate          datetime comment '삭제 날짜'
 );
-
-alter table CartItems
-    add column floor_id int not null after table_id;
-
-alter table CartItems
-    add column productPrice int not null after table_id;
-
-alter table CartItems
-    add column productSumPrice int not null after table_id;
-
-alter table CartItems
-    add column productName varchar(200) not null after table_id;
-
-alter table CartItems
-    add column productSailPrice varchar(200) not null after table_id;
-
-alter table CartItems
-    add column cart_id int not null;
-
-alter table CartItems
-    add column cart_id int not null;
-
-alter table CartItems
-    add column isReturn int not null default 0 comment '( 0 ) 은 반품 안된거, ( 1 )은 반품 된거, ( 2 )은 반품전 상태';
-
-insert into CartItems
-set regDate    = now(),
-    updateDate =now(),
-    product_id = 1,
-    table_id   = 3,
-    quantity   = 1;
-
-
-insert into CartItems
-set regDate    = now(),
-    updateDate =now(),
-    product_id = 3,
-    table_id   = 3,
-    quantity   = 1;
-
-
-insert into CartItems
-set regDate    = now(),
-    updateDate =now(),
-    product_id = 7,
-    table_id   = 1,
-    quantity   = 1;
-
-
-update CartItems
-set updateDate = now(),
-    quantity   = quantity + 1
-where table_id = 2
-  and product_id = 1
-  and floor_id = 1;
 
 
 create table tableGroup
@@ -395,79 +137,53 @@ create table tableGroup
     delDate    datetime comment '삭제 날짜'
 );
 
-insert into tableGroup
-set regDate    = now(),
-    updateDate =now(),
-    groupNum   = tableGroup.id,
-    tableCnt   = 0,
-    color      = 'rgb(50,50,50)';
-
 
 create table paymentCash
 (
     id              int unsigned not null primary key auto_increment,
     regDate         datetime     not null,
     updateDate      datetime     not null,
+    openingDate     varchar(50)  not null,
     tabId           int          not null,
     floor           int          not null,
     cashTotalAmount int          not null,
     cashAmountPaid  int          not null,
-    discountAmount  int          not null
+    discountAmount  int          not null default 0,
+    cart_id         int          not null
 );
 
-alter table paymentCash
-    add column cart_id int not null;
 
-create table paymentCreditCart
+create table paymentCreditCard
 (
     id                    int unsigned not null primary key auto_increment,
     regDate               datetime     not null,
     updateDate            datetime     not null,
+    openingDate           varchar(50)  not null,
     tabId                 int          not null,
     floor                 int          not null,
-    cartTotalAmount       int          not null,
-    cartAmountPaid        int          not null,
-    discountAmount        int          not null,
-    payByCreditCartNumber varchar(250) not null
+    cardTotalAmount       int          not null,
+    cardAmountPaid        int          not null,
+    discountAmount        int          not null default 0,
+    cart_id               int          not null,
+    payByCreditCardNumber varchar(250) not null
 );
 
-alter table paymentCreditCart
-    add column cart_id int not null;
 
-alter table paymentCreditCart
-    add column payByCreditCartNumber varchar(350) not null;
-
-create table paymentCreditCartAndCash
+create table paymentCreditCardAndCash
 (
     id                    int unsigned not null primary key auto_increment,
     regDate               datetime     not null,
     updateDate            datetime     not null,
+    openingDate           varchar(50)  not null,
     tabId                 int          not null,
     floor                 int          not null,
     totalAmount           int          not null,
-    CartAmountPaid        int          not null,
-    CashAmountPaid        int          not null,
-    discountAmount        int          not null,
-    payByCreditCartNumber varchar(250) not null
-);
-
-alter table paymentCreditCartAndCash
-    add column cart_id int not null;
-
-
-alter table paymentCreditCartAndCash
-    add column isReturn int not null default 0 comment '( 0 ) 은 반품 안된거, ( 1 )은 반품 된거, ( 2 )은 반품전 상태';
-
-
-create table Cart
-(
-    id         int unsigned     not null primary key auto_increment,
-    regDate    datetime         not null,
-    updateDate datetime         not null,
-    tabId      int              not null,
-    floor      int              not null,
-    delStatus  tinyint unsigned not null default 0 comment '삭제여부 (삭제 전  = 0, 삭제 후 = 1)',
-    delDate    datetime comment '삭제 날짜'
+    CardAmountPaid        int          not null default 0,
+    CashAmountPaid        int          not null default 0,
+    discountAmount        int          not null default 0,
+    payByCreditCardNumber varchar(250) not null,
+    cart_id               int          not null,
+    isReturn              int          not null default 0 comment '( 0 ) 은 반품 안된거, ( 1 )은 반품 된거, ( 2 )은 반품전 상태'
 );
 
 
@@ -486,6 +202,7 @@ create table member
     delDate      datetime                   null comment '회원 탈퇴 날짜'
 );
 
+
 create table employee
 (
     id           int unsigned auto_increment primary key,
@@ -503,33 +220,24 @@ create table employee
 );
 
 
-insert into employee
-set regDate      =now(),
-    updateDate   = now(),
-    userId       = 1,
-    employeeCode = 421707,
-    employeePw   = '17b67ae8e7253331881d28e6e8f42ca6fade68f325fedc0f528ecbdb10304bf7',
-    `name`       = '사이드',
-    cellphoneNum = '010-8210-8335',
-    email        = 'said@gmail.com';
-
-
 create table deadlineSettlement
 (
-    id              int unsigned auto_increment primary key,
-    businessDate    varchar(100) not null,
-    updateDate      datetime     not null,
-    openingDate     varchar(100) not null,
-    employeeName    varchar(100) not null,
-    employeeCode    varchar(100) not null,
-    totalSales      int          not null,
-    totalSalesCount int          not null,
-    discountAmount  int          not null,
-    VAT             int          not null,
-    NETSales        int          not null,
-    amountOfReturns int          not null,
-    paidByCash      int          not null,
-    paidByCart      int          not null
+    id                int unsigned auto_increment primary key,
+    openingDate       varchar(50) not null,
+    closeDate         datetime    not null,
+    updateDate        datetime,
+    openEmployeeName  varchar(50) not null,
+    openEmployeeCode  varchar(50) not null,
+    closeEmployeeName varchar(50) not null,
+    closeEmployeeCode varchar(50) not null,
+    totalSales        int         not null,
+    totalSalesCount   int         not null,
+    discountAmount    int         not null,
+    VAT               int         not null,
+    NETSales          int         not null,
+    amountOfReturns   int         not null,
+    paidByCash        int         not null,
+    paidByCard        int         not null
 );
 
 
@@ -554,6 +262,7 @@ select now(), now(), '001', '테스트', count(middle.id)
 from productMiddleClassification as middle
 where middle.bigClassificationCode = '001';
 
+
 create table productMiddleClassification
 (
     id                       int unsigned auto_increment primary key,
@@ -574,6 +283,7 @@ insert into productMiddleClassification(regDate, updateDate, bigClassificationCo
 select now(), now(), '001', '001', '미들테스트', count(small.id)
 from productSmallClassification as small
 where small.middleClassificationCode = '001';
+
 
 
 create table productSmallClassification
@@ -601,47 +311,3 @@ set regDate                  = now(),
     productCnt               = 0;
 
 
-update product
-set smallClassificationName = '003'
-where smallClassificationName = '주류메뉴';
-
-select *
-from product;
-
-select p.id,
-       p.productCode,
-       p.productKorName,
-       p.productEngName,
-       p.price,
-       p.costPrice,
-       pBC.bigClassificationName    as bigClassificationName,
-       pBC.bigClassificationCode    as bigClassificationCode,
-       pMC.middleClassificationName as middleClassificationName,
-       pMC.middleClassificationCode as middleClassificationCode,
-       pSC.smallClassificationName  as smallClassificationName,
-       pSC.smallClassificationCode  as smallClassificationCode
-from product as p
-         inner join productBigClassification as pBC on p.bigClassificationCode = pBC.bigClassificationCode
-         inner join productMiddleClassification pMC on p.bigClassificationCode = pMC.bigClassificationCode
-    and p.middleClassificationCode = pMC.middleClassificationCode
-         inner join productSmallClassification pSC on p.bigClassificationCode = pSC.bigClassificationCode
-    and p.middleClassificationCode = pSC.middleClassificationCode
-    and p.smallClassificationCode = pSC.smallClassificationCode;
-
-
-insert into product
-set regDate                  = now(),
-    updateDate               = now(),
-    productCode              = lpad(16, '6', '0'),
-    bigClassificationCode    = '001',
-    middleClassificationCode = '002',
-    smallClassificationCode  = '001',
-    productKorName           = '치즈라볶이',
-    productEngName           = '',
-    price                    = 25000,
-    costPrice                = 0;
-
-
-select *
-from productSmallClassification
-order by id ASC;

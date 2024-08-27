@@ -38,7 +38,6 @@ public class OrderController {
 
     @RequestMapping("/usr/tables/detail")
     public String Detail(String tabId, @RequestParam(defaultValue = "1") int floor, @RequestParam(defaultValue = "1") int page, Model model) {
-        System.out.println(tabId);
         int tabNum = Integer.parseInt(tabId);
 
         if (floor <= 0 || floor > 3) {
@@ -77,11 +76,11 @@ public class OrderController {
 
         if (cart != null) {
             List<paymentCash> paymentCashList = orderService.getPaymentCashList(tabNum, floor, cart.getId(), rq.getOpeningDate());
-            List<paymentCreditCard> paymentCartList = orderService.getPaymentCartList(tabNum, floor, cart.getId(), rq.getOpeningDate());
+            List<paymentCreditCard> paymentCardList = orderService.getPaymentCartList(tabNum, floor, cart.getId(), rq.getOpeningDate());
 
-            if (paymentCartList.size() != 0 || paymentCashList.size() != 0) {
+            if (paymentCardList.size() != 0 || paymentCashList.size() != 0) {
                 model.addAttribute("paymentCashList", paymentCashList);
-                model.addAttribute("paymentCartList", paymentCartList);
+                model.addAttribute("paymentCardList", paymentCardList);
             }
         }
 

@@ -125,11 +125,10 @@
 </div>
 
 <script>
-    let selectElement1 = document.getElementById("proType-color-selector");
-    let selectElement2 = document.getElementById("product-color-selector");
-    selectElement1.selectedIndex = -1; // 선택된 옵션을 없앱니다.
-    selectElement2.selectedIndex = -1; // 선택된 옵션을 없앱니다.
-
+    // let selectElement1 = document.getElementById("proType-color-selector");
+    // let selectElement2 = document.getElementById("product-color-selector");
+    // selectElement1.selectedIndex = -1; // 선택된 옵션을 없앱니다.
+    // selectElement2.selectedIndex = -1; // 선택된 옵션을 없앱니다.
     function getProTypeList() {
         $(".t-l-product-list").empty();
         let searchKeyword = "";
@@ -155,7 +154,9 @@
                         if (value != "null") {
                             proTypeList += `
                                 <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
-                                <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"  id="\${value.code}" onclick="getProList(this)">
+                                <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%"
+                                    sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"
+                                    id="\${value.code}" onclick="getProList(this)">
                                     \${value.code} \${value.korName}
                                 </li>
                             `

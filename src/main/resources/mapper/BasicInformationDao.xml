@@ -37,7 +37,7 @@
         order by id ASC
     </select>
 
-    <select id="getProductList" resultType="Product">
+    <select id="getProductList" resultType="product">
         select p.id, p.productCode, p.productKorName, p.productEngName, p.price, p.costPrice,
         pBC.bigClassificationName as bigClassificationName,
         pBC.bigClassificationCode as bigClassificationCode,

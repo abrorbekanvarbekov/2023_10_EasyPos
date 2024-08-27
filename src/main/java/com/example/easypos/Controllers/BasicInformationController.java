@@ -264,12 +264,11 @@ public class BasicInformationController {
     @ResponseBody
     public ResponseEntity updateProTypeSequenceNum(@RequestParam List<String> proTypeCodeList,
                                                    @RequestParam List<String> proTypeSequenceNumLIst) {
-
         int result = basicInformationService.updateProTypeSequenceNum(proTypeCodeList, proTypeSequenceNumLIst);
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -277,12 +276,12 @@ public class BasicInformationController {
     @RequestMapping("/usr/basic-information/touchKeyManagement/delProductTypes")
     @ResponseBody
     public ResponseEntity delProductTypes(@RequestParam List<String> delProTypeIdList) {
+        System.out.println(delProTypeIdList);
         int result = basicInformationService.delProductTypes(delProTypeIdList);
-
         if (result == 1) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

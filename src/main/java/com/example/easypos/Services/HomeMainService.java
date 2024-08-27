@@ -20,8 +20,8 @@ public class HomeMainService {
         this.homeMainDao = homeMainDao;
     }
 
-    public List<paymentCreditCardAndCash> getPaymentCartAndCashList(String openingDate, String floor) {
-        return homeMainDao.getPaymentCartAndCashList(openingDate, floor);
+    public List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate,String endDate, String floor) {
+        return homeMainDao.getPaymentCartAndCashList(beginDate, endDate, floor);
     }
 
     public List<CartItems> getCartItemsByCart_id(int cartId, String openingDate) {
@@ -75,9 +75,9 @@ public class HomeMainService {
     }
 
     public void insertDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
-                                         int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
+                                         int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard) {
         homeMainDao.insertDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
-                discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
     }
 
     public deadlineSettlement getDeadlineSettlement(String openingDate) {
@@ -85,9 +85,9 @@ public class HomeMainService {
     }
 
     public void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
-                                         int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
+                                         int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard) {
         homeMainDao.updateDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
-                discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
     }
 
     public void removeLeftCartItem(String businessDate) {

@@ -22,7 +22,7 @@ public class CartItems {
     private int productSailPrice;
     private int cart_id;
     private int floor_id;
-    private int cartAmountPaid;
+    private int cardAmountPaid;
     private int cashAmountPaid;
     private int isReturn;
     private int totalAmount;

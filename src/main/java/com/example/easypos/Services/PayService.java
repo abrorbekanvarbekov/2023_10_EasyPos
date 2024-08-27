@@ -36,9 +36,9 @@ public class PayService {
 
     // ==================================================================//
 
-    public void insertPaymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount,
-                                        String payByCreditCartNumber, int cart_id, String openingDate) {
-        payDao.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, payByCreditCartNumber, cart_id, openingDate);
+    public void insertPaymentCreditCard(int floor, int tabId, int totalAmount, int splitAmount, int cardTotalSailAmount,
+                                        String payByCreditCardNumber, int cart_id, String openingDate) {
+        payDao.insertPaymentCreditCard(floor, tabId, totalAmount, splitAmount, cardTotalSailAmount, payByCreditCardNumber, cart_id, openingDate);
     }
 
     public int createCart(int floor, int tabId) {
@@ -55,20 +55,20 @@ public class PayService {
 
     public void insertPaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
                                                 int cart_id, String openingDate) {
-        payDao.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, creditCartNumber, cart_id, openingDate);
+        payDao.insertPaymentCardAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, creditCartNumber, cart_id, openingDate);
     }
 
-    public paymentCreditCardAndCash getExistPaymentCartAndCashItem(int cart_id, String openingDate) {
-        return payDao.getExistPaymentCartAndCashItem(cart_id, openingDate);
+    public paymentCreditCardAndCash getExistPaymentCardAndCashItem(int cart_id, String openingDate) {
+        return payDao.getExistPaymentCardAndCashItem(cart_id, openingDate);
     }
 
     public void updatePaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
                                                 int cart_id, String openingDate) {
-        payDao.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, creditCartNumber, cart_id, openingDate);
+        payDao.updatePaymentCardAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, creditCartNumber, cart_id, openingDate);
     }
 
     public void insertPaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cart_id, String openingDate) {
-        payDao.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart_id, openingDate);
+        payDao.insertPaymentCardAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart_id, openingDate);
     }
 
     public void updatePaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int amountToBeReceivedCartS, int cashTotalSailAmount, int cart_id, String openingDate) {

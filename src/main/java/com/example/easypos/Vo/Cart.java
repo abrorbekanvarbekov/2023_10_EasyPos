@@ -13,4 +13,5 @@ public class Cart {
     private String updateDate;
     private int tabId;
     private int floor;
+    private String openingDate;
 }

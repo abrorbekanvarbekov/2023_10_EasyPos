@@ -291,7 +291,7 @@ public interface BasicInformationDao {
     ProductType getProductType(String proTypeCode, String productTypeKorName);
 
     @Select("""
-            select * from ProductType
+            select * from productType
                 where id = #{delProductTypeId}
             """)
     ProductType getProductTypeById(int delProductTypeId);

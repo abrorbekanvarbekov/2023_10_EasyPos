@@ -42,6 +42,10 @@
                     <span>${NETsaleAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
                 </li>
                 <li>
+                    <span>테이블단가</span>
+                    <span>${payedTotalAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+                </li>
+                <li>
                     <span>봉사료액</span>
                     <span>0</span>
                 </li>
@@ -62,7 +66,7 @@
                 </li>
                 <li>
                     <span>신용카드</span>
-                    <span>${payedCartSumAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
+                    <span>${payedCardSumAmount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",")}</span>
                 </li>
                 <li>
                     <span>상품권</span>
@@ -351,7 +355,7 @@
                             NETSales: ${NETsaleAmount},
                             amountOfReturns: ${amountOfReturns},
                             paidByCash: ${payedCashSumAmount},
-                            paidByCart: ${payedCartSumAmount}
+                            paidByCard: ${payedCardSumAmount}
                         }, async function (data) {
                             const exit = await showMsgBoxOnlyCheckBtn("프로그램 종료합니다.")
                             if (exit == "true") location.replace(data.msg);

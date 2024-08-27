@@ -57,13 +57,13 @@ public interface PayDao {
                 openingDate= #{openingDate},
                 floor = #{floor},
                 tabId = #{tabId},
-                cartTotalAmount = #{totalAmount},
-                cartAmountPaid = #{splitAmount},
-                discountAmount = #{cartTotalSailAmount},
-                payByCreditCartNumber = #{payByCreditCartNumber},
+                cardTotalAmount = #{totalAmount},
+                cardAmountPaid = #{splitAmount},
+                discountAmount = #{cardTotalSailAmount},
+                payByCreditCardNumber = #{payByCreditCardNumber},
                 cart_id = #{cart_id}
             """)
-    void insertPaymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String payByCreditCartNumber,
+    void insertPaymentCreditCard(int floor, int tabId, int totalAmount, int splitAmount, int cardTotalSailAmount, String payByCreditCardNumber,
                                  int cart_id, String openingDate);
 
     @Insert("""
@@ -98,13 +98,13 @@ public interface PayDao {
                 tabId = #{tabId},
                 floor = #{floor},
                 totalAmount = #{totalAmount},
-                CartAmountPaid = #{splitAmount},
+                CardAmountPaid = #{splitAmount},
                 CashAmountPaid = 0,
-                discountAmount = #{cartTotalSailAmount},
-                payByCreditCartNumber = #{creditCartNumber},
+                discountAmount = #{cardTotalSailAmount},
+                payByCreditCardNumber = #{creditCardNumber},
                 cart_id = #{cartId}
             """)
-    void insertPaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
+    void insertPaymentCardAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cardTotalSailAmount, String creditCardNumber,
                                          int cartId, String openingDate);
 
     @Select("""
@@ -112,18 +112,18 @@ public interface PayDao {
                 where cart_id = #{cartId}
                 and openingDate = #{openingDate};
             """)
-    paymentCreditCardAndCash getExistPaymentCartAndCashItem(int cartId, String openingDate);
+    paymentCreditCardAndCash getExistPaymentCardAndCashItem(int cartId, String openingDate);
 
     @Update("""
             update paymentCreditCardAndCash
                 set updateDate = now(),
-                    CartAmountPaid = CartAmountPaid + #{splitAmount}
+                    CardAmountPaid = CardAmountPaid + #{splitAmount}
                 where cart_id = #{cartId}
                 and tabId = #{tabId}
                 and floor = #{floor}
                 and openingDate = #{openingDate};
             """)
-    void updatePaymentCartAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
+    void updatePaymentCardAndCashForCart(int floor, int tabId, int totalAmount, int splitAmount, int cartTotalSailAmount, String creditCartNumber,
                                          int cartId, String openingDate);
 
     @Insert("""
@@ -134,13 +134,13 @@ public interface PayDao {
                     tabId = #{tabId},
                     floor = #{floor},
                     totalAmount = #{totalAmount},
-                    CartAmountPaid = 0,
+                    CardAmountPaid = 0,
                     CashAmountPaid = #{splitAmount},
                     discountAmount = #{cashTotalSailAmount},
-                    payByCreditCartNumber = '0',
+                    payByCreditCardNumber = '0',
                     cart_id = #{cartId}
             """)
-    void insertPaymentCartAndCashForCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cartId, String openingDate);
+    void insertPaymentCardAndCashForCash(int floor, int tabId, int totalAmount, int splitAmount, int cashTotalSailAmount, int cartId, String openingDate);
 
     @Update("""
             update paymentCreditCardAndCash

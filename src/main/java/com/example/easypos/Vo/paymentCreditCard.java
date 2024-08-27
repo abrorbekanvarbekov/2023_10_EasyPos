@@ -14,10 +14,10 @@ public class paymentCreditCard {
     private String updateDate;
     private int tabId;
     private int floor;
-    private int cartTotalAmount;
-    private int cartAmountPaid;
-    private int sumCartAmountPaid;
+    private int cardTotalAmount;
+    private int cardAmountPaid;
+    private int sumCardAmountPaid;
     private int discountAmount;
-    private String payByCreditCartNumber;
+    private String payByCreditCardNumber;
     private int cart_id;
 }

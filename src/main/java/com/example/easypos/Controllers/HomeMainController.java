@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -43,9 +44,9 @@ public class HomeMainController {
     //    ============================================================================= //
     @RequestMapping("/usr/home-main/salesHistory")
     public String salesHistory(Model model) {
-
-        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), "1");
-        model.addAttribute("paymentCartAndCashList", paymentCartAndCashList);
+        String endDate = dateFormatter.format(dateNow) + " 23:59:59";
+        List<paymentCreditCardAndCash> paymentCardAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), endDate, "1");
+        model.addAttribute("paymentCardAndCashList", paymentCardAndCashList);
         return "usr/home-main/salesHistory";
     }
 
@@ -53,9 +54,8 @@ public class HomeMainController {
     @RequestMapping("/usr/home-main/getPaymentCartList")
     @ResponseBody
     public ResultDate getPaymentCartList(String beginDate, String endDate, String floor) {
-
-        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), floor);
-        return ResultDate.from("S-1", "성공", "paymentCartAndCashList", paymentCartAndCashList);
+        List<paymentCreditCardAndCash> paymentCardAndCashList = homeMainService.getPaymentCartAndCashList(beginDate, endDate, floor);
+        return ResultDate.from("S-1", "성공", "paymentCardAndCashList", paymentCardAndCashList);
     }
 
     @RequestMapping("/usr/home-main/getCartItemByCart_id")
@@ -69,8 +69,9 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/receiptReturn")
     public String receiptReturn(Model model) {
-        List<paymentCreditCardAndCash> paymentCartAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), "1");
-        model.addAttribute("paymentCartAndCashList", paymentCartAndCashList);
+        String endDate = dateFormatter.format(dateNow) + " 23:59:59";
+        List<paymentCreditCardAndCash> paymendCardAndCashList = homeMainService.getPaymentCartAndCashList(rq.getOpeningDate(), endDate, "1");
+        model.addAttribute("paymentCardAndCashList", paymendCardAndCashList);
         return "usr/home-main/receiptReturn";
     }
 
@@ -109,7 +110,8 @@ public class HomeMainController {
         model.addAttribute("businessDateToFormat", businessDateToFormat);
         model.addAttribute("payedTotalDiscountAmount", String.valueOf(payedTotalDiscountAmount.get(0)));
         model.addAttribute("payedTotalAmount", String.valueOf(payedTotalAmount.get(0) + payedTotalAmount.get(1)));
-        model.addAttribute("payedCartSumAmount", String.valueOf(payedTotalAmount.get(0)));
+        model.addAttribute("tableUnitPrice", String.valueOf((payedTotalAmount.get(0) + payedTotalAmount.get(1))));
+        model.addAttribute("payedCardSumAmount", String.valueOf(payedTotalAmount.get(0)));
         model.addAttribute("payedCashSumAmount", String.valueOf(payedTotalAmount.get(1)));
         model.addAttribute("VAT_Amount", String.valueOf(VAT_Amount));
         model.addAttribute("NETsaleAmount", String.valueOf((payedTotalAmount.get(0) + payedTotalAmount.get(1)) - VAT_Amount));
@@ -125,13 +127,13 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/setDeadlineSettlement")
     @ResponseBody
-    public ResultDate<String> setDeadlineSettlement(String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart) {
+    public ResultDate<String> setDeadlineSettlement(String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard) {
         try {
             deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(rq.getOpeningDate());
             if (deadlineSettlement == null) {
-                homeMainService.insertDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                homeMainService.insertDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
             } else {
-                homeMainService.updateDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCart);
+                homeMainService.updateDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
             }
 
             rq.logout();

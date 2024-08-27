@@ -2494,10 +2494,11 @@ body .header-box li:hover, .header-box-detail li:hover {
 .settlementDetails:not(:nth-child(n + 5)) li {
     display: flex;
     width: 100%;
-    height: 12.9%;
+    height: 11.9%;
     border-bottom: 1px solid rgba(169, 169, 169, .3);
     font-size: 0.8rem;
 }
+
 
 .settlementDetails li span:nth-child(2n+1) {
     display: flex;
@@ -2717,7 +2718,7 @@ a {
 }
 
 .touch-product-location {
-    display: flex;
+    display: none;
     position: relative;
     width: 98%;
     height: 100%;
@@ -3228,8 +3229,9 @@ a {
     background-color: white;
 }
 
-.productType-list-con-left .is-empty-msg,
-.productType-list-con-right .is-empty-msg {
+.is-empty-msg,
+.is-empty-msg,
+.is-empty-msg {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -3241,7 +3243,8 @@ a {
 }
 
 .productType-list-con-left > .is-empty-msg > div,
-.productType-list-con-right > .is-empty-msg > div {
+.productType-list-con-right > .is-empty-msg > div,
+.product-list-container .is-empty-msg > div {
     width: 100%;
     height: 100%;
 }
@@ -3964,7 +3967,7 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
 /*========= Other Management ======================*/
 
 .other-management-page {
-    display: flex;
+    display: none;
     position: relative;
     width: 98%;
     height: 100%;

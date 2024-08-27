@@ -29,11 +29,11 @@
         <div>
             <span>승인금액</span>
             <span class="text-4xl text-blue-500 "
-                  id="amountPay">${splitAmount != 0 ? splitAmount : amountToBeReceivedCart}</span>
+                  id="amountPay">${splitAmount != 0 ? splitAmount : amountToBeReceivedCard}</span>
         </div>
         <div>
             <span>총금액</span>
-            <span class="totalAmount">${splitAmount != 0 ? splitAmount : amountToBeReceivedCart}</span>
+            <span class="totalAmount">${splitAmount != 0 ? splitAmount : amountToBeReceivedCard}</span>
         </div>
         <div>
             <span>받은금액</span>
@@ -41,7 +41,7 @@
         </div>
         <div>
             <span>받을금액</span>
-            <span class="amountToBeReceived">${amountToBeReceivedCart}</span>
+            <span class="amountToBeReceived">${amountToBeReceivedCard}</span>
         </div>
         <div></div>
         <div class="flex justify-center mt-6 w-full">
@@ -121,7 +121,6 @@
     insertComma();
 
 
-
     function showConfirmDialog(message) {
         return new Promise((resolve, reject) => {
             let confirmMessage = document.querySelector(".confirm-message");
@@ -162,7 +161,7 @@
         document.querySelector(".byCreditCartLeftPage > div:nth-child(3) > span:last-child > p:last-child").innerHTML = "${CreditCartValidMonth}월";
 
         let amountPay = document.querySelector("#amountPay").textContent.replace(",", "")
-        let amountToBeReceived = ${amountToBeReceivedCart};
+        let amountToBeReceived = ${amountToBeReceivedCard};
 
         if (amountPay < amountToBeReceived == true) {
             setTimeout(function () {
@@ -171,15 +170,15 @@
                     floor: ${floor},
                     totalAmount: ${totalAmount},
                     splitAmount: ${splitAmount == "" ? 0 : splitAmount},
-                    CreditCartNumber: ${CreditCartNumber},
-                    cartTotalSailAmount: ${cartTotalSailAmount},
-                    amountToBeReceivedCart: ${amountToBeReceivedCart},
+                    CreditCardNumber: ${CreditCardNumber},
+                    cardTotalSailAmount: ${cardTotalSailAmount},
+                    amountToBeReceivedCard: ${amountToBeReceivedCard},
                     isPrintReceipt: 'false'
                 }, function (data) {
                     location.replace(data.msg);
                 }, "json")
             }, 1000)
-        }else{
+        } else {
             setTimeout(function () {
                 exampleFunction().then((result) => {
                     $.get("/usr/tables/orderPage/paymentCreditCard", {
@@ -187,9 +186,9 @@
                         floor: ${floor},
                         totalAmount: ${totalAmount},
                         splitAmount: ${splitAmount == "" ? 0 : splitAmount},
-                        CreditCartNumber: ${CreditCartNumber},
-                        cartTotalSailAmount: ${cartTotalSailAmount},
-                        amountToBeReceivedCart: ${amountToBeReceivedCart},
+                        CreditCardNumber: ${CreditCardNumber},
+                        cardTotalSailAmount: ${cardTotalSailAmount},
+                        amountToBeReceivedCard: ${amountToBeReceivedCard},
                         isPrintReceipt: result
                     }, function (data) {
                         location.replace(data.msg);

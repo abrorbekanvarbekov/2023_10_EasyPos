@@ -31,12 +31,12 @@ public class HealthCheckController {
         return ResponseEntity.ok(responseData);
     }
 
-    @GetMapping("/env")
-    public ResponseEntity<?> getEnv(){
-        return ResponseEntity.ok(env);
+    @RequestMapping("/env")
+    public String getEnv(){
+        return "home";
     }
 
-    @GetMapping("/test")
+    @RequestMapping("/test")
     public String test(){
         return "/usr/test/test";
     }

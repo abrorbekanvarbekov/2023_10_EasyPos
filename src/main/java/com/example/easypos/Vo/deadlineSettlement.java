@@ -12,6 +12,7 @@ public class deadlineSettlement {
     private int id;
     private String openingDate;
     private String closingDate;
+    private String updateDate;
     private String openEmployeeName;
     private String openEmployeeCode;
     private String closeEmployeeName;
@@ -23,5 +24,5 @@ public class deadlineSettlement {
     private int NETSales;
     private int amountOfReturns;
     private int paidByCash;
-    private int paidByCart;
+    private int paidByCard;
 }

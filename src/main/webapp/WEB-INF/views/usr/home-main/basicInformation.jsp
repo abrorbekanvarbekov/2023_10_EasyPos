@@ -84,17 +84,14 @@
         </nav>
     </div>
 
-    <%-- ====================== 상품관리  ======================== --%>
-    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/salesInformationManagement.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/productSearchPage.jsp" %>--%>
-    <%--        <%@include file="../basicInformation/productRegistrationPage.jsp" %>--%>
+    <%--     ====================== 상품관리  ======================== --%>
+    <%@include file="../basicInformation/salesInformationManagement.jsp" %>
+    <%@include file="../basicInformation/productSearchPage.jsp" %>
+    <%@include file="../basicInformation/productRegistrationPage.jsp" %>
 
-    <%--    &lt;%&ndash; ====================== 터치키상품 관리  ======================== &ndash;%&gt;--%>
-    <%--    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>--%>
-    <%--    <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>--%>
+    <%--         ====================== 터치키상품 관리  ======================== --%>
+    <%@include file="../basicInformation/touchKeyProductRegistration.jsp" %>
+    <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>
 
     <%-- ====================== 기타 관리  ======================== --%>
     <%@include file="../basicInformation/otherManagement.jsp" %>
@@ -379,7 +376,7 @@
                     pageName == "product-reg-page" ?
                         productListItem += `
                     <li class="productList \${idx+1 == 1 ? 'checked' : ''}" id="listId_\${value.id}" data-value="listItem_\${idx+1}">
-                        <span><input type="checkbox" id="checkbox-product-id" value="\${value.id}" \${value.productType != ''? 'disabled' : ''}></span>
+                        <span><input type="checkbox" id="checkbox-product-id" value="\${value.id}" \${value.productType == ''? 'disabled' : ''}></span>
                         <span>\${idx + 1}</span>
                         <span>\${value.productCode}</span>
                         <span data-value="\${value.bigClassificationCode}">\${value.bigClassificationName}</span>
@@ -619,6 +616,7 @@
     function addProductLine() {
         $(".product-list-reg").css("display", "flex");
         $(".product-add-container-curtain").css("display", "none")
+        $(".is-empty-msg").css("display", "none")
         let productListLength = $(".product-list-reg li").length
 
         let bigClassificationNode = document.querySelector(`.product-reg-page div > #basic-i-bigC`);
@@ -692,20 +690,20 @@
                                 let smallCCode = smallClassificationSelect.options[smallClassificationSelect.selectedIndex].value;
                                 let productCode = productListLength.toString();
                                 let productListItem = `
-                                <li class="productList new-pro-item" id="listItem_\${productListLength+1}">
-                                    <span><input type="checkbox"></span>
-                                    <span>\${productListLength+1}</span>
-                                    <span></span>
-                                    <span data-value="\${bigCCode}">\${bigCName}</span>
-                                    <span data-value="\${middleCCode}">\${middleCName}</span>
-                                    <span data-value="\${smallCCode}">\${smallCName}</span>
-                                    <span><input type="text"  onfocus="mine()"></span>
-                                    <span><input type="text"  onfocus="mine()"></span>
-                                    <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
-                                    <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
-                                    <span></span>
-                                </li>
-                                `
+                                    <li class="productList new-pro-item" id="listItem_\${productListLength+1}">
+                                        <span><input type="checkbox"></span>
+                                        <span>\${productListLength+1}</span>
+                                        <span></span>
+                                        <span data-value="\${bigCCode}">\${bigCName}</span>
+                                        <span data-value="\${middleCCode}">\${middleCName}</span>
+                                        <span data-value="\${smallCCode}">\${smallCName}</span>
+                                        <span><input type="text"  onfocus="mine()"></span>
+                                        <span><input type="text"  onfocus="mine()"></span>
+                                        <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
+                                        <span><input type="text" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" onfocus="mine()"></span>
+                                        <span></span>
+                                    </li>
+                                    `
                                 $(".product-list-reg").append(productListItem);
 
                                 if (productListLength == 0) {
@@ -836,7 +834,6 @@
                 costPriceList.push(el.children[9].children[0].value != '' ? el.children[9].children[0].value.replace(",", "") : 0);
             });
 
-            console.log(updateProductIdList)
             $.post("/usr/basic-information/modifyProduct", {
                 updateProductIdList: updateProductIdList.join(","),
                 bigClassificationCodeList: bigClassificationCodeList.join(","),

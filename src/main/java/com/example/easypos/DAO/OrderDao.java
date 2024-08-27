@@ -145,7 +145,7 @@ public interface OrderDao {
     List<paymentCash> getPaymentCashList(int tabNum, int floor, int cartId, String openingDate);
 
     @Select("""
-            select cartAmountPaid from paymentCreditCard
+            select cardAmountPaid from paymentCreditCard
                 where cart_id = #{cartId}
                 and tabId = #{tabNum}
                 and floor = #{floor}

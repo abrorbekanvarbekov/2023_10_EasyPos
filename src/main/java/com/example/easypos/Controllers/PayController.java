@@ -88,7 +88,7 @@ public class PayController {
             payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCash ? splitAmount : amountToBeReceivedCash,
                     cashTotalSailAmount, cart.getId(), openingDate);
 
-            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCardAndCashItem(cart.getId(), openingDate);
             if (paymentCardAndCash == null) {
                 payService.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCash ? splitAmount : amountToBeReceivedCash,
                         cashTotalSailAmount, cart.getId(), openingDate);
@@ -106,7 +106,7 @@ public class PayController {
         } else {
             payService.insertPaymentCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId(), openingDate);
 
-            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCardAndCashItem(cart.getId(), openingDate);
             if (paymentCardAndCash == null) {
                 payService.insertPaymentCartAndCashForCash(floor, tabId, totalAmount, splitAmount, cashTotalSailAmount, cart.getId(), openingDate);
             } else {
@@ -121,23 +121,23 @@ public class PayController {
     // ==================================================================//
 
     @RequestMapping("/usr/tables/orderPage/payByCreditCard")
-    public String payByCreditCart(int AmountToBeReceivedCard, int CardTotalAmount, int CardSplitAmount,
+    public String payByCreditCard(int AmountToBeReceivedCard, int CardTotalAmount, int CardSplitAmount,
                                   int CardTotalSailAmount, int floor, int tabId, Model model) {
-        String CreditCartNumber = Util.getCreditCartNumbers();
-        String CreditCartCompany = Util.getCreditCartCompany();
-        String CreditCartValidYear = Util.getCreditCartValidTHRU();
-        String CreditCartValidMonth = Util.getCreditCartValidTHRUMonth();
+        String CreditCardNumber = Util.getCreditCartNumbers();
+        String CreditCardCompany = Util.getCreditCartCompany();
+        String CreditCardValidYear = Util.getCreditCartValidTHRU();
+        String CreditCardValidMonth = Util.getCreditCartValidTHRUMonth();
 
         model.addAttribute("floor", floor);
         model.addAttribute("tabId", tabId);
-        model.addAttribute("CreditCartNumber", CreditCartNumber);
-        model.addAttribute("CreditCartCompany", CreditCartCompany);
-        model.addAttribute("CreditCartValidYear", CreditCartValidYear);
-        model.addAttribute("CreditCartValidMonth", CreditCartValidMonth);
-        model.addAttribute("amountToBeReceivedCart", AmountToBeReceivedCard);
+        model.addAttribute("CreditCardNumber", CreditCardNumber);
+        model.addAttribute("CreditCardCompany", CreditCardCompany);
+        model.addAttribute("CreditCardValidYear", CreditCardValidYear);
+        model.addAttribute("CreditCardValidMonth", CreditCardValidMonth);
+        model.addAttribute("amountToBeReceivedCard", AmountToBeReceivedCard);
         model.addAttribute("totalAmount", CardTotalAmount);
         model.addAttribute("splitAmount", CardSplitAmount);
-        model.addAttribute("cartTotalSailAmount", CardTotalSailAmount);
+        model.addAttribute("cardTotalSailAmount", CardTotalSailAmount);
         return "/usr/table/payByCreditCart";
     }
 
@@ -146,7 +146,7 @@ public class PayController {
     @RequestMapping("/usr/tables/orderPage/paymentCreditCard")
     @ResponseBody
     public ResultDate paymentCreditCart(int floor, int tabId, int totalAmount, int splitAmount,
-                                        String CreditCartNumber, int cartTotalSailAmount, int amountToBeReceivedCart, String isPrintReceipt) {
+                                        String CreditCardNumber, int cardTotalSailAmount, int amountToBeReceivedCard, String isPrintReceipt) {
 
         String[] businessFullDate = rq.getBusinessDate().split(" ");
         String openingDate = businessFullDate[0];
@@ -170,21 +170,21 @@ public class PayController {
             System.out.println("------------------------------------------------");
             System.out.println(String.format("합    계  :       %d", productSUmPrice));
             System.out.println(String.format("받을금액  :       %d", productSUmPrice));
-            System.out.println(String.format("받은금액  :       %d", amountToBeReceivedCart));
-            System.out.println(String.format("거스름돈  :       %d", (amountToBeReceivedCart - productSUmPrice)));
+            System.out.println(String.format("받은금액  :       %d", amountToBeReceivedCard));
+            System.out.println(String.format("거스름돈  :       %d", (amountToBeReceivedCard - productSUmPrice)));
         }
 
-        if (splitAmount == 0 || splitAmount == amountToBeReceivedCart || splitAmount > amountToBeReceivedCart) {
-            payService.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                    cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+        if (splitAmount == 0 || splitAmount == amountToBeReceivedCard || splitAmount > amountToBeReceivedCard) {
+            payService.insertPaymentCreditCard(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCard ? splitAmount : amountToBeReceivedCard,
+                    cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
 
-            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCardAndCashItem(cart.getId(), openingDate);
             if (paymentCardAndCash == null) {
-                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                        cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCard ? splitAmount : amountToBeReceivedCard,
+                        cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
             } else {
-                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCart ? splitAmount : amountToBeReceivedCart,
-                        cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount > amountToBeReceivedCard ? splitAmount : amountToBeReceivedCard,
+                        cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
             }
 
             payService.removePaidCartItem(floor, tabId, openingDate);
@@ -192,13 +192,13 @@ public class PayController {
             rq.leftAmount(0);
             return ResultDate.from("S-1", String.format("/?floor=%d", floor));
         } else {
-            payService.insertPaymentCreditCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+            payService.insertPaymentCreditCard(floor, tabId, totalAmount, splitAmount, cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
 
-            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCartAndCashItem(cart.getId(), openingDate);
+            paymentCreditCardAndCash paymentCardAndCash = payService.getExistPaymentCardAndCashItem(cart.getId(), openingDate);
             if (paymentCardAndCash == null) {
-                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+                payService.insertPaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
             } else {
-                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cartTotalSailAmount, CreditCartNumber, cart.getId(), openingDate);
+                payService.updatePaymentCartAndCashForCart(floor, tabId, totalAmount, splitAmount, cardTotalSailAmount, CreditCardNumber, cart.getId(), openingDate);
             }
 
             rq.leftAmount(rq.getLeftAmount() + splitAmount);

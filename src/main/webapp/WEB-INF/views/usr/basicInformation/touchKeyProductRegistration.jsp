@@ -190,7 +190,6 @@
         });
     }
 
-    <%----%>
 
     function getProductTypeList() {
         $(".productType-list-container").css("display", "flex");
@@ -360,6 +359,7 @@
                         </div>
                         `
                 $(".productNumAndCode").empty();
+                $(".productNumAndCode").css("display", "flex");
                 $(".productType-list-con-right").html(msgBox);
             }
         }, "json")
@@ -436,12 +436,11 @@
         $(".productType-list-con-left li").each((idx, el) => {
             const proNumAndCodeLiIdx = proTypeNumAndCode[0].children[idx].id;
             const productProCode = el.id.substring(el.id.indexOf("_") + 1);
-            proTypeNumAndCodeLiIdxList.push(proNumAndCodeLiIdx);
-            proTypeProCodeList.push(productProCode);
+            proNumAndCodeLiIdx != "" ? proTypeNumAndCodeLiIdxList.push(proNumAndCodeLiIdx) : "";
+            productProCode != "" ? proTypeProCodeList.push(productProCode) : "";
         })
 
         if (proTypeNumAndCodeLiIdxList.length != 0) {
-
             $.ajax({
                 url: "/usr/basic-information/touchKeyManagement/updateProTypeSequenceNum",
                 method: "POST",
@@ -620,7 +619,6 @@
                 }
             })
         }
-
     }
 
     function delProductTypeAndProduct() {
@@ -723,18 +721,15 @@
                         <span>\${value.productCode}</span>
                         <span>\${value.productKorName}</span>
                         <span data-value="\${value.price}">\${value.price.toLocaleString()}</span>
-                        <span></span>
+                        <span>0</span>
                     </li>
                     `
                 })
 
                 $(`.search-pro-list-container`).html(productListItem);
 
-<<<<<<< HEAD
                 clickEventForSearchProList("search-pro-list-container", "product");
-=======
                 clickEventForProType("search-pro-list-container", "product");
->>>>>>> parent of 128e99e (detail page 기능들 재들 재적화 했음)
                 let listItemFirstItem = document.querySelector(`.search-pro-list-container li:nth-child(1)`)
 
                 scrollToSelectedItem(listItemFirstItem)

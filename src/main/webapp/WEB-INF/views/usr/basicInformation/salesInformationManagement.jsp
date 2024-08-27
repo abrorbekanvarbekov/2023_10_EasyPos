@@ -87,7 +87,7 @@
 </div>
 
 <script>
-    let beforeEmptyListLength = 0;  // 나중에 무조건 해결 해야함
+    let beforeEmptyListLen = 0;  // 나중에 무조건 해결 해야함
     let selectedClassName = "";     // 나중에 무조건 해결 해야함
 
     function selectedItem(className) {
@@ -125,8 +125,7 @@
         let listItemLength = document.querySelectorAll(`.\${className} li`).length;
         let classificationName = className.replace("product", "").replace("Classification", "").toLowerCase();
         let listId = classificationName + "_00" + (listItemLength + 1);
-
-        if (beforeEmptyListLength == currEmptyListLength) {
+        if (beforeEmptyListLen == currEmptyListLength) {
             let classificationStr = `
                 <li class="emptyList">
                     <input type="checkbox" id="\${listId}" >
@@ -149,8 +148,8 @@
             let lastChild = $(`.\${className} li:last-child`)[0];
 
             if (childIdx > 1) {
-                $(`.\${className} li:nth-child(\${childIdx-1})`).css("backgroundColor", "#FFFFFF");
-                $(`.\${className} li:nth-child(\${childIdx -1}) > input:nth-child(3)`).css("backgroundColor", "#FFFFFF");
+                $(`.\${className} li:nth-child(\${childIdx - 1})`).css("backgroundColor", "#FFFFFF");
+                $(`.\${className} li:nth-child(\${childIdx - 1}) > input:nth-child(3)`).css("backgroundColor", "#FFFFFF");
                 $(`.\${className} li:nth-child(\${childIdx - 1})`).removeClass("checked");
             }
 
@@ -165,8 +164,7 @@
                 getSmallClassificationList("", "", "");
             }
 
-            beforeEmptyListLength = document.querySelectorAll(`.\${className} .emptyList`).length
-
+            beforeEmptyListLen = document.querySelectorAll(`.\${className} > li.emptyList`).length
         } else {
             switch (className) {
                 case "productBigClassification" :
@@ -186,7 +184,7 @@
         let classificationListLength = $(`.\${className} .emptyList`).length
 
         if (classificationListLength != 0) {
-            beforeEmptyListLength--;
+            beforeEmptyListLen--;
             $(`.\${className} .checked`).remove('.checked');
             let childIdx = $(`.\${className} li`).length
             let lastChild = $(`.\${className} li:last-child`)[0];
@@ -209,7 +207,7 @@
     }
 
     function getBigClassificationList(searchClassificationName) {
-        beforeEmptyListLength = 0;
+        beforeEmptyListLen = 0;
         $.get("/usr/basic-information/getBigClassification", {
             searchClassificationName: searchClassificationName
         }, function (data) {
@@ -423,7 +421,6 @@
                         checkedBigClassificationCode: checkedBigClassificationCode,
                         checkedMiddleClassificationCode: checkedMiddleClassificationCode
                     }, function (data) {
-                        console.log(data)
                     }, "json")
 
                     alert("정상적로 삭제 되었습니다.")

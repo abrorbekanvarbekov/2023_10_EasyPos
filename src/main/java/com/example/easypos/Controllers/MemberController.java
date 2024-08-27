@@ -48,7 +48,7 @@ public class MemberController {
     @RequestMapping("/usr/member/doLogin")
     @ResponseBody
     public ResultDate<String> doLogin(String loginId, String loginPw, boolean isIdSave) {
-
+        System.out.println(loginId);
         String errorMsg = "";
 
         if (Util.empty(loginId)) {

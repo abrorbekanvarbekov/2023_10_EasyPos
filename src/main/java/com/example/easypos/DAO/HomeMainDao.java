@@ -12,18 +12,19 @@ import java.util.List;
 public interface HomeMainDao {
 
     @Select("""
-            select tabId, floor, cart_id, CashAmountPaid, CartAmountPaid,totalAmount,regDate,isReturn,discountAmount,
+            select tabId, floor, cart_id, CashAmountPaid, CardAmountPaid,totalAmount,regDate,isReturn,discountAmount,
                         ifnull(sum(CashAmountPaid), 0) as sumCashAmountPaid,
-                        ifnull(sum(CartAmountPaid), 0) as sumCartAmountPaid
+                        ifnull(sum(CardAmountPaid), 0) as sumCardAmountPaid
             from paymentCreditCardAndCash
                  WHERE floor = #{floor}
-                   and openingDate = #{openingDate}
+                   and regDate > #{beginDate}
+                   and regDate < #{endDate}
                  group by regDate
             """)
-    List<paymentCreditCardAndCash> getPaymentCartAndCashList(String openingDate, String floor);
+    List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate, String endDate , String floor);
 
     @Select("""
-            select cartI.*, pay.CartAmountPaid, pay.CashAmountPaid, pay.totalAmount, pay.discountAmount
+            select cartI.*, pay.CardAmountPaid, pay.CashAmountPaid, pay.totalAmount, pay.discountAmount
                 from CartItems as cartI
                          inner join paymentCreditCardAndCash as pay
                                     on cartI.cart_id = pay.cart_id
@@ -44,14 +45,14 @@ public interface HomeMainDao {
 
 
     @Insert("""
-            insert into paymentCreditCardAndCash(regDate, updateDate, tabId, floor, totalAmount, CartAmountPaid, CashAmountPaid,
+            insert into paymentCreditCardAndCash(regDate, updateDate, tabId, floor, totalAmount, CardAmountPaid, CashAmountPaid,
                                                  discountAmount, payByCreditCartNumber, cart_id, isReturn)
             select now(),
                    updateDate,
                    tabId,
                    floor,
                    totalAmount,
-                   CartAmountPaid,
+                   CardAmountPaid,
                    CashAmountPaid,
                    discountAmount,
                    payByCreditCartNumber,
@@ -99,7 +100,7 @@ public interface HomeMainDao {
     @Insert("""
             insert into deadlineSettlement
             set openingDate = #{openingDate},
-                closingDate = now(),
+                closeDate = now(),
                 openEmployeeName = #{openEmployeeName},
                 openEmployeeCode = #{openEmployeeCode},
                 closeEmployeeName = #{closeEmployeeName},
@@ -111,11 +112,11 @@ public interface HomeMainDao {
                 NETSales = #{NETSales},
                 amountOfReturns = #{amountOfReturns},
                 paidByCash = #{paidByCash},
-                paidByCart = #{paidByCart}
+                paidByCard = #{paidByCard}
             """)
     void insertDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName,
                                   String closeEmployeeCode, int totalSales, int totalSalesCount,
-                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard);
 
     @Select("""
             select * from deadlineSettlement
@@ -139,11 +140,11 @@ public interface HomeMainDao {
                     NETSales = #{NETSales},
                     amountOfReturns = #{amountOfReturns},
                     paidByCash = #{paidByCash},
-                    paidByCart = #{paidByCart}
+                    paidByCard = #{paidByCard}
                 where openingDate = #{openingDate}
             """)
     void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
-                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCart);
+                                  int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard);
 
     @Update("""
             delete from CartItems
