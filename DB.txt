@@ -2,6 +2,7 @@ drop database if exists EasyPos;
 CREATE DATABASE EasyPos;
 USE EasyPos;
 
+
 create table `table`
 (
     id          int unsigned     not null primary key auto_increment,
@@ -20,16 +21,16 @@ create table `table`
 );
 
 
-insert into `table`
-set regDate    = now(),
-    updateDate = now(),
-    tableName  = 1,
-    width      = 100,
-    height     = 100,
-    `left`     = 0,
-    top        = 0,
-    floor      = 1,
-    bgColor    = '#BFE4FF';
+# insert into `table`
+# set regDate    = now(),
+#     updateDate = now(),
+#     tableName  = 1,
+#     width      = 100,
+#     height     = 100,
+#     `left`     = 0,
+#     top        = 0,
+#     floor      = 1,
+#     bgColor    = '#BFE4FF';
 
 
 create table productType
@@ -48,16 +49,16 @@ create table productType
 );
 
 
-insert into productType
-set regDate      = now(),
-    updateDate   = now(),
-    `code`       = lpad(1, '3', '0'),
-    sequenceNum  = 0,
-    korName      = '메인메뉴/주류',
-    engName      = '',
-    authDivision = '매장',
-    color        = 'lightgreen';
-
+# insert into productType
+# set regDate      = now(),
+#     updateDate   = now(),
+#     `code`       = lpad(1, '3', '0'),
+#     sequenceNum  = 0,
+#     korName      = '메인메뉴/주류',
+#     engName      = '',
+#     authDivision = '매장',
+#     color        = 'lightgreen';
+#
 
 create table product
 (
@@ -77,17 +78,17 @@ create table product
 );
 
 
-insert into product
-set regDate                  = now(),
-    updateDate               = now(),
-    productCode              = lpad(16, '6', '0'),
-    bigClassificationCode    = '001',
-    middleClassificationCode = '002',
-    smallClassificationCode  = '001',
-    productKorName           = '치즈라볶이',
-    productEngName           = '',
-    price                    = 25000,
-    costPrice                = 0;
+# insert into product
+# set regDate                  = now(),
+#     updateDate               = now(),
+#     productCode              = lpad(16, '6', '0'),
+#     bigClassificationCode    = '001',
+#     middleClassificationCode = '002',
+#     smallClassificationCode  = '001',
+#     productKorName           = '치즈라볶이',
+#     productEngName           = '',
+#     price                    = 25000,
+#     costPrice                = 0;
 
 
 
@@ -255,12 +256,12 @@ create table productBigClassification
 
 
 
-insert into productBigClassification(regDate, updateDate, bigClassificationCode,
-                                     bigClassificationName,
-                                     middleClassificationCnt)
-select now(), now(), '001', '테스트', count(middle.id)
-from productMiddleClassification as middle
-where middle.bigClassificationCode = '001';
+# insert into productBigClassification(regDate, updateDate, bigClassificationCode,
+#                                      bigClassificationName,
+#                                      middleClassificationCnt)
+# select now(), now(), '001', '테스트', count(middle.id)
+# from productMiddleClassification as middle
+# where middle.bigClassificationCode = '001';
 
 
 create table productMiddleClassification
@@ -277,12 +278,12 @@ create table productMiddleClassification
 );
 
 
-insert into productMiddleClassification(regDate, updateDate, bigClassificationCode,
-                                        middleClassificationCode,
-                                        middleClassificationName, smallClassificationCnt)
-select now(), now(), '001', '001', '미들테스트', count(small.id)
-from productSmallClassification as small
-where small.middleClassificationCode = '001';
+# insert into productMiddleClassification(regDate, updateDate, bigClassificationCode,
+#                                         middleClassificationCode,
+#                                         middleClassificationName, smallClassificationCnt)
+# select now(), now(), '001', '001', '미들테스트', count(small.id)
+# from productSmallClassification as small
+# where small.middleClassificationCode = '001';
 
 
 
@@ -302,12 +303,12 @@ create table productSmallClassification
 
 
 
-insert into productSmallClassification
-set regDate                  = now(),
-    updateDate               = now(),
-    middleClassificationCode = '001',
-    smallClassificationCode  = '001',
-    smallClassificationName  = '스몰테스트',
-    productCnt               = 0;
+# insert into productSmallClassification
+# set regDate                  = now(),
+#     updateDate               = now(),
+#     middleClassificationCode = '001',
+#     smallClassificationCode  = '001',
+#     smallClassificationName  = '스몰테스트',
+#     productCnt               = 0;
 
 

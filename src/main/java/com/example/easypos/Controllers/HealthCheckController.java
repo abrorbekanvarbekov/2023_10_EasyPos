@@ -32,8 +32,8 @@ public class HealthCheckController {
     }
 
     @RequestMapping("/env")
-    public String getEnv(){
-        return "home";
+    public ResponseEntity<?> getEnv(){
+        return ResponseEntity.ok(env);
     }
 
     @RequestMapping("/test")

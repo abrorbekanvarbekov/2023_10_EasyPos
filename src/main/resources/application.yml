@@ -30,7 +30,7 @@ spring:
 
 server:
   port: 8080
-  serverAddress: 43.200.77.69
+  serverAddress: 3.36.197.135
 
 serverName: blue_server
 ---
@@ -42,7 +42,7 @@ spring:
 
 server:
   port: 8081
-  serverAddress: 43.200.77.69
+  serverAddress: 3.36.197.135
 
 serverName: green_server
 ---
@@ -61,8 +61,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.56.102:3307/EasyPos?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
-    username: root
+    url: jdbc:mysql://172.31.14.142:3306/EasyPos?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
+    username: user1
     password: korea12313
 
 
