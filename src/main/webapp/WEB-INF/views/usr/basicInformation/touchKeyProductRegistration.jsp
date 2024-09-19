@@ -15,7 +15,7 @@
                     <span>조회</span>
                 </button>
                 <button onclick="saveChanges();" class="btn btn-active btn-sm pl-2">저장</button>
-                <button onclick="delProductTypeAndProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="delProductTypeAndProduct2();" class="btn btn-active btn-sm pl-2">삭제</button>
                 <button class="btn btn-active btn-sm pl-2">엑셀</button>
             </div>
         </div>
@@ -211,7 +211,7 @@
                             </li>
                         `
                         proTypeList += `
-                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}" id="proTypeList_\${value.code}" sequenceNum="\${idx + 1}">
+                            <li class="productType \${idx+1 == 1 ? 'checked' : ''}" id="proTypeList_\${value.code}" sequenceNum="\${idx}">
                                 <span>\${value.code}</span>
                                 <span>
                                     <input id="proTypeKorName_\${value.code}" type="text" value="\${value.korName}"
@@ -225,8 +225,8 @@
                                 <span style="background-color: \${value.color}">
                                     <select id="proTypeColorBox_\${value.code}" onchange="updateProductType(this.id)"
                                         class="select select-bordered select-sm w-full max-w-xs" style="background-color: \${value.color}">
-                                      <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
-                                      <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
+                                      <option value="darkorange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
+                                      <option value="deepskyblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
                                       <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
                                       <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
                                       <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
@@ -268,7 +268,7 @@
             `
 
             let proTypeList = `
-                <li class="productType newProType" sequenceNum="\${productTypeLen + 1}">
+                <li class="productType newProType" sequenceNum="\${productTypeLen}">
                     <span></span>
                     <span>
                         <input type="text">
@@ -336,8 +336,8 @@
                             <span style="background-color: \${value.color}">
                                 <select id="productColorBox_\${value.productCode}" class="select select-bordered select-sm w-full max-w-xs"
                                     style="background-color: \${value.color}" onchange="updateProduct(this.id)">
-                                  <option value="orange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
-                                  <option value="lightblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
+                                  <option value="darkorange" \${value.color == 'orange' ? 'selected' : ''}>오랜지</option>
+                                  <option value="deepskyblue" \${value.color == 'lightblue' ? 'selected' : ''}>연파랑</option>
                                   <option value="lightgreen" \${value.color == 'lightgreen' ? 'selected' : ''}>연녹</option>
                                   <option value="lightpink" \${value.color == 'lightpink' ? 'selected' : ''}>핑크</option>
                                   <option value="orangered" \${value.color == 'orangered' ? 'selected' : ''}>연빨강</option>
@@ -621,54 +621,59 @@
         }
     }
 
-    function delProductTypeAndProduct() {
+    function delProductTypeAndProduct2() {
         const delProTypeIdList = $('#product-type-checkbox:checked').map((index, el) => el.value).toArray();
         const delProductCodeList = $('#product-checkbox:checked').map((index, el) => el.value).toArray();
-
         if (delProTypeIdList != 0) {
-            $.ajax({
-                url: "/usr/basic-information/touchKeyManagement/delProductTypes",
-                data: {
-                    delProTypeIdList: delProTypeIdList.join(",")
-                },
-                method: "POST",
-                success: function (data) {
-                    alert("정상적으로 처리 되었습니다.");
-                    getProductTypeList();
-                },
-                error: function (request, status, error) {
-                    alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
-                    getProductTypeList();
-                },
-                complete: function () {
-                    getProductTypeList();
-                }
-            })
+            let result = confirm("정말 삭제하시겠습니까?")
+            if (result == true) {
+                $.ajax({
+                    url: "/usr/basic-information/touchKeyManagement/delProductTypes",
+                    data: {
+                        delProTypeIdList: delProTypeIdList.join(",")
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        alert("정상적으로 처리 되었습니다.");
+                        getProductTypeList();
+                    },
+                    error: function (request, status, error) {
+                        alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                        getProductTypeList();
+                    },
+                    complete: function () {
+                        getProductTypeList();
+                    }
+                })
+            }
         }
 
         if (delProductCodeList != 0) {
             let selectProTypeItem = $(".productType-list-con-left .productType.selected ")[0];
             let productTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
 
-            $.ajax({
-                url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
-                data: {
-                    delProductCodeList: delProductCodeList.join(","),
-                    productTypeCode: productTypeCode
-                },
-                method: "POST",
-                success: function (data) {
-                    alert("정상적으로 처리 되었습니다.");
-                    getProductList(selectProTypeItem);
-                },
-                error: function (request, status, error) {
-                    alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
-                    getProductList(selectProTypeItem);
-                },
-                complete: function () {
-                    getProductList(selectProTypeItem);
-                }
-            })
+            let result = confirm("정말 삭제하시겠습니까?")
+            if (result == true) {
+                $.ajax({
+                    url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
+                    data: {
+                        delProductCodeList: delProductCodeList.join(","),
+                        productTypeCode: productTypeCode
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        alert("정상적으로 처리 되었습니다.");
+                        getProductList(selectProTypeItem);
+                    },
+                    error: function (request, status, error) {
+                        alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                        getProductList(selectProTypeItem);
+                    },
+                    complete: function () {
+                        getProductList(selectProTypeItem);
+                    }
+                })
+            }
         }
     }
 

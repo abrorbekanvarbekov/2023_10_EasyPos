@@ -276,7 +276,6 @@ public class BasicInformationController {
     @RequestMapping("/usr/basic-information/touchKeyManagement/delProductTypes")
     @ResponseBody
     public ResponseEntity delProductTypes(@RequestParam List<String> delProTypeIdList) {
-        System.out.println(delProTypeIdList);
         int result = basicInformationService.delProductTypes(delProTypeIdList);
         if (result == 1) {
             return ResponseEntity.ok().build();

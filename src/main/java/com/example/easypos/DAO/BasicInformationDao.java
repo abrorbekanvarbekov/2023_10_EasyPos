@@ -207,6 +207,13 @@ public interface BasicInformationDao {
             """)
     void createAndDropTable(String sql);
 
+    @Select("""
+            select sequenceNum from productType
+                order by sequenceNum desc limit 1
+            """)
+    int getLastSequenceNum();
+
+
     @Insert("""
             insert into productType
             set regDate      = now(),

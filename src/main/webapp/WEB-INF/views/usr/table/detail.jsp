@@ -651,7 +651,7 @@
                     onclick="selectMenuItem(this)"
                     class="productItems">
                     <span class="w-full h-3/5 text-center" name="productName">${product.productKorName}</span>
-                    <span class="text-red-400 pt-2 h-2/5 price" data-value="${product.price}"
+                    <span class="text-red-600 h-2/5 price" data-value="${product.price}"
                           name="price">${product.price}원</span>
                 </li>
             </c:forEach>

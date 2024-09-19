@@ -166,6 +166,7 @@ public class BasicInformationService {
         return basicInformationDao.getProductTypeList(searchKeyword);
     }
 
+
     public int addProductType(List<String> newProTypeSequenceNumList, List<String> productTypeKorNameList,
                               List<String> productTypeEngNameList, List<String> productTypeColorList) {
         int result = 0;
@@ -175,9 +176,8 @@ public class BasicInformationService {
             String productTypeEngName = productTypeEngNameList.get(i);
             String productTypeColor = productTypeColorList.get(i);
             int sequenceNum = Integer.parseInt(newProTypeSequenceNumList.get(i));
-
             result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName,
-                    productTypeColor, sequenceNum);
+                    productTypeColor, sequenceNum );
 
             if (result == 1) {
                 String proTypeCode = String.format("%03d", productTypeCode + 1);
@@ -311,4 +311,5 @@ public class BasicInformationService {
     public List<Table> getTables(int floor) {
         return basicInformationDao.getTables(floor);
     }
+
 }

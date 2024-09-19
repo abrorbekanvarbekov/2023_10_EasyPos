@@ -15,7 +15,7 @@
                     <span>조회</span>
                 </button>
                 <button onclick="saveUpdateInfo()" class="btn btn-active btn-sm pl-2">저장</button>
-                <button onclick="" class="btn btn-active btn-sm pl-2">삭제</button>
+                <button onclick="delProductTypeAndProduct();" class="btn btn-active btn-sm pl-2">삭제</button>
             </div>
         </div>
         <div class="touch-location-classification">
@@ -125,10 +125,10 @@
 </div>
 
 <script>
-    // let selectElement1 = document.getElementById("proType-color-selector");
-    // let selectElement2 = document.getElementById("product-color-selector");
-    // selectElement1.selectedIndex = -1; // 선택된 옵션을 없앱니다.
-    // selectElement2.selectedIndex = -1; // 선택된 옵션을 없앱니다.
+    let selectElement1 = document.getElementById("proType-color-selector");
+    let selectElement2 = document.getElementById("product-color-selector");
+    selectElement1.selectedIndex = -1; // 선택된 옵션을 없앱니다.
+    selectElement2.selectedIndex = -1; // 선택된 옵션을 없앱니다.
     function getProTypeList() {
         $(".t-l-product-list").empty();
         let searchKeyword = "";
@@ -153,7 +153,7 @@
                     $.each(data, (idx, value) => {
                         if (value != "null") {
                             proTypeList += `
-                                <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                                <span style="width: \${spanWidth}%" draggable="false"><input type="checkbox" id="product-type-checkbox" value="\${value.id}"  class="checkbox checkbox-sm"/> </span>
                                 <li class="proTypeItem" draggable="true"  style="background-color: \${value.color}; width: \${liWidth}%"
                                     sequenceNum="\${value.sequenceNum}"  name="\${value.korName}"
                                     id="\${value.code}" onclick="getProList(this)">
@@ -283,7 +283,7 @@
             if (data.length != 0) {
                 $.each(data, (idx, value) => {
                     productList += `
-                        <span draggable="false" style="width: \${spanWidth}%"><input type="checkbox" class="checkbox checkbox-sm"/> </span>
+                        <span draggable="false" style="width: \${spanWidth}%"><input type="checkbox" id="product-checkbox" value="\${value.productCode}" class="checkbox checkbox-sm"/> </span>
                         <li class="productItem" draggable="true" style="background-color: \${value.color}; width: \${liWidth}%" sequenceNum="\${value.sequenceNum}"  name="\${value.productKorName}"  id="\${value.productCode}">
                             \${value.productCode} \${value.productKorName}
                         </li>
@@ -493,6 +493,63 @@
                 }
             } else {
                 getProTypeList();
+            }
+        }
+    }
+
+    function delProductTypeAndProduct() {
+        const delProTypeIdList = $('#product-type-checkbox:checked').map((index, el) => el.value).toArray();
+        const delProductCodeList = $('#product-checkbox:checked').map((index, el) => el.value).toArray();
+
+        if (delProTypeIdList.length != 0) {
+            let result = confirm("정말 삭제하시겠습니까?")
+            if (result == true) {
+                $.ajax({
+                    url: "/usr/basic-information/touchKeyManagement/delProductTypes",
+                    data: {
+                        delProTypeIdList: delProTypeIdList.join(",")
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        alert("정상적으로 처리 되었습니다.");
+                        getProTypeList();
+                    },
+                    error: function (request, status, error) {
+                        alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                        getProTypeList();
+                    },
+                    complete: function () {
+                        getProTypeList();
+                    }
+                })
+            }
+        }
+
+        if (delProductCodeList.length != 0) {
+            let selectProTypeItem = $(".t-l-classification-list .proTypeItem.checked ")[0];
+            let productTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);
+
+            let result = confirm("정말 삭제하시겠습니까?")
+            if (result == true) {
+                $.ajax({
+                    url: "/usr/basic-information/touchKeyManagement/delTypeForProducts",
+                    data: {
+                        delProductCodeList: delProductCodeList.join(","),
+                        productTypeCode: productTypeCode
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        alert("정상적으로 처리 되었습니다.");
+                        getProList(selectProTypeItem);
+                    },
+                    error: function (request, status, error) {
+                        alert("정상적으로 처리 되지 않았습니다. \n 다시 시도해보세요.");
+                        getProList(selectProTypeItem);
+                    },
+                    complete: function () {
+                        getProList(selectProTypeItem);
+                    }
+                })
             }
         }
     }
