@@ -26,7 +26,7 @@
                floor="${floor}"
                style="width: ${table.width}; height: ${table.height}; top: ${table.top}; left: ${table.left}">
                 <div class="tableGroupNum" id="groupNum_${table.tableName}"></div>
-                <div class="flex flex-col h-full w-full items-center mt-2 overflow-hidden" id="${table.tableName}">
+                <div class="flex flex-col h-full w-full items-center  overflow-hidden" id="${table.tableName}">
                     <span class="${cartItems != null ? "text-red-400" : ""}">${table.tableName}번</span>
                     <c:forEach var="priceSum" items="${priceSumList}">
                         <c:if test="${priceSum.table_id == table.tableName}">
@@ -34,14 +34,16 @@
                                   id="table_${table.tableName}sumPrice">${priceSum.priceSum}</span>
                         </c:if>
                     </c:forEach>
-                    <c:forEach var="cartItem" items="${cartItems}">
-                        <c:if test="${cartItem.table_id==table.tableName}">
-                            <div>
-                                <span class="pr-2">${cartItem.productName}</span>
-                                <span>${cartItem.quantity}</span>
-                            </div>
-                        </c:if>
-                    </c:forEach>
+                    <div class="table-products-info-box">
+                        <c:forEach var="cartItem" items="${cartItems}">
+                            <c:if test="${cartItem.table_id==table.tableName}">
+                                <div>
+                                    <span>${cartItem.productName}</span>
+                                    <span>${cartItem.quantity}</span>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
                 </div>
             </a>
         </c:forEach>
@@ -92,7 +94,7 @@
         </div>
         <div>
             <span>담당자</span>
-            <span>아브로르</span>
+            <span>${loginedEmployeeName}</span>
         </div>
         <div>
             <span>식사미제공</span>

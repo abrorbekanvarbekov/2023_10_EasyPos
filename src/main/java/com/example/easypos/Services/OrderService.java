@@ -16,8 +16,12 @@ public class OrderService {
         this.orderDao = orderDao;
     }
 
-    public List<ProductType> getProductTypes() {
-        return orderDao.getProductTypes();
+    public List<ProductType> getProductTypesCnt() {
+        return orderDao.getProductTypesCnt();
+    }
+
+    public List<ProductType> getProductTypes(int limit, int proTypeNumIPage) {
+        return orderDao.getProductTypes(limit, proTypeNumIPage);
     }
 
     public int getProductCnt(String productTypeCode) {

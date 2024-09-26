@@ -44,7 +44,6 @@ if (HomeContainer != null) {
         const endOfYPoint = containerHeight - boxHeight;
         tableEl.style.left = `${Math.min(Math.max(0, originLeft + diffX), endOfXPoint)}px`;
         tableEl.style.top = `${Math.min(Math.max(0, originTop + diffY), endOfYPoint)}px`;
-
         $.get('/usr/tables/update', {
             elPosX: tableEl.offsetLeft,
             elPosY: tableEl.offsetTop,

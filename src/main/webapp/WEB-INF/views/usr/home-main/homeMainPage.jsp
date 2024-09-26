@@ -66,11 +66,11 @@
                 </div>
                 <span>영업정보관리</span>
             </div>
-            <div>
+            <div onclick="location.replace('/usr/home-main/tableLayout?floor=1')">
                 <div>
                     <span class="material-symbols-outlined text-white text-7xl">account_balance</span>
                 </div>
-                <span>영업준비금</span>
+                <span>테이블 배치</span>
             </div>
         </div>
     </div>

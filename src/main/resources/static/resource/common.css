@@ -571,6 +571,53 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: red;
 }
 
+.tables > div:nth-child(2) > span:first-child {
+    width: 100%;
+    font-size: .8rem;
+    text-align: center;
+    height: 21%;
+}
+
+.tables > div:nth-child(2) > span:nth-child(2) {
+    width: 100%;
+    font-size: .8rem;
+    text-align: center;
+    height: 21%;
+}
+
+.tables > div:nth-child(2) > .table-products-info-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: smaller;
+    width: 100%;
+    height: 60%;
+}
+
+.tables > div:nth-child(2) > .table-products-info-box div {
+    display: flex;
+    align-items: center;
+    /*justify-content: space-evenly;*/
+    flex-direction: row;
+    height: 31%;
+    width: 100%;
+}
+
+.tables > div:nth-child(2) > .table-products-info-box div > span:first-child {
+    text-align: center;
+    width: 80%;
+    height: 100%;
+    margin-right: 1%;
+    overflow: hidden;
+}
+
+.tables > div:nth-child(2) > .table-products-info-box div > span:last-child {
+    text-align: center;
+    overflow: hidden;
+    width: 20%;
+    height: 100%;
+}
+
 /*Detail Page LeftFeed*/
 .manuPage {
     display: flex;
@@ -853,7 +900,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     font-weight: bold;
 }
 
-.manuPage > .manuPageRight > .productType-box li:nth-child(14) {
+.manuPage > .manuPageRight > .productType-box li.proType-next-prev-btn {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -864,7 +911,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: white;
 }
 
-.productType-box li:nth-child(14) > span:nth-child(1) {
+.productType-box li.proType-next-prev-btn > span:nth-child(1) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -875,7 +922,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     font-size: clamp(1.3rem, 2.2vw, 2.2rem);
 }
 
-.productType-box li:nth-child(14) > span:nth-child(2) {
+.productType-box li.proType-next-prev-btn > span:nth-child(2) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -926,7 +973,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     font-size: clamp(0.7rem, 1vw, 1rem);
 }
 
-.manuPage > .manuPageRight > .product-box li:nth-child(28) {
+.manuPage > .manuPageRight > .product-box li.prev-next-btn {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -937,7 +984,7 @@ body .header-box li:hover, .header-box-detail li:hover {
     background-color: white;
 }
 
-.product-box li:nth-child(28) > span:nth-child(1) {
+.product-box li.prev-next-btn > span:nth-child(1) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -949,11 +996,11 @@ body .header-box li:hover, .header-box-detail li:hover {
     cursor: pointer;
 }
 
-.product-box li:nth-child(28) > span:active {
+.product-box li.prev-next-btn > span:active {
     transform: translateY(2px);
 }
 
-.product-box li:nth-child(28) > span:nth-child(2) {
+.product-box li.prev-next-btn > span:nth-child(2) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3978,11 +4025,11 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
 /*========= Other Management ======================*/
 
 .other-management-page {
-    display: none;
+    display: flex;
     position: relative;
     width: 98%;
-    height: 100%;
-    left: 2%;
+    height: 92%;
+    /*left: 2%;*/
     top: 0%;
     transition: left 0.5s, background-color 0.5s;
     background-color: #FFFFFF;
@@ -4136,27 +4183,76 @@ span:not(:nth-child(7), :nth-child(2), :nth-child(8), :nth-child(1)) {
 }
 
 .other-management-tables > li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 15%;
-    height: 11%;
+    position: absolute;
+    cursor: all-scroll;
 }
 
-.other-management-tables > li:nth-child(1) {
+.target {
+    width: 100px;
+    height: 100px;
+    background-color: peachpuff;
+    position: relative;
+    text-align: center;
+    line-height: 100px;
+    font-size: 20px;
+    /*margin: 50px auto;*/
+    border: 2px solid black;
+}
+
+.target:nth-child(1) {
+    top: 10px;
+    left: 0;
+}
+
+.target:nth-child(2) {
+    top: 10px;
+    left: 110px;
+}
+
+.target:nth-child(3) {
+    top: 10px;
+    left: 220px;
+}
+
+.target:nth-child(4) {
+    top: 10px;
+    left: 330px;
+}
+
+.border-line {
+    position: absolute;
+    background-color: red; /* 테두리 색상 */
+}
+
+/* 상, 하, 좌, 우 테두리 기본 스타일 */
+.border-top,
+.border-bottom {
+    width: 100%;
+    height: 4px;
+}
+
+.border-left,
+.border-right {
+    width: 4px;
+    height: 100%;
+}
+
+.border-top {
+    top: -2px;
+    left: 0;
+}
+
+.border-bottom {
+    bottom: -2px;
+    left: 0;
+}
+
+.border-left {
+    left: -2px;
     top: 0;
-    left: 10px;
-    /*background-color: #2B7ABB;*/
 }
 
-.other-management-tables > li:nth-child(2) {
-    top: 100px;
-    left: 80px;
-    /*background-color: #FBD3AD;*/
-}
-
-.other-management-tables > li:nth-child(3) {
-    top: 50px;
-    left: 60px;
-    /*background-color: #575B6D;*/
+.border-right {
+    right: -2px;
+    top: 0;
 }

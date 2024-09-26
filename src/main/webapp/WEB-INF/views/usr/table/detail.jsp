@@ -624,27 +624,39 @@
         }
 
     </script>
+
     <div class="manuPageRight">
         <ul class="productType-box">
             <c:forEach var="productType" items="${productTypes}" varStatus="idx">
-                <li onclick="getProductByProTypeName(this, null);" class="${idx.index == 0 ? 'selected' : ''}"
+                <li onclick="getProductNextOrPrev(this, null);" class="${idx.index == 0 ? 'selected' : ''}"
                     name="${productType.korName}"
                     id="productType_${productType.code}">
                     <button style="background-color: ${productType.color}" class="">${productType.korName}</button>
                 </li>
             </c:forEach>
-            <c:if test="${productTypes.size() <= 13}">
+            <c:if test="${productTypes.size() < 13}">
                 <c:forEach begin="${productTypes.size() + 1}" end="13" varStatus="idx">
                     <li id="productType_${idx.index + 1}"></li>
                     <c:if test="${idx.index == 13}">
-                        <li id="productType_${idx.index + 1}">
-                            <span class="material-symbols-outlined">arrow_back_ios</span>
-                            <span class="material-symbols-outlined ${productTypes.size() > 13 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                        <li class="proType-next-prev-btn" id="productType_${idx.index + 1}">
+                            <span onclick="${page > 1 ? 'getProTypeNextOrPrev(null, 1)' : ''}"
+                                  class="material-symbols-outlined">arrow_back_ios</span>
+                            <span onclick="${proTypeTotalPage > 1 ? 'getProTypeNextOrPrev(null, 2)' : ''}"
+                                  class="material-symbols-outlined ${proTypeTotalPage > 3 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                         </li>
                     </c:if>
                 </c:forEach>
             </c:if>
+            <c:if test="${productTypes.size() == 13}">
+                <li class="proType-next-prev-btn">
+                    <span onclick="${page > 1 ? 'getProTypeNextOrPrev(null, 1)' : ''}"
+                          class="material-symbols-outlined">arrow_back_ios</span>
+                    <span onclick="${proTypeTotalPage > 1 ? 'getProTypeNextOrPrev(null, 2)' : ''}"
+                          class="material-symbols-outlined ${proTypeTotalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                </li>
+            </c:if>
         </ul>
+
         <ul class="product-box">
             <c:forEach var="product" items="${products}">
                 <li id="productItem_${product.id}" style="background-color: ${product.color}"
@@ -655,43 +667,134 @@
                           name="price">${product.price}원</span>
                 </li>
             </c:forEach>
-            <c:if test="${products.size() <= 27}">
+            <c:if test="${products.size() < 27}">
                 <c:forEach begin="${products.size() + 1}" end="27" varStatus="idx">
                     <li id="${idx.index}"
-                        class="productItems ">
+                        class="productItems">
                     </li>
                     <c:if test="${idx.index == 27}">
                         <li id="${idx.index}"
-                            class="productItems ">
-                            <span onclick="${products.size() > 27 ? 'getProductByProTypeName(null, 1)' : ''}"
-                                  class="material-symbols-outlined ">arrow_back_ios</span>
-                            <span onclick="${products.size() > 27 ? 'getProductByProTypeName(null, 2)' : ''}"
+                            class="prev-next-btn">
+                            <span onclick="${page > 1 ? 'getProductNextOrPrev(null, 1)' : ''}"
+                                  class="material-symbols-outlined ${page > 1 ? 'bg-blue-600' : ''}">arrow_back_ios</span>
+                            <span onclick="${totalPage > 1 ? 'getProductNextOrPrev(null, 2)' : ''}"
                                   class="material-symbols-outlined ${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                         </li>
                     </c:if>
                 </c:forEach>
             </c:if>
+            <c:if test="${products.size() == 27}">
+                <li class="prev-next-btn">
+                            <span onclick="${page > 1 ? 'getProductNextOrPrev(null, 1)' : ''}"
+                                  class="material-symbols-outlined ${page > 1 ? 'bg-blue-600' : ''}">arrow_back_ios</span>
+                    <span onclick="${totalPage > 1 ? 'getProductNextOrPrev(null, 2)' : ''}"
+                          class="material-symbols-outlined ${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                </li>
+            </c:if>
         </ul>
     </div>
 
     <script>
-
-        let page = 1;
+        let page = ${page};
         let totalPage = ${totalPage};
 
-        function getProductByProTypeName(el, btnName) {
+        let proTypePage = ${page};
+        let proTypeTotalPage = ${proTypeTotalPage};
+
+        function getProTypeNextOrPrev(el, btnName) {
+            if (btnName == 1 && proTypePage > 1) {
+                proTypePage--;
+            } else if (btnName == 2 && proTypePage < proTypeTotalPage) {
+                proTypePage++;
+            }
+
+            $.ajax({
+                url: "/usr/tables/detail/getProductType",
+                data: {
+                    proTypePage: proTypePage
+                },
+                method: "GET",
+                success: function (data) {
+                    if (data.proTypeList.length != 0) {
+                        drawProTypeLi(data);
+                        proTypePage = data.proTypePage;
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log(error)
+                },
+                complete: function () {
+                }
+            })
+        }
+
+        function drawProTypeLi(data) {
+            let proTypeList = data.proTypeList;
+            let proTypeCnt = data.proTypeCnt;
+            let proTypeTotalPage = data.totalPage;
+            let proTypePage = data.proTypePage;
+            let liElement = "";
+            if (proTypeList.length != 0) {
+                for (let i = 0; i < proTypeList.length; i++) {
+                    let proType = proTypeList[i];
+                    liElement += `
+                     <li onclick="getProductNextOrPrev(this, null);"
+                            name="\${proType.korName}"
+                        id="productType_\${proType.code}">
+                        <button style="background-color: \${proType.color}" class="">\${proType.korName}</button>
+                    </li>
+                `
+                }
+                if (proTypeList.length < 13) {
+                    for (let i = proTypeList.length + 1; i <= 13; i++) {
+                        liElement += `
+                         <li id="productType_\${i + 1}"></li>`
+                        if (i == 13) {
+                            liElement += `
+                             <li id="\${i}"class="proType-next-prev-btn">
+                                <span onclick="\${proTypePage > 1 ? 'getProTypeNextOrPrev(null, 1)' : ''}"
+                                    class="material-symbols-outlined \${proTypePage > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
+                                <span onclick="\${proTypeTotalPage > 1 ? 'getProTypeNextOrPrev(null, 2)' : ''}"
+                                    class="material-symbols-outlined \${proTypePage != proTypeTotalPage ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                             </li>
+                            `
+                        }
+                    }
+                } else {
+                    liElement += `
+                             <li  class="proType-next-prev-btn ">
+                                <span onclick="\${proTypePage > 1 ? 'getProTypeNextOrPrev(null, 1)' : ''}"
+                                    class="material-symbols-outlined \${proTypePage > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
+                                <span onclick="\${proTypeTotalPage > 1 ? 'getProTypeNextOrPrev(null, 2)' : ''}"
+                                    class="material-symbols-outlined \${proTypeTotalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                             </li>
+                            `
+                }
+                $(".manuPageRight .productType-box").html(liElement);
+            }
+
+            // let beforeProType = document.querySelector(".productType-box li.selected")
+            // getProductNextOrPrev(beforeProType, null);
+        }
+
+        let proTypeSelectedEl = document.querySelector(".productType-box li.selected")
+
+        function getProductNextOrPrev(el, btnName) {
             let productTypeCode = "";
             let productTypeName = "";
             if (el != null) {
-                let beforeProType = document.querySelector(".productType-box li.selected")
+                // let beforeProType = document.querySelector(".productType-box li.selected")
+                let beforeProType = proTypeSelectedEl
                 beforeProType.classList.remove("selected");
                 productTypeCode = el.id.substring(el.id.indexOf("_") + 1);
                 productTypeName = el.getAttribute("name");
                 el.classList.add("selected");
+                proTypeSelectedEl = el;
 
                 page = 1;
             } else {
-                let beforeProType = document.querySelector(".productType-box li.selected")
+                // let beforeProType = document.querySelector(".productType-box li.selected")
+                let beforeProType = proTypeSelectedEl
                 productTypeCode = beforeProType.id.substring(beforeProType.id.indexOf("_") + 1);
                 productTypeName = beforeProType.getAttribute("name");
 
@@ -711,14 +814,17 @@
                 },
                 method: "GET",
                 success: function (data) {
-                    drawProductLi(data);
-                    totalPage = data.totalPage;
+                    if (data.productList.length != 0) {
+                        drawProductLi(data);
+                        totalPage = data.totalPage;
+                    } else {
+                        drawProductLi(data);
+                    }
                 },
                 error: function (request, status, error) {
                     console.log(error)
                 },
                 complete: function () {
-
                 }
             })
         }
@@ -728,7 +834,6 @@
             let productCnt = data.productCnt;
             let totalPage = data.totalPage;
             let page = data.page;
-
             let liElement = "";
             if (productList.length != 0) {
                 for (let i = 0; i < productList.length; i++) {
@@ -737,12 +842,11 @@
                      <li id="productItem_\${product.id}" style="background-color: \${product.color}"  onclick="selectMenuItem(this)"
                         class="productItems flex flex-col justify-center items-center w-full h-full cursor-pointer p-4">
                         <span class="w-full h-3/5 text-center" name="productName">\${product.productKorName}</span>
-                        <span class="text-red-400 pt-2 h-2/5 price" name="price" data-value="\${product.price}">\${product.price.toLocaleString()}원</span>
+                        <span class="text-red-600  h-2/5 price" name="price" data-value="\${product.price}">\${product.price.toLocaleString()}원</span>
                     </li>
                 `
                 }
-
-                if (productList.length <= 27) {
+                if (productList.length < 27) {
                     for (let i = productList.length + 1; i <= 27; i++) {
                         liElement += `
                          <li id="\${i}"
@@ -751,34 +855,40 @@
                         `
                         if (i == 27) {
                             liElement += `
-                             <li id="\${i}"class="productItems ">
-                                <span onclick="\${productCnt > 27 ? 'getProductByProTypeName(null, 1)' : ''}"
+                             <li id="\${i}"class="prev-next-btn ">
+                                <span onclick="\${page > 1 ? 'getProductNextOrPrev(null, 1)' : ''}"
                                     class="material-symbols-outlined \${page > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
-                                <span onclick="\${productCnt > 27 ? 'getProductByProTypeName(null, 2)' : ''}"
-                                    class="material-symbols-outlined \${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                                <span onclick="\${totalPage > 1 ? 'getProductNextOrPrev(null, 2)' : ''}"
+                                    class="material-symbols-outlined \${page != totalPage ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                              </li>
                             `
                         }
                     }
+                } else {
+                    liElement += `
+                             <li  class="prev-next-btn ">
+                                <span onclick="\${page > 1 ? 'getProductNextOrPrev(null, 1)' : ''}"
+                                    class="material-symbols-outlined \${page > 1 ? 'bg-blue-600' : ''}" >arrow_back_ios</span>
+                                <span onclick="\${totalPage > 1 ? 'getProductNextOrPrev(null, 2)' : ''}"
+                                    class="material-symbols-outlined \${totalPage > 1 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
+                             </li>
+                            `
                 }
                 $(".manuPageRight .product-box").html(liElement);
-
             } else {
-                if (productList.length <= 27) {
-                    for (let i = productList.length + 1; i <= 27; i++) {
-                        liElement += `
+                for (let i = 1; i <= 27; i++) {
+                    liElement += `
                              <li id="\${i}"
                                 class="productItems flex ">
                              </li>
                             `
-                        if (i == 27) {
-                            liElement += `
-                             <li id="\${i}"class="productItems ">
+                    if (i == 27) {
+                        liElement += `
+                             <li id="\${i}" class="prev-next-btn">
                                 <span class="material-symbols-outlined">arrow_back_ios</span>
                                 <span class="material-symbols-outlined \${productCnt > 10 ? 'bg-blue-600' : ''}">arrow_forward_ios</span>
                              </li>
                             `
-                        }
                     }
                 }
                 $(".manuPageRight .product-box").html(liElement);

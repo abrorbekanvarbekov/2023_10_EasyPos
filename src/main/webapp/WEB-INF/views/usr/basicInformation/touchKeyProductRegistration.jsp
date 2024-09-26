@@ -429,6 +429,7 @@
             return;
         }
 
+        // ============================================ //
         let proTypeNumAndCode = $(".proTypeNumAndCode");
         let proTypeNumAndCodeLiIdxList = [];
         let proTypeProCodeList = [];
@@ -460,6 +461,7 @@
             })
         }
 
+        // ============================================ //
         let productNumAndCode = $(".productNumAndCode");
         let proNumAndCodeLiIdxList = [];
         let productProCodeList = [];
@@ -494,6 +496,7 @@
             })
         }
 
+        // ============================================ //
         if (newProTypeLen != 0) {
             let newProTypeSequenceNumList = [];
             let newProTypeKorNameList = [];
@@ -535,6 +538,7 @@
             })
         }
 
+        // ============================================ //
         if (updateProTypeLen != 0) {
             let updateProductTypeCodeList = [];
             let updateProTypeSequenceNumList = [];
@@ -580,6 +584,7 @@
             })
         }
 
+        // ============================================ //
         if (updateProLen != 0) {
             let selectProTypeItem = $(".productType-list-con-left li.checked ")[0];
             let selectProTypeCode = selectProTypeItem.id.substring(selectProTypeItem.id.indexOf("_") + 1);

@@ -16,7 +16,9 @@ public class Table {
     private int height;
     private int left;
     private int top;
+    private int border_radius;
     private int authLevel;
     private int floor;
+    private int lastTableNum;
     private String bgColor;
 }

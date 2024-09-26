@@ -1,6 +1,7 @@
 package com.example.easypos.DAO;
 
 import com.example.easypos.Vo.CartItems;
+import com.example.easypos.Vo.Table;
 import com.example.easypos.Vo.deadlineSettlement;
 import com.example.easypos.Vo.paymentCreditCardAndCash;
 import org.apache.ibatis.annotations.*;
@@ -21,7 +22,7 @@ public interface HomeMainDao {
                    and regDate < #{endDate}
                  group by regDate
             """)
-    List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate, String endDate , String floor);
+    List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate, String endDate, String floor);
 
     @Select("""
             select cartI.*, pay.CardAmountPaid, pay.CashAmountPaid, pay.totalAmount, pay.discountAmount
@@ -45,17 +46,18 @@ public interface HomeMainDao {
 
 
     @Insert("""
-            insert into paymentCreditCardAndCash(regDate, updateDate, tabId, floor, totalAmount, CardAmountPaid, CashAmountPaid,
-                                                 discountAmount, payByCreditCartNumber, cart_id, isReturn)
+            insert into paymentCreditCardAndCash(regDate, updateDate, openingDate, tabId, floor, totalAmount, CardAmountPaid, CashAmountPaid,
+                                                 discountAmount, payByCreditCardNumber, cart_id, isReturn)
             select now(),
                    updateDate,
+                   #{openingDate},
                    tabId,
                    floor,
                    totalAmount,
                    CardAmountPaid,
                    CashAmountPaid,
                    discountAmount,
-                   payByCreditCartNumber,
+                   payByCreditCardNumber,
                    cart_id,
                    1
             from paymentCreditCardAndCash
@@ -65,7 +67,7 @@ public interface HomeMainDao {
     void insertReturnPayment(int cartId, String openingDate);
 
     @Delete("""
-            delete from paymentCreditCart
+            delete from paymentCreditCard
                 where cart_id = #{cartId}
                 and openingDate = #{openingDate}
             """)
@@ -158,4 +160,41 @@ public interface HomeMainDao {
                 where openingDate = #{businessDate}
             """)
     void removeLeftCart(String businessDate);
+
+    @Insert("""
+            insert into `table` (
+                                 regDate, updateDate, tableName, width, height, `left`, top, 
+                                 border_radius, authLevel, floor, lastTableNum, bgColor
+            ) SELECT now(),
+                     now(),
+                     #{tableNum},
+                     #{width},
+                     #{height},
+                     #{top},
+                     #{left},
+                     #{border_radius},
+                     1,
+                     #{floor},
+                     #{tableNum},
+                     #{tableColor}
+            """)
+    int createTable(int tableNum, String tableColor, int floor, int width, int height, int top, int left, int border_radius);
+
+    @Select("""
+            select * from `table`
+                where floor = #{floor}
+            """)
+    List<Table> getTableList(int floor);
+
+    @Update("""
+            update `table`
+            set updateDate = now(),
+                width = #{width},
+                height = #{height},
+                `left` = #{elPosX},
+                `top` = #{elPosY}
+            where tableName = #{number}
+            and floor = #{floor}
+            """)
+    int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor);
 }

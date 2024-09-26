@@ -48,7 +48,6 @@ public class MemberController {
     @RequestMapping("/usr/member/doLogin")
     @ResponseBody
     public ResultDate<String> doLogin(String loginId, String loginPw, boolean isIdSave) {
-        System.out.println(loginId);
         String errorMsg = "";
 
         if (Util.empty(loginId)) {
@@ -77,20 +76,23 @@ public class MemberController {
             return ResultDate.from("F-1", errorMsg);
         }
 
-        if (rq.getLoginedMemberId() != 0) {
-            errorMsg = "이미 로그인 상태 입니다.";
-            return ResultDate.from("S-2", errorMsg, "homeUrl", "/?floor=1");
-        }
+//        if (rq.getLoginedMemberId() != 0) {
+//            errorMsg = "이미 로그인 상태 입니다.";
+//            return ResultDate.from("S-2", errorMsg, "homeUrl", "/?floor=1");
+//        }
 
         rq.login(member);
-
-        return ResultDate.from("S-1", "/usr/member/employeeListPage");
+        if (rq.getLoginedEmployee() == null) {
+            return ResultDate.from("S-1", "/usr/member/employeeListPage");
+        } else {
+            return ResultDate.from("S-1", "/");
+        }
     }
 
     @RequestMapping("/usr/member/employeeListPage")
     public String employeeListPage(Model model) {
 
-        List<Employee> employeeList = memberService.getEmployeeList(rq.getLoginedMemberId());
+        List<Employee> employeeList = memberService.getEmployeeList();
 
         String todayDate = dateFormatter.format(dateNow);
         model.addAttribute("todayDate", todayDate);

@@ -7,11 +7,19 @@ import java.util.List;
 
 @Mapper
 public interface OrderDao {
+
     @Select("""
             select * from productType
             order by sequenceNum
             """)
-    List<ProductType> getProductTypes();
+    List<ProductType> getProductTypesCnt();
+
+    @Select("""
+            select * from productType
+            order by sequenceNum
+            limit #{limit}, #{proTypeNumIPage}
+            """)
+    List<ProductType> getProductTypes(int limit, int proTypeNumIPage);
 
     @Select("""
             select count(*) from `${productTypeCode}`

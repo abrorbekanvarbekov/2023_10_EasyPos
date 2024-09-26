@@ -74,7 +74,7 @@
                     <span class="material-symbols-outlined">article</span>
                     <a href="#">기타관리</a>
                     <ul>
-                        <li>
+                        <li onclick="tableLayout();" id="tableLayout">
                             <span class="material-symbols-outlined">subdirectory_arrow_right</span>
                             <a href="#">테이블 베치</a>
                         </li>
@@ -94,7 +94,7 @@
     <%@include file="../basicInformation/touchKeyLocationRegistration.jsp" %>
 
     <%-- ====================== 기타 관리  ======================== --%>
-    <%@include file="../basicInformation/otherManagement.jsp" %>
+<%--    <%@include file="../basicInformation/otherManagement.jsp" %>--%>
 </div>
 
 <script>
@@ -216,9 +216,8 @@
         $(".touch-product-reg").unwrap();
     }
 
-    // ==============================================================//
-
     function touchKeyLocation() {
+
         $(".basicInformation-left").css("display", "none")
         $("#classificationManagement").css("color", "#FFFFFF");
 
@@ -241,6 +240,38 @@
 
         $(".touch-product-location").unwrap();
     }
+
+    // ===================== 기타 관리 =======================//
+
+    // function tableLayout() {
+    //     $(".basicInformation-left").css("display", "none")
+    //     $("#classificationManagement").css("color", "#FFFFFF");
+    //
+    //     $("#productLookUp").css("color", "#FFFFFF")
+    //     $(".product-lookUp-page").css("display", "none");
+    //
+    //     $("#addProductPage").css("color", "#FFFFFF");
+    //     $(".add-product-page").css("display", "none");
+    //
+    //     $("#touchKeyRegistration").css("color", "#FFFFFF");
+    //     $(".touch-product-reg").css("display", "none");
+    //
+    //     $("#touchKeyLocation").css("color", "#FFFFFF");
+    //     $(".touch-product-location").css("display", "none");
+    //
+    //     $("#tableLayout").css("color", "#FBD3AD");
+    //     $(".other-management-page").css("display", "block");
+    //
+    //     $(".basicInformation-left").load(location.href + ' .basicInformation-left');
+    //     $(".product-lookUp-page").load(location.href + ' .product-lookUp-page');
+    //     $(".add-product-page").load(location.href + ' .add-product-page');
+    //     $(".touch-product-reg").load(location.href + ' .touch-product-reg');
+    //     $(".touch-product-location").load(location.href + ' .touch-product-location');
+    //
+    //     $(".other-management-page").unwrap();
+    // }
+
+    // ===========================================//
 
     function mine() {
         $(event.target).select();

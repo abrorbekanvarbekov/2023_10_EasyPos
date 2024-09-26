@@ -44,18 +44,27 @@ public class OrderController {
             return rq.jsReturnOnView("갯층 값이 잘 못 입력하였습니다.");
         }
 
-        List<ProductType> productTypes = orderService.getProductTypes();
+        int proTypeCnt = orderService.getProductTypesCnt().size();
+        int proTypeNumIPage = 13;
+        int limit = (page - 1) * proTypeNumIPage;
+        List<ProductType> productTypes = orderService.getProductTypes(limit, proTypeNumIPage);
+
+        int proTypeTotalPage = (int) Math.ceil((double) proTypeCnt / proTypeNumIPage) == 0 ? 1 : (int) Math.ceil((double) proTypeCnt / proTypeNumIPage);
+
+        // 오더 페이지 한 페이지 몇개 메뉴 나오는지 정히
         List<Product> products = new ArrayList<>();
         int productCnt = 0;
         int proItemInPage = 27;
         int limitFrom = (page - 1) * proItemInPage;
 
+        // order page 에들어갈때 메인메뉴에 매뉴들이 나오게
         if (productTypes.size() != 0) {
             productCnt = orderService.getProductCnt(productTypes.get(0).getCode());
             products = orderService.getProductList(productTypes.get(0).getCode(), productTypes.get(0).getKorName(), limitFrom, proItemInPage);
         }
 
-        int totalPage = (int) Math.ceil((double) productCnt / proItemInPage);
+        // 메뉴들의 총 개수를 계산해서 몇 페이지 있는지 확인
+        int totalPage = (int) Math.ceil((double) productCnt / proItemInPage) == 0 ? 1 : (int) Math.ceil((double) productCnt / proItemInPage);
 
         List<CartItems> cartItemsList = orderService.getCartItemsList(tabNum, floor, rq.getOpeningDate());
         int totalQuantity = 0;
@@ -94,14 +103,36 @@ public class OrderController {
         model.addAttribute("discountSumAMount", discountSumAMount);
         model.addAttribute("receiveAmount", receiveAmount);
         model.addAttribute("totalPage", totalPage);
+        model.addAttribute("proTypeTotalPage", proTypeTotalPage);
+        model.addAttribute("page", page);
         return "/usr/table/detail";
     }
+
+    // ==============================================================//
+    @RequestMapping("/usr/tables/detail/getProductType")
+    @ResponseBody
+    public ResponseEntity getProTypeList(@RequestParam(defaultValue = "1") int proTypePage) {
+
+        int proTypeCnt = orderService.getProductTypesCnt().size();
+        int proTypeNumIPage = 13;
+        int limitFrom = (proTypePage == 0 ? 1 : proTypePage - 1) * proTypeNumIPage;
+        int totalPage = (int) Math.ceil((double) proTypeCnt / proTypeNumIPage);
+
+        List<ProductType> proTypeList = orderService.getProductTypes(limitFrom, proTypeNumIPage);
+        Map<String, Object> context = new HashMap<>();
+        context.put("proTypeList", proTypeList);
+        context.put("proTypeCnt", proTypeCnt);
+        context.put("totalPage", totalPage);
+        context.put("proTypePage", proTypePage);
+
+        return ResponseEntity.ok().body(context);
+    }
+
 
     // ==============================================================//
     @RequestMapping("/usr/tables/detail/getProduct")
     @ResponseBody
     public ResponseEntity getProductList(String productTypeCode, String productTypeName, @RequestParam(defaultValue = "1") int page) {
-
         int productCnt = orderService.getProductCnt(productTypeCode);
         int proItemInPage = 27;
         int limitFrom = (page == 0 ? 1 : page - 1) * proItemInPage;

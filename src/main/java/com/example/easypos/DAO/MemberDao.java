@@ -31,10 +31,9 @@ public interface MemberDao {
     Members getMemberById(int loginedMemberId);
 
     @Select("""
-            select * from employee
-            where userId = #{loginedMemberId} 
+            select * from employee 
             """)
-    List<Employee> getEmployeeList(int loginedMemberId);
+    List<Employee> getEmployeeList();
 
     @Select("""
             select * from employee

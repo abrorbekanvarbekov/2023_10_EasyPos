@@ -13,6 +13,7 @@ create table `table`
     height      int unsigned     not null,
     `left`      int unsigned     not null,
     `top`       int unsigned     not null,
+    border_radius       int ,
     `authLevel` tinyint unsigned not null default 1 comment '권한 라벨 (일반 = 1, 관리자 = 3)',
     floor       int unsigned     not null,
     bgColor     varchar(50)      not null default '#BFE4FF',

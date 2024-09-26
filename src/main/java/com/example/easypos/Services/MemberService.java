@@ -30,8 +30,8 @@ public class MemberService {
         return memberDao.getMemberById(loginedMemberId);
     }
 
-    public List<Employee> getEmployeeList(int loginedMemberId) {
-        return memberDao.getEmployeeList(loginedMemberId);
+    public List<Employee> getEmployeeList() {
+        return memberDao.getEmployeeList();
     }
 
     public Employee getEmployee(int employeeCode) {

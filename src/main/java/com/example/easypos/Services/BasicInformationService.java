@@ -177,7 +177,7 @@ public class BasicInformationService {
             String productTypeColor = productTypeColorList.get(i);
             int sequenceNum = Integer.parseInt(newProTypeSequenceNumList.get(i));
             result = basicInformationDao.addProductType(productTypeCode + 1, productTypeKorName, productTypeEngName,
-                    productTypeColor, sequenceNum );
+                    productTypeColor, sequenceNum);
 
             if (result == 1) {
                 String proTypeCode = String.format("%03d", productTypeCode + 1);
@@ -194,7 +194,7 @@ public class BasicInformationService {
                         "                    korName     varchar(100) not null,\n" +
                         "                    productCode varchar(50)  not null,\n" +
                         "                    color       varchar(50)  not null,\n" +
-                        "                    sequenceNum varchar(50)  not null\n" +
+                        "                    sequenceNum int                    \n" +
                         "                );";
                 basicInformationDao.createAndDropTable(createSql);
             }

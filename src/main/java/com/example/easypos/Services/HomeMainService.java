@@ -3,6 +3,7 @@ package com.example.easypos.Services;
 
 import com.example.easypos.DAO.HomeMainDao;
 import com.example.easypos.Vo.CartItems;
+import com.example.easypos.Vo.Table;
 import com.example.easypos.Vo.deadlineSettlement;
 import com.example.easypos.Vo.paymentCreditCardAndCash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class HomeMainService {
         this.homeMainDao = homeMainDao;
     }
 
-    public List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate,String endDate, String floor) {
+    public List<paymentCreditCardAndCash> getPaymentCartAndCashList(String beginDate, String endDate, String floor) {
         return homeMainDao.getPaymentCartAndCashList(beginDate, endDate, floor);
     }
 
@@ -96,5 +97,18 @@ public class HomeMainService {
 
     public void removeLeftCart(String businessDate) {
         homeMainDao.removeLeftCart(businessDate);
+    }
+
+    public int createTable(int tableNum, String tableColor, int floor, int width, int height,
+                           int top, int left, int border_radius) {
+        return homeMainDao.createTable(tableNum, tableColor, floor, width, height, top, left, border_radius);
+    }
+
+    public List<Table> getTableList(int floor) {
+        return homeMainDao.getTableList(floor);
+    }
+
+    public int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor) {
+        return homeMainDao.updateTable(width, height, elPosX, elPosY, number, floor);
     }
 }

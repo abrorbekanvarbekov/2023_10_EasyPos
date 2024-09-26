@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -165,5 +165,33 @@ public class HomeMainController {
     @RequestMapping("/usr/home-main/salesInformationManagement")
     public String SalesInformationManagement() {
         return "/usr/home-main/basicInformation";
+    }
+
+    @RequestMapping("/usr/home-main/tableLayout")
+    public String tableLayout(int floor, Model model) {
+        List<Table> tableList = homeMainService.getTableList(floor);
+        model.addAttribute("tableList", tableList);
+        return "usr/home-main/otherManagement";
+    }
+
+    @RequestMapping("/usr/home-main/createTable")
+    @ResponseBody
+    public ResponseEntity<?> createTable(int tableNum, String tableColor, int floor, int width,
+                                         int height, int top, int left, int border_radius) {
+        int result = homeMainService.createTable(tableNum, tableColor, floor, width,
+                height, top, left, border_radius);
+        if (result == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body("테이블이 생성되지 않았습니다.");
+        }
+    }
+
+    @RequestMapping("/usr/home-main/updateTable")
+    @ResponseBody
+    public ResponseEntity<?> updateTable(int width, int height, int elPosX, int elPosY, int number, int floor) {
+        homeMainService.updateTable(width, height, elPosX, elPosY, number, floor);
+        return ResponseEntity.ok().build();
+
     }
 }
