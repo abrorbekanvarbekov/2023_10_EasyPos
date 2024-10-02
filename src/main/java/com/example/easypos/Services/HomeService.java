@@ -93,9 +93,9 @@ public class HomeService {
         return homeDao.getCartItem(productId, tabId, floor);
     }
 
-    public void toMoveCartItems(int product_id, String productName, int table_id, int quantity, int productPrice,
+    public void toMoveCartItems(String openingDate, int product_id, String productName, int table_id, int quantity, int productPrice,
                                 int productSumPrice, int productSailPrice, int floor_id, int cart_id) {
-        homeDao.toMoveCartItems(product_id, productName, table_id, quantity, productPrice, productSumPrice, productSailPrice, floor_id, cart_id);
+        homeDao.toMoveCartItems(openingDate, product_id, productName, table_id, quantity, productPrice, productSumPrice, productSailPrice, floor_id, cart_id);
     }
 
     public void toMoveUpdateCartItems(int afterTableNum, int floor, int productId, int quantity, int productSailPrice, int productSumPrice, int cart_id) {

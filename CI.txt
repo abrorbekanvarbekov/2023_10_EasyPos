@@ -101,3 +101,13 @@ jobs:
           script: |
             sudo docker stop ${{env.CURRENT_UPSTREAM}}
             sudo docker rm ${{env.CURRENT_UPSTREAM}}
+
+
+=====================
+docker run \
+  --name=nginx-server \
+  -d \
+  -p 80:80 \
+  --rm \
+  -v /home/ubuntu/EasyPos-Project/nginx/conf.d:/etc/nginx/conf.d \
+  nginx:latest

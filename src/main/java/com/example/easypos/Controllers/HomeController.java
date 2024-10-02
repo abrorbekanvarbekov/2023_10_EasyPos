@@ -154,7 +154,7 @@ public class HomeController {
                 CartItems item = homeService.getCartItem(currentCartItem.getProduct_id(), afterTableNum, floor);
                 if (item != null && currTableNum != afterTableNum) {
                     if (currentCartItem.getProductSailPrice() != 0) {
-                        homeService.toMoveCartItems(currentCartItem.getProduct_id(), currentCartItem.getProductName(), afterTableNum,
+                        homeService.toMoveCartItems(rq.getOpeningDate(), currentCartItem.getProduct_id(), currentCartItem.getProductName(), afterTableNum,
                                 currentCartItem.getQuantity(), currentCartItem.getProductPrice(), currentCartItem.getProductSumPrice(),
                                 currentCartItem.getProductSailPrice(), floor, cart.getId());
                     } else if (currentCartItem.getProductSailPrice() == 0) {
@@ -164,7 +164,7 @@ public class HomeController {
                     homeService.updateCart(floor, afterTableNum, currTableNum);
 
                 } else if (item == null) {
-                    homeService.toMoveCartItems(currentCartItem.getProduct_id(), currentCartItem.getProductName(), afterTableNum,
+                    homeService.toMoveCartItems(rq.getOpeningDate(), currentCartItem.getProduct_id(), currentCartItem.getProductName(), afterTableNum,
                             currentCartItem.getQuantity(), currentCartItem.getProductPrice(), currentCartItem.getProductSumPrice(),
                             currentCartItem.getProductSailPrice(), floor, cart.getId());
                     homeService.updateCart(floor, afterTableNum, currTableNum);

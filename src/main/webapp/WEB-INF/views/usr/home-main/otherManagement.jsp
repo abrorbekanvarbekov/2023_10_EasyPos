@@ -72,7 +72,7 @@
                         <span style="background-color: #FBD3B7" class="mt-1"
                               onclick="createTable('orangeTable')"></span>
                         <span style="background-color: #AFE4BB" class="mt-1"
-                              onclick="createTable('circleTable')"></span>
+                         A     onclick="createTable('circleTable')"></span>
                         <div>
                             <span class="material-symbols-outlined pr-2 text-lg text-red-400">arrow_circle_right</span>
                             <span>구조물</span>

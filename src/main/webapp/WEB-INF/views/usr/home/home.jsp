@@ -24,7 +24,7 @@
                class="tables text-sm" id="${table.tableName}"
                draggable="true"
                floor="${floor}"
-               style="width: ${table.width}; height: ${table.height}; top: ${table.top}; left: ${table.left}">
+               style="width: ${table.width}; height: ${table.height}; top: ${table.top}; left: ${table.left}; background-color: ${table.bgColor}">
                 <div class="tableGroupNum" id="groupNum_${table.tableName}"></div>
                 <div class="flex flex-col h-full w-full items-center  overflow-hidden" id="${table.tableName}">
                     <span class="${cartItems != null ? "text-red-400" : ""}">${table.tableName}번</span>

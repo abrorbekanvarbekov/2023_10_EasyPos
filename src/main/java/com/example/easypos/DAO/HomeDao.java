@@ -123,6 +123,7 @@ public interface HomeDao {
             insert into CartItems(
                     regDate,
                     updateDate,
+                    openingDate,
                     product_id,
                     productName,
                     table_id,
@@ -132,12 +133,12 @@ public interface HomeDao {
                     productSailPrice,
                     floor_id,
                     cart_id)
-                select now(), now(), #{product_id}, #{productName}, #{table_id}, #{quantity}, #{productPrice}, #{productSumPrice}, #{productSailPrice}, #{floor_id}, #{cartId}
+                select now(), now(), #{openingDate}, #{product_id}, #{productName}, #{table_id}, #{quantity}, #{productPrice}, #{productSumPrice}, #{productSailPrice}, #{floor_id}, #{cartId}
                 from product as p
                 where p.id = #{product_id}
                 and delStatus = 0;
             """)
-    void toMoveCartItems(int product_id, String productName, int table_id, int quantity, int productPrice, int productSumPrice, int productSailPrice, int floor_id, int cartId);
+    void toMoveCartItems(String openingDate, int product_id, String productName, int table_id, int quantity, int productPrice, int productSumPrice, int productSailPrice, int floor_id, int cartId);
 
     @Update("""
             update CartItems as c
