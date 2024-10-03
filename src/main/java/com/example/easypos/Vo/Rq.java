@@ -125,6 +125,13 @@ public class Rq {
 //        this.businessDate = "";
     }
 
+    public void deadlineSetLogOut() {
+        this.session.removeAttribute("loginedMemberId");
+        this.loginedMember = null;
+        this.session.removeAttribute("loginedEmployee");
+        this.businessDate = "";
+    }
+
     public void floor(int floor) {
         this.session.setAttribute("floor", floor);
     }

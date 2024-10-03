@@ -136,7 +136,7 @@ public class HomeMainController {
                 homeMainService.updateDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
             }
 
-            rq.logout();
+            rq.deadlineSetLogOut();
             homeMainService.removeLeftCartItem(rq.getOpeningDate());
             homeMainService.removeLeftCart(rq.getOpeningDate());
             return ResultDate.from("S-1", "/usr/member/loginPage");
