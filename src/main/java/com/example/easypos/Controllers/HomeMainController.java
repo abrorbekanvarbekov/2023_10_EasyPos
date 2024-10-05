@@ -90,7 +90,6 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/deadlineSettlement")
     public String deadlineSettlement(Model model) {
-
         String floor = String.valueOf(rq.getFloor());
 
         List<Integer> payedTotalAmount = homeMainService.getPayedTotalAmount(floor, rq.getOpeningDate());
@@ -127,13 +126,20 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/setDeadlineSettlement")
     @ResponseBody
-    public ResultDate<String> setDeadlineSettlement(String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount, int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard) {
+    public ResultDate<String> setDeadlineSettlement(String openEmployeeName, String openEmployeeCode, String closeEmployeeName,
+                                                    String closeEmployeeCode, int totalSales, int totalSalesCount,
+                                                    int discountAmount, int VAT, int NETSales, int amountOfReturns,
+                                                    int paidByCash, int paidByCard) {
         try {
             deadlineSettlement deadlineSettlement = homeMainService.getDeadlineSettlement(rq.getOpeningDate());
             if (deadlineSettlement == null) {
-                homeMainService.insertDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
+                homeMainService.insertDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName,
+                        closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns,
+                        paidByCash, paidByCard);
             } else {
-                homeMainService.updateDeadlineSettlement(rq.getOpeningDate(), openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
+                homeMainService.updateDeadlineSettlement(deadlineSettlement.getId(), rq.getOpeningDate(), openEmployeeName, openEmployeeCode,
+                        closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount, discountAmount,
+                        VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
             }
 
             rq.deadlineSetLogOut();

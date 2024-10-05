@@ -85,9 +85,9 @@ public class HomeMainService {
         return homeMainDao.getDeadlineSettlement(openingDate);
     }
 
-    public void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
+    public void updateDeadlineSettlement(int id, String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
                                          int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard) {
-        homeMainDao.updateDeadlineSettlement(openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
+        homeMainDao.updateDeadlineSettlement(id, openingDate, openEmployeeName, openEmployeeCode, closeEmployeeName, closeEmployeeCode, totalSales, totalSalesCount,
                 discountAmount, VAT, NETSales, amountOfReturns, paidByCash, paidByCard);
     }
 

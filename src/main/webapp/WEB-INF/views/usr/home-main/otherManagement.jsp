@@ -72,7 +72,7 @@
                         <span style="background-color: #FBD3B7" class="mt-1"
                               onclick="createTable('orangeTable')"></span>
                         <span style="background-color: #AFE4BB" class="mt-1"
-                         A     onclick="createTable('circleTable')"></span>
+                              A onclick="createTable('circleTable')"></span>
                         <div>
                             <span class="material-symbols-outlined pr-2 text-lg text-red-400">arrow_circle_right</span>
                             <span>구조물</span>
@@ -84,12 +84,9 @@
                 </div>
             </div>
             <ul class="other-management-tables">
-                <%--                <li class="target"></li>--%>
-                <%--                <li class="target"></li>--%>
-                <%--                <li class="target"></li>--%>
-                <%--                <li class="target"></li>--%>
                 <c:forEach var="table" items="${tableList}" varStatus="idx">
-                    <li draggable="true" class="tables right ${idx.count == 1 ? 'resizable-content' : ''}"
+                    <li draggable="true"
+                        class="tables right ${idx.count == 1 ? 'resizable-content' : ''}"
                         id="table_${idx.count}" floor="${table.floor}"
                         style="position: absolute; width: ${table.width}; height: ${table.height}; top: ${table.top};
                                 left: ${table.left}; border-radius: ${table.border_radius}px; background-color: ${table.bgColor}">
@@ -102,123 +99,150 @@
 </div>
 
 <script>
-    document.querySelectorAll('.tables').forEach((element) => {
-        element.addEventListener('click', function () {
-            // 기존에 추가된 테두리가 있으면 제거
-            removeBorders(this);
-            // 상, 하, 좌, 우 테두리 요소 생성
-            const borders = ['top', 'bottom', 'left', 'right'].map(direction => {
-                const border = document.createElement('div');
-                border.className = `border-line border-\${direction}`;
-                return border;
-            });
+    // li 태그들을 가져옵니다
+    const resizableElements = document.querySelectorAll('.tables');
+    resizableElements.forEach((li) => {
+        // 크기 조절 핸들을 추가
+        const handleX = document.createElement('div');
+        const handleY = document.createElement('div');
+        handleX.className = 'resize-handleX';
+        handleY.className = 'resize-handleY';
+        li.appendChild(handleX);
+        li.appendChild(handleY);
 
-            // 생성된 테두리 요소들을 타겟에 추가
-            borders.forEach(border => this.appendChild(border));
+        let isResizing = false;  // 크기 조절 중인지 여부
+        let lastX, lastY;        // 마지막 마우스 위치
 
-            document.querySelectorAll(".border-top").forEach((ele) => {
-                ele.addEventListener("mouseenter", function (el) {
-                    element.style.cursor = "n-resize";
-                })
-                ele.addEventListener("mouseout", function () {
-                    element.style.cursor = "all-scroll";
-                })
-            })
-
-            document.querySelectorAll(".border-bottom").forEach((ele) => {
-                ele.addEventListener("mouseenter", function (el) {
-                    element.style.cursor = "n-resize";
-                })
-                ele.addEventListener("mouseout", function () {
-                    element.style.cursor = "all-scroll";
-                })
-            })
-
-            document.querySelectorAll(".border-left").forEach((ele) => {
-                ele.addEventListener("mouseenter", function (el) {
-                    element.style.cursor = "w-resize";
-                })
-                ele.addEventListener("mouseout", function () {
-                    element.style.cursor = "all-scroll";
-                })
-            })
-
-            document.querySelectorAll(".border-right").forEach((ele) => {
-                ele.addEventListener("mouseenter", function (el) {
-                    element.style.cursor = "w-resize";
-                })
-                ele.addEventListener("mouseout", function () {
-                    element.style.cursor = "all-scroll";
-                })
-            })
+        handleX.addEventListener('mousedown', function (e) {
+            let parentLi = handleX.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            lastX = e.clientX;
+            document.addEventListener('mousemove', resizeX);
+            document.addEventListener('mouseup', stopResizeX);
         });
-    })
+        handleX.addEventListener('mouseup', stopResizeX)
 
-    // 기존에 있는 테두리 제거 함수
-    function removeBorders(element) {
-        const borders = element.querySelectorAll('.border-line');
-        borders.forEach(border => border.remove());
-    }
+        handleY.addEventListener('mousedown', function (e) {
+            let parentLi = handleX.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            lastY = e.clientY;
+            document.addEventListener('mousemove', resizeY);
+            document.addEventListener('mouseup', stopResizeY);
+        });
+        handleY.addEventListener('mouseup', stopResizeY);
+
+        function resizeX(e) {
+            if (!isResizing) return;
+            // 마우스의 현재 위치
+            const dy = e.clientY - lastY;
+
+            // 가로로 크기 조절
+            li.style.height = li.offsetHeight + dy + 'px';
+
+            // 위치 업데이트
+            lastY = e.clientY;
+        }
+
+        function resizeY(e) {
+            if (!isResizing) return;
+            // 마우스의 현재 위치
+            const dx = e.clientX - lastX;
+
+            // 가로로 크기 조절
+            li.style.width = li.offsetWidth + dx + 'px';
+
+            // 위치 업데이트
+            lastX = e.clientX;
+        }
+
+        function stopResizeX() {
+            let parentLi = handleX.parentNode;
+            parentLi.draggable = true;
+            isResizing = false;
+            document.removeEventListener('mousemove', resizeX);
+            document.removeEventListener('mouseup', stopResizeX);
+        }
+
+        function stopResizeY() {
+            let parentLi = handleX.parentNode;
+            parentLi.draggable = true;
+            isResizing = false;
+            document.removeEventListener('mousemove', resizeY);
+            document.removeEventListener('mouseup', stopResizeY);
+        }
+    });
 
     // ======================================= //
     document.querySelectorAll(".other-management-tables li").forEach((element) => {
         element.addEventListener("click", function () {
-            element.style.border = "2px solid red"
+            let clickedLi = document.querySelector(".other-management-tables > .clicked");
+            if (clickedLi != null) {
+                clickedLi.classList.remove("clicked");
+                clickedLi.style.border = "none";
+            }
+            element.classList.add("clicked");
+            element.style.border = "1px solid #00bfff";
         })
     })
 
-    const HomeContainer = document.querySelector(".other-management-tables")
-    if (HomeContainer != null) {
-        const {width: containerWidth, height: containerHeight} = HomeContainer.getBoundingClientRect();
-        let posX = null;
-        let posY = null;
-        let tableId = null;
-        let originLeft = null;
-        let originTop = null;
-        let originX = null;
-        let originY = null;
-        let boxWidth = null;
-        let boxHeight = null;
-        let floor = null;
 
-        document.querySelectorAll(".other-management-tables .tables").forEach((element) => {
-            element.addEventListener("dragstart", (e) => {
-                tableId = e.target.id
-                floor = e.target.attributes.floor.value
-                posX = e.offsetX;
-                posY = e.offsetY;
-                originX = e.clientX;
-                originY = e.clientY;
-                originLeft = element.offsetLeft;
-                originTop = element.offsetTop;
-                boxWidth = element.clientWidth;
-                boxHeight = element.clientHeight;
+    function tableMovement() {
+        const HomeContainer = document.querySelector(".other-management-tables")
+        if (HomeContainer != null) {
+            const {width: containerWidth, height: containerHeight} = HomeContainer.getBoundingClientRect();
+            let posX = null;
+            let posY = null;
+            let tableId = null;
+            let originLeft = null;
+            let originTop = null;
+            let originX = null;
+            let originY = null;
+            let boxWidth = null;
+            let boxHeight = null;
+            let floor = null;
+
+            document.querySelectorAll(".other-management-tables .tables").forEach((element) => {
+                element.addEventListener("dragstart", (e) => {
+                    tableId = e.target.id
+                    floor = e.target.attributes.floor.value
+                    posX = e.offsetX;
+                    posY = e.offsetY;
+                    originX = e.clientX;
+                    originY = e.clientY;
+                    originLeft = element.offsetLeft;
+                    originTop = element.offsetTop;
+                    boxWidth = element.clientWidth;
+                    boxHeight = element.clientHeight;
+                })
             })
-        })
 
-        document.querySelector(".other-management-tables").addEventListener("dragover", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        })
+            document.querySelector(".other-management-tables").addEventListener("dragover", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            })
 
-        document.querySelector(".other-management-tables").addEventListener("drop", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const tableEl = document.getElementById(tableId);
-            const diffX = e.clientX - originX;
-            const diffY = e.clientY - originY;
-            const endOfXPoint = containerWidth - boxWidth;
-            const endOfYPoint = containerHeight - boxHeight;
+            document.querySelector(".other-management-tables").addEventListener("drop", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const tableEl = document.getElementById(tableId);
+                const diffX = e.clientX - originX;
+                const diffY = e.clientY - originY;
+                const endOfXPoint = containerWidth - boxWidth;
+                const endOfYPoint = containerHeight - boxHeight;
 
-            let left = Math.min(Math.max(0, originLeft + diffX), endOfXPoint);
-            let right = Math.min(Math.max(0, originTop + diffY), endOfYPoint);
-            if (tableEl != null) {
-                tableEl.style.left = left + "px";
-                tableEl.style.top = right + "px";
-            }
-        })
+                let left = Math.min(Math.max(0, originLeft + diffX), endOfXPoint);
+                let right = Math.min(Math.max(0, originTop + diffY), endOfYPoint);
+                if (tableEl != null) {
+                    tableEl.style.left = left + "px";
+                    tableEl.style.top = right + "px";
+                }
+            })
+        }
     }
 
+    tableMovement();
     let lastTableNum = ${tableList.get(tableList.size()-1).lastTableNum};
 
     function createTable(tableType) {

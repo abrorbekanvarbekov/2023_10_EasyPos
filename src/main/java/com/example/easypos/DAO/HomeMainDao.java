@@ -130,7 +130,7 @@ public interface HomeMainDao {
     @Update("""
             update deadlineSettlement
                 set openingDate = #{openingDate},
-                    closingDate = now(),
+                    closeDate = now(),
                     openEmployeeName = #{openEmployeeName},
                     openEmployeeCode = #{openEmployeeCode},
                     closeEmployeeName = #{closeEmployeeName},
@@ -144,8 +144,9 @@ public interface HomeMainDao {
                     paidByCash = #{paidByCash},
                     paidByCard = #{paidByCard}
                 where openingDate = #{openingDate}
+                and id = #{id}
             """)
-    void updateDeadlineSettlement(String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
+    void updateDeadlineSettlement(int id, String openingDate, String openEmployeeName, String openEmployeeCode, String closeEmployeeName, String closeEmployeeCode, int totalSales, int totalSalesCount,
                                   int discountAmount, int VAT, int NETSales, int amountOfReturns, int paidByCash, int paidByCard);
 
     @Update("""
