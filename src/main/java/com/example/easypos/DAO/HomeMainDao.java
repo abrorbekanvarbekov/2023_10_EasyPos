@@ -198,4 +198,11 @@ public interface HomeMainDao {
             and floor = #{floor}
             """)
     int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor);
+
+    @Delete("""
+            delete from `table`
+                where floor = #{floor}
+                and tableName = #{tableId};
+            """)
+    void deleteTable(String tableId, int floor);
 }

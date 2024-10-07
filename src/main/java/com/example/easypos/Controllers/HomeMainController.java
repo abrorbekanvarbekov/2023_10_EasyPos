@@ -200,4 +200,11 @@ public class HomeMainController {
         return ResponseEntity.ok().build();
 
     }
+
+    @RequestMapping("/usr/home-main/deleteTable")
+    @ResponseBody
+    public ResponseEntity<?> deleteTable(String tableId, int floor) {
+        homeMainService.deleteTable(tableId, floor);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -60,7 +60,7 @@
                     <div>
                         <button class="btn btn-outline btn-error btn-sm">테이블정보</button>
                         <button class="btn btn-outline btn-error btn-sm">복수등록</button>
-                        <button class="btn btn-outline btn-error btn-sm">선택삭제</button>
+                        <button onclick="deleteTable();" class="btn btn-outline btn-error btn-sm">선택삭제</button>
                         <button class="btn btn-outline btn-error btn-sm">테이블복사</button>
                     </div>
                     <div>
@@ -100,47 +100,170 @@
 
 <script>
     // li 태그들을 가져옵니다
-    const resizableElements = document.querySelectorAll('.tables');
-    resizableElements.forEach((li) => {
+    function tableResizeable(element) {
         // 크기 조절 핸들을 추가
-        const handleX = document.createElement('div');
-        const handleY = document.createElement('div');
-        handleX.className = 'resize-handleX';
-        handleY.className = 'resize-handleY';
-        li.appendChild(handleX);
-        li.appendChild(handleY);
+        const leftTop = document.createElement('div');
+        const top = document.createElement('div');
+        const rightTop = document.createElement('div');
+        const right = document.createElement('div');
+        const rightBottom = document.createElement('div');
+        const bottom = document.createElement('div');
+        const leftBottom = document.createElement('div');
+        const left = document.createElement('div');
+
+        leftTop.className = 'resize-leftTop resizeable';
+        top.className = 'resize-top resizeable';
+        rightTop.className = 'resize-rightTop resizeable';
+        right.className = 'resize-right resizeable';
+        rightBottom.className = 'resize-rightBottom resizeable';
+        bottom.className = 'resize-bottom resizeable';
+        leftBottom.className = 'resize-leftBottom resizeable';
+        left.className = 'resize-left resizeable';
+
+        element.appendChild(leftTop);
+        element.appendChild(top);
+        element.appendChild(rightTop);
+        element.appendChild(right);
+        element.appendChild(rightBottom);
+        element.appendChild(bottom);
+        element.appendChild(leftBottom);
+        element.appendChild(left);
 
         let isResizing = false;  // 크기 조절 중인지 여부
         let lastX, lastY;        // 마지막 마우스 위치
+        let resizingSide = null;
+        let resizingUpDown = null;
+        let resizingLT_RB = null;
+        let resizingRT_LB = null;
 
-        handleX.addEventListener('mousedown', function (e) {
-            let parentLi = handleX.parentNode;
+        leftTop.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = leftTop.parentNode;
             parentLi.draggable = false;
             isResizing = true;
+            resizingLT_RB = "leftTop";
             lastX = e.clientX;
+            lastY = e.clientY;
+            document.addEventListener('mousemove', resizeAngleLT_RB);
+            document.addEventListener('mouseup', stopResizeAngleLT_RB);
+        });
+
+        leftTop.addEventListener('mouseup', stopResizeAngleLT_RB)
+
+        top.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = top.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingUpDown = "top";
+            lastY = e.clientY;
             document.addEventListener('mousemove', resizeX);
             document.addEventListener('mouseup', stopResizeX);
         });
-        handleX.addEventListener('mouseup', stopResizeX)
 
-        handleY.addEventListener('mousedown', function (e) {
-            let parentLi = handleX.parentNode;
+        top.addEventListener('mouseup', stopResizeX)
+
+        rightTop.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = rightTop.parentNode;
             parentLi.draggable = false;
             isResizing = true;
+            resizingRT_LB = "rightTop";
+            lastX = e.clientX;
             lastY = e.clientY;
+            document.addEventListener('mousemove', resizeAngleRT_LB);
+            document.addEventListener('mouseup', stopResizeAngleRT_LB);
+        });
+
+        rightTop.addEventListener('mouseup', stopResizeAngleRT_LB)
+
+        right.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = right.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingSide = "right";
+            lastX = e.clientX;
             document.addEventListener('mousemove', resizeY);
             document.addEventListener('mouseup', stopResizeY);
         });
-        handleY.addEventListener('mouseup', stopResizeY);
+
+        right.addEventListener('mouseup', stopResizeX)
+
+        rightBottom.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = rightBottom.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingLT_RB = "rightBottom";
+            lastX = e.clientX;
+            lastY = e.clientY;
+            document.addEventListener('mousemove', resizeAngleLT_RB);
+            document.addEventListener('mouseup', stopResizeAngleLT_RB);
+        });
+
+        rightBottom.addEventListener('mouseup', stopResizeAngleLT_RB);
+
+        bottom.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = bottom.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingUpDown = "bottom";
+            lastY = e.clientY;
+            document.addEventListener('mousemove', resizeX);
+            document.addEventListener('mouseup', stopResizeX);
+        });
+
+        bottom.addEventListener('mouseup', stopResizeY);
+
+        leftBottom.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = leftBottom.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingRT_LB = "leftBottom";
+            lastX = e.clientX;
+            lastY = e.clientY;
+            document.addEventListener('mousemove', resizeAngleRT_LB);
+            document.addEventListener('mouseup', stopResizeAngleRT_LB);
+        });
+
+        leftBottom.addEventListener('mouseup', stopResizeAngleRT_LB);
+
+        left.addEventListener('mousedown', function (e) {
+            element.classList.add("updatedLi");
+
+            let parentLi = left.parentNode;
+            parentLi.draggable = false;
+            isResizing = true;
+            resizingSide = "left";
+            lastX = e.clientX;
+            document.addEventListener('mousemove', resizeY);
+            document.addEventListener('mouseup', stopResizeY);
+        });
+
+        left.addEventListener('mouseup', stopResizeY);
 
         function resizeX(e) {
             if (!isResizing) return;
             // 마우스의 현재 위치
             const dy = e.clientY - lastY;
-
-            // 가로로 크기 조절
-            li.style.height = li.offsetHeight + dy + 'px';
-
+            if (resizingUpDown === 'bottom') {
+                // 가로로 크기 조절
+                element.style.height = element.offsetHeight + dy + 'px';
+            } else if (resizingUpDown === 'top') {
+                // 왼쪽으로 크기 조절
+                element.style.height = element.offsetHeight - dy + 'px';
+                element.style.top = element.offsetTop + dy + 'px';  // 요소의 왼쪽 위치 변경
+            }
             // 위치 업데이트
             lastY = e.clientY;
         }
@@ -150,29 +273,118 @@
             // 마우스의 현재 위치
             const dx = e.clientX - lastX;
 
-            // 가로로 크기 조절
-            li.style.width = li.offsetWidth + dx + 'px';
-
+            if (resizingSide === 'right') {
+                // 가로로 크기 조절
+                element.style.width = element.offsetWidth + dx + 'px';
+            } else if (resizingSide === 'left') {
+                // 왼쪽으로 크기 조절
+                element.style.width = element.offsetWidth - dx + 'px';
+                element.style.left = element.offsetLeft + dx + 'px';  // 요소의 왼쪽 위치 변경
+            }
             // 위치 업데이트
             lastX = e.clientX;
         }
 
-        function stopResizeX() {
-            let parentLi = handleX.parentNode;
+        function resizeAngleLT_RB(e) {
+            if (!isResizing) return;
+            // 마우스의 현재 위치
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+
+            if (resizingLT_RB === "leftTop") {
+                // 가로로 크기 조절
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    element.style.width = element.offsetWidth - dx + 'px';
+                    element.style.left = element.offsetLeft + dx + 'px';  // 요소의 왼쪽 위치 변경
+                }
+                // 세로로 크기 조절
+                else {
+                    element.style.height = element.offsetHeight - dy + 'px';
+                    element.style.top = element.offsetTop + dy + 'px';  // 요소의 왼쪽 위치 변경
+                }
+            } else if (resizingLT_RB === "rightBottom") {
+                // 가로로 크기 조절
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    element.style.width = element.offsetWidth + dx + 'px';
+                }
+                // 세로로 크기 조절
+                else {
+                    element.style.height = element.offsetHeight + dy + 'px';
+                }
+            }
+            // 위치 업데이트
+            lastX = e.clientX;
+            lastY = e.clientY;
+        }
+
+        function stopResizeAngleLT_RB() {
+            let parentLi = top.parentNode;
             parentLi.draggable = true;
             isResizing = false;
+            resizingLT_RB = null;
+            document.removeEventListener('mousemove', resizeAngleLT_RB);
+            document.removeEventListener('mouseup', stopResizeAngleLT_RB);
+        }
+
+        function resizeAngleRT_LB(e) {
+            if (!isResizing) return;
+            // 마우스의 현재 위치
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+
+            if (resizingRT_LB === "rightTop") {
+                // 가로로 크기 조절
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    element.style.width = element.offsetWidth + dx + 'px';
+                }
+                // 세로로 크기 조절
+                else {
+                    element.style.height = element.offsetHeight - dy + 'px';
+                    element.style.top = element.offsetTop + dy + 'px';  // 요소의 왼쪽 위치 변경
+                }
+            } else if (resizingRT_LB === "leftBottom") {
+                // 가로로 크기 조절
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    element.style.width = element.offsetWidth - dx + 'px';
+                    element.style.left = element.offsetLeft + dx + 'px';  // 요소의 왼쪽 위치 변경
+                }
+                // 세로로 크기 조절
+                else {
+                    element.style.height = element.offsetHeight + dy + 'px';
+                }
+            }
+            // 위치 업데이트
+            lastX = e.clientX;
+            lastY = e.clientY;
+        }
+
+        function stopResizeAngleRT_LB() {
+            let parentLi = top.parentNode;
+            parentLi.draggable = true;
+            isResizing = false;
+            resizingRT_LB = null;
+            document.removeEventListener('mousemove', resizeAngleLT_RB);
+            document.removeEventListener('mouseup', stopResizeAngleRT_LB);
+        }
+
+        function stopResizeX() {
+            let parentLi = top.parentNode;
+            parentLi.draggable = true;
+            isResizing = false;
+            resizingUpDown = null;
             document.removeEventListener('mousemove', resizeX);
             document.removeEventListener('mouseup', stopResizeX);
         }
 
         function stopResizeY() {
-            let parentLi = handleX.parentNode;
+            let parentLi = top.parentNode;
             parentLi.draggable = true;
             isResizing = false;
+            resizingSide = null;
             document.removeEventListener('mousemove', resizeY);
             document.removeEventListener('mouseup', stopResizeY);
         }
-    });
+    }
 
     // ======================================= //
     document.querySelectorAll(".other-management-tables li").forEach((element) => {
@@ -181,9 +393,14 @@
             if (clickedLi != null) {
                 clickedLi.classList.remove("clicked");
                 clickedLi.style.border = "none";
+                for (let i = 0; i < clickedLi.children.length; i++) {
+                    clickedLi.children[i].style.display = "none";
+                }
             }
             element.classList.add("clicked");
             element.style.border = "1px solid #00bfff";
+
+            tableResizeable(element);
         })
     })
 
@@ -205,6 +422,8 @@
 
             document.querySelectorAll(".other-management-tables .tables").forEach((element) => {
                 element.addEventListener("dragstart", (e) => {
+                    element.classList.add("updatedLi");
+
                     tableId = e.target.id
                     floor = e.target.attributes.floor.value
                     posX = e.offsetX;
@@ -352,7 +571,7 @@
     }
 
     function saveUpdateTableData() {
-        document.querySelectorAll(".other-management-tables li").forEach((element) => {
+        document.querySelectorAll(".other-management-tables li.updatedLi").forEach((element) => {
             updateTableLocation(element);
         })
     }
@@ -384,116 +603,26 @@
         // console.log(tableEl)
     }
 
-    // ===================================== //
-
-    // function getTables(floor) {
-    //     $.ajax({
-    //         url: "/usr/basic-information/otherManagement/tablesArrangement",
-    //         method: "GET",
-    //         data: {
-    //             floor: floor.substring(floor.indexOf("-") + 1)
-    //         },
-    //         success: function (data) {
-    //             drawingATable(data);
-    //         },
-    //         error: function (request, status, error) {
-    //         },
-    //         complete: function () {
-    //         }
-    //
-    //     })
-    // }
-    //
-    // getTables('floor-1');
-
-    // function drawingATable(data) {
-    //     let tables = '';
-    //     for (let i = 0; i < data.length; i++) {
-    //         let table = data[i];
-    //         tables += ` <li draggable="true" class="tables" id="table_\${table.tableName}" floor = "\${table.floor}"
-    //                        style="position: absolute; width: \${table.width}; height: \${table.height}; top: \${table.top};
-    //                         left: \${table.left}; border-radius: 5px; background-color: \${table.bgColor}">
-    //                         \${table.tableName}
-    //                     </li>`
-    //     }
-    //
-    //     $(".other-management-tables").html(tables);
-    //     moveTheTable();
-    //
-    // }
-
-    // function moveTheTable() {
-    //     const HomeContainer = document.querySelector(".other-management-tables")
-    //     if (HomeContainer != null) {
-    //         const {width: containerWidth, height: containerHeight} = HomeContainer.getBoundingClientRect();
-    //         let posX = null;
-    //         let posY = null;
-    //         let tableId = null;
-    //         let originLeft = null;
-    //         let originTop = null;
-    //         let originX = null;
-    //         let originY = null;
-    //         let boxWidth = null;
-    //         let boxHeight = null;
-    //         let floor = null;
-    //
-    //         document.querySelectorAll(".other-management-tables .tables").forEach((element) => {
-    //             element.addEventListener("dragstart", (e) => {
-    //                 console.log(e)
-    //                 tableId = e.target.id
-    //                 floor = e.target.attributes.floor.value
-    //                 posX = e.offsetX;
-    //                 posY = e.offsetY;
-    //                 originX = e.clientX;
-    //                 originY = e.clientY;
-    //                 originLeft = element.offsetLeft;
-    //                 originTop = element.offsetTop;
-    //                 boxWidth = element.clientWidth;
-    //                 boxHeight = element.clientHeight;
-    //             })
-    //         })
-    //
-    //         document.querySelector(".other-management-tables").addEventListener("dragover", (e) => {
-    //             e.preventDefault();
-    //             e.stopPropagation();
-    //         })
-    //
-    //         document.querySelector(".other-management-tables").addEventListener("drop", (e) => {
-    //             e.preventDefault();
-    //             e.stopPropagation();
-    //             const tableEl = document.getElementById(tableId);
-    //             const diffX = e.clientX - originX;
-    //             const diffY = e.clientY - originY;
-    //             const endOfXPoint = containerWidth - boxWidth;
-    //             const endOfYPoint = containerHeight - boxHeight;
-    //
-    //             let left = Math.min(Math.max(0, originLeft + diffX), endOfXPoint);
-    //             let right = Math.min(Math.max(0, originTop + diffY), endOfYPoint);
-    //             if (tableEl != null) {
-    //                 tableEl.style.left = left + "px";
-    //                 tableEl.style.top = right + "px";
-    //             }
-    //             // $.get('/usr/tables/update', {
-    //             //     elPosX: tableEl.offsetLeft,
-    //             //     elPosY: tableEl.offsetTop,
-    //             //     number: tableId.substring(tableId.indexOf("_") + 1),
-    //             //     floor: floor
-    //             // }, function (data) {
-    //             //     console.log("성공")
-    //             // }, 'json')
-    //
-    //         })
-    //     }
-    // }
-
-    // document.querySelectorAll(".other-management-buttons > div:nth-child(2) > div:not(:first-child)").forEach((element) => {
-    //     $(".other-management-buttons .active").css("backgroundColor", "orange");
-    //     element.addEventListener("click", function (el) {
-    //         $(".other-management-buttons .active").css("backgroundColor", "inherit");
-    //         $(".other-management-buttons .active").removeClass("active");
-    //         element.style.backgroundColor = "orange";
-    //         element.classList.add("active");
-    //     })
-    // })
+    function deleteTable() {
+        document.querySelectorAll(".other-management-tables li.clicked").forEach((element) => {
+            let tableId = element.textContent.trim().substring(element.textContent.trim().indexOf("_") + 1);
+            let floor = parseInt(${param.floor});
+            $.ajax({
+                url: "/usr/home-main/deleteTable",
+                method: "POST",
+                data: {
+                    tableId: tableId,
+                    floor: floor
+                },
+                success: function (data) {
+                    location.replace('/usr/home-main/tableLayout?floor=' + floor);
+                },
+                error: function (request, status, error) {
+                },
+                complete: function () {
+                }
+            })
+        })
+    }
 
 </script>

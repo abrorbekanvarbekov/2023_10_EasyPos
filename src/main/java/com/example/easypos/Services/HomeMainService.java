@@ -111,4 +111,8 @@ public class HomeMainService {
     public int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor) {
         return homeMainDao.updateTable(width, height, elPosX, elPosY, number, floor);
     }
+
+    public void deleteTable(String tableId, int floor) {
+        homeMainDao.deleteTable(tableId, floor);
+    }
 }
