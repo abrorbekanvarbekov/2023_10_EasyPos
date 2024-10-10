@@ -195,8 +195,8 @@ public class HomeMainController {
 
     @RequestMapping("/usr/home-main/updateTable")
     @ResponseBody
-    public ResponseEntity<?> updateTable(int width, int height, int elPosX, int elPosY, int number, int floor) {
-        homeMainService.updateTable(width, height, elPosX, elPosY, number, floor);
+    public ResponseEntity<?> updateTable(int width, int height, int elPosX, int elPosY, int number, int floor, int tableId) {
+        homeMainService.updateTable(width, height, elPosX, elPosY, number, floor, tableId);
         return ResponseEntity.ok().build();
 
     }

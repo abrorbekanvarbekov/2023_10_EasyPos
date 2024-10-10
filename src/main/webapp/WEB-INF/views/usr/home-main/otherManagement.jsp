@@ -58,7 +58,7 @@
                 </div>
                 <div>
                     <div>
-                        <button class="btn btn-outline btn-error btn-sm">테이블정보</button>
+                        <button onclick="tableInfoPage();" class="btn btn-outline btn-error btn-sm">테이블정보</button>
                         <button class="btn btn-outline btn-error btn-sm">복수등록</button>
                         <button onclick="deleteTable();" class="btn btn-outline btn-error btn-sm">선택삭제</button>
                         <button class="btn btn-outline btn-error btn-sm">테이블복사</button>
@@ -87,17 +87,59 @@
                 <c:forEach var="table" items="${tableList}" varStatus="idx">
                     <li draggable="true"
                         class="tables right ${idx.count == 1 ? 'resizable-content' : ''}"
-                        id="table_${idx.count}" floor="${table.floor}"
+                        id="table_${table.id}" floor="${table.floor}"
                         style="position: absolute; width: ${table.width}; height: ${table.height}; top: ${table.top};
                                 left: ${table.left}; border-radius: ${table.border_radius}px; background-color: ${table.bgColor}">
-                            ${table.tableName}
+                            ${table.tableName}번
                     </li>
                 </c:forEach>
             </ul>
         </div>
     </div>
 </div>
-
+<div class="tableInfoBackP">
+    <div class="tableInfoPage" draggable="true">
+        <div>
+            <span>테이블배치-테이블설정</span>
+            <span class="material-symbols-outlined" onclick="closeTableInfoPage();">close</span>
+        </div>
+        <div>
+            <div>테이블 정보</div>
+            <div>
+                <ul>
+                    <li>테이블명</li>
+                    <li>좌석수</li>
+                    <li>테이블식별번호</li>
+                </ul>
+                <ul>
+                    <li>
+                        <input class="tableNum-class" type="text" value=""
+                               style="border: 1px solid gray; outline: none">
+                    </li>
+                    <li>
+                        <select name="" id="">
+                            <option value="" selected>선택없음</option>
+                            <option value="">1인석</option>
+                            <option value="">2인석</option>
+                            <option value="">3인석</option>
+                            <option value="">4인석</option>
+                            <option value="">5인석</option>
+                            <option value="">6인석</option>
+                            <option value="">8인석</option>
+                            <option value="">9인석</option>
+                            <option value="">10인석</option>
+                        </select>
+                    </li>
+                    <li><input type="text" style="border: 1px solid gray; outline: none"></li>
+                </ul>
+            </div>
+            <div>
+                <button class="btn btn-xs" onclick="modifyTableNum();">확인</button>
+                <button class="btn btn-xs" onclick="closeTableInfoPage();">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     // li 태그들을 가져옵니다
     function tableResizeable(element) {
@@ -400,10 +442,11 @@
             element.classList.add("clicked");
             element.style.border = "1px solid #00bfff";
 
+            element.addEventListener("dblclick", tableInfoPage);
+
             tableResizeable(element);
         })
     })
-
 
     function tableMovement() {
         const HomeContainer = document.querySelector(".other-management-tables")
@@ -423,7 +466,6 @@
             document.querySelectorAll(".other-management-tables .tables").forEach((element) => {
                 element.addEventListener("dragstart", (e) => {
                     element.classList.add("updatedLi");
-
                     tableId = e.target.id
                     floor = e.target.attributes.floor.value
                     posX = e.offsetX;
@@ -586,6 +628,7 @@
                 elPosX: parseInt(tableEl.offsetLeft),
                 elPosY: parseInt(tableEl.offsetTop),
                 number: parseInt(tableEl.textContent),
+                tableId: parseInt(tableEl.id.substring(tableEl.id.indexOf("_") + 1)),
                 floor: parseInt(${param.floor})
             },
             success: function (data) {
@@ -605,7 +648,7 @@
 
     function deleteTable() {
         document.querySelectorAll(".other-management-tables li.clicked").forEach((element) => {
-            let tableId = element.textContent.trim().substring(element.textContent.trim().indexOf("_") + 1);
+            let tableId = element.id.substring(element.id.indexOf("_") + 1);
             let floor = parseInt(${param.floor});
             $.ajax({
                 url: "/usr/home-main/deleteTable",
@@ -615,13 +658,99 @@
                     floor: floor
                 },
                 success: function (data) {
-                    location.replace('/usr/home-main/tableLayout?floor=' + floor);
+                    element.style.display = "none";
                 },
                 error: function (request, status, error) {
                 },
                 complete: function () {
                 }
             })
+        })
+    }
+
+    function tableInfoPage() {
+        const clickedLi = document.querySelector(".other-management-tables > .clicked")
+        const tableNum = clickedLi.textContent.trim();
+
+        if (clickedLi != null) {
+            const backgroundPage = document.querySelector(".tableInfoBackP");
+            backgroundPage.style.display = "flex";
+            const tableInfoPage = document.querySelector('.tableInfoPage');
+            dragAndDrop(backgroundPage, tableInfoPage)
+
+            document.querySelector(".tableInfoBackP .tableNum-class").value = tableNum;
+
+        }
+    }
+
+    function closeTableInfoPage() {
+        const backgroundPage = document.querySelector(".tableInfoBackP");
+        backgroundPage.style.display = "none";
+    }
+
+    function modifyTableNum() {
+        const tableNewNum = document.querySelector(".tableInfoBackP .tableNum-class").value;
+        const clickedLi = document.querySelector(".other-management-tables > .clicked")
+        clickedLi.classList.add("updatedLi");
+        clickedLi.innerText = tableNewNum;
+        closeTableInfoPage();
+    }
+
+    function dragAndDrop(dragZone, draggable) {
+        const {width: containerWidth, height: containerHeight} = dragZone.getBoundingClientRect();
+        let posX = null;
+        let posY = null;
+        let tableId = null;
+        let originLeft = null;
+        let originTop = null;
+        let originX = null;
+        let originY = null;
+        let boxWidth = null;
+        let boxHeight = null;
+        let floor = null;
+
+        draggable.addEventListener("dragstart", (e) => {
+            e.target.id = "draggableDiv";
+            setTimeout(() => {
+                e.target.style.display = 'none';  // 드래그 중에 요소 숨기기
+            }, 0);
+
+            tableId = e.target.id
+            posX = e.offsetX;
+            posY = e.offsetY;
+            originX = e.clientX;
+            originY = e.clientY;
+            originLeft = draggable.offsetLeft;
+            originTop = draggable.offsetTop;
+            boxWidth = draggable.clientWidth;
+            boxHeight = draggable.clientHeight;
+        })
+
+        // 드래그가 끝났을 때 요소를 다시 표시
+        draggable.addEventListener('dragend', (e) => {
+            e.target.style.display = 'block';
+        });
+
+        dragZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+
+        dragZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const tableEl = document.getElementById(tableId);
+            const diffX = e.clientX - originX;
+            const diffY = e.clientY - originY;
+            const endOfXPoint = containerWidth - boxWidth;
+            const endOfYPoint = containerHeight - boxHeight;
+
+            let left = Math.min(Math.max(0, originLeft + diffX), endOfXPoint);
+            let right = Math.min(Math.max(0, originTop + diffY), endOfYPoint);
+            if (tableEl != null) {
+                tableEl.style.left = left + "px";
+                tableEl.style.top = right + "px";
+            }
         })
     }
 

@@ -11,26 +11,26 @@
     <ul class="header-box-detail">
         <li class="btn-last-receipt">
             <a>
-                <span class="material-symbols-outlined text-4xl">print</span>
+                <span class="material-symbols-outlined text-3xl">print</span>
                 <div><span class="material-symbols-outlined ">undo</span></div>
                 <span class="text-sm">직전 영수증</span>
             </a>
         </li>
         <li>
             <a href="btn-go-wallpapers">
-                <span class="material-symbols-outlined text-3xl">desktop_windows</span>
+                <span class="material-symbols-outlined text-2xl">desktop_windows</span>
                 <span class="text-sm">바탕화면</span>
             </a>
         </li>
         <li>
             <a href="">
-                <span class="material-symbols-outlined text-3xl">cached</span>
+                <span class="material-symbols-outlined text-2xl">cached</span>
                 <span class="text-sm">자료송수신</span>
             </a>
         </li>
         <li class="printer-control-box">
             <a>
-                <span class="material-symbols-outlined text-4xl">print</span>
+                <span class="material-symbols-outlined text-3xl">print</span>
                 <div class="printer-control-btn">
                     <span class="material-symbols-outlined">play_arrow</span>
                     <span class="material-symbols-outlined hidden">pause</span>
@@ -40,13 +40,13 @@
         </li>
         <li>
             <a href="/usr/main/salesSummary">
-                <span class="material-symbols-outlined text-3xl">currency_exchange</span>
+                <span class="material-symbols-outlined text-2xl">currency_exchange</span>
                 <span class="text-sm">총매출</span>
             </a>
         </li>
         <li class="btn-close">
             <a>
-                <span class="material-symbols-outlined text-4xl">close</span>
+                <span class="material-symbols-outlined text-3xl">close</span>
             </a>
         </li>
     </ul>
@@ -106,7 +106,7 @@
         $('.layer-bg').show();
     }
 
-    function closeMsgBox(){
+    function closeMsgBox() {
         $('.layer').hide();
         $('.layer-bg').hide();
     }

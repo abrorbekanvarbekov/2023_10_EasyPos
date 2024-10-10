@@ -193,16 +193,17 @@ public interface HomeMainDao {
                 width = #{width},
                 height = #{height},
                 `left` = #{elPosX},
-                `top` = #{elPosY}
-            where tableName = #{number}
+                `top` = #{elPosY},
+                tableName = #{number}
+            where id = #{tableId}
             and floor = #{floor}
             """)
-    int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor);
+    int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor, int tableId);
 
     @Delete("""
             delete from `table`
                 where floor = #{floor}
-                and tableName = #{tableId};
+                and id = #{tableId};
             """)
     void deleteTable(String tableId, int floor);
 }

@@ -108,8 +108,8 @@ public class HomeMainService {
         return homeMainDao.getTableList(floor);
     }
 
-    public int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor) {
-        return homeMainDao.updateTable(width, height, elPosX, elPosY, number, floor);
+    public int updateTable(int width, int height, int elPosX, int elPosY, int number, int floor, int tableId) {
+        return homeMainDao.updateTable(width, height, elPosX, elPosY, number, floor, tableId);
     }
 
     public void deleteTable(String tableId, int floor) {

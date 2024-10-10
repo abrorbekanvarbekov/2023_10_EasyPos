@@ -16,8 +16,8 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
 
     @Autowired
     public MyWebMvcConfigurer(BeforeActionInterceptor beforeActionInterceptor
-            ,NeedLoginInterceptor needLoginInterceptor
-            ,NeedEmployeeLoginInterceptor needEmployeeLoginInterceptor) {
+            , NeedLoginInterceptor needLoginInterceptor
+            , NeedEmployeeLoginInterceptor needEmployeeLoginInterceptor) {
         this.beforeActionInterceptor = beforeActionInterceptor;
         this.needLoginInterceptor = needLoginInterceptor;
         this.needEmployeeLoginInterceptor = needEmployeeLoginInterceptor;
@@ -30,26 +30,39 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/favicon.ico")
                 .excludePathPatterns("/resource/**");
         registry.addInterceptor(needLoginInterceptor)
+//                HomeController
                 .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
+//                HomeMainController
+                .addPathPatterns("/usr/home/homeMainPage")
+                .addPathPatterns("/usr/home-main/salesHistory")
+                .addPathPatterns("/usr/home-main/receiptReturn")
+                .addPathPatterns("/usr/home-main/deadlineSettlement")
+                .addPathPatterns("/usr/home-main/salesInformationManagement")
+                .addPathPatterns("/usr/home-main/tableLayout")
+//                MemeberController
                 .addPathPatterns("/usr/member/employeeListPage")
+//                OderController
                 .addPathPatterns("/usr/tables/detail")
-                .addPathPatterns("/usr/home/homeMainPage")
-                .addPathPatterns("/usr/home-main/receiptReturn")
-                .addPathPatterns("/usr/home-main/salesHistory")
-                .addPathPatterns("/usr/tables/orderPage/payByCreditCart")
+//                PayController
                 .addPathPatterns("/usr/tables/orderPage/payByCash")
-                .addPathPatterns("/usr/home-main/deadlineSettlement");
+                .addPathPatterns("/usr/tables/orderPage/payByCreditCard");
         registry.addInterceptor(needEmployeeLoginInterceptor)
+                //                HomeController
                 .addPathPatterns("/")
                 .addPathPatterns("/usr/main/salesSummary")
-                .addPathPatterns("/usr/tables/detail")
+//                HomeMainController
                 .addPathPatterns("/usr/home/homeMainPage")
-                .addPathPatterns("/usr/home-main/receiptReturn")
                 .addPathPatterns("/usr/home-main/salesHistory")
-                .addPathPatterns("/usr/tables/orderPage/payByCreditCart")
+                .addPathPatterns("/usr/home-main/receiptReturn")
+                .addPathPatterns("/usr/home-main/deadlineSettlement")
+                .addPathPatterns("/usr/home-main/salesInformationManagement")
+                .addPathPatterns("/usr/home-main/tableLayout")
+//                OderController
+                .addPathPatterns("/usr/tables/detail")
+//                PayController
                 .addPathPatterns("/usr/tables/orderPage/payByCash")
-                .addPathPatterns("/usr/home-main/deadlineSettlement");
+                .addPathPatterns("/usr/tables/orderPage/payByCreditCard");
     }
 
 }
