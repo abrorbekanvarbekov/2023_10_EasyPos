@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@include file="head.jsp" %>
-<script src="/resource/pay.js" defer="defer"></script>
 <c:set var="scriptRoute" value="/resource/pay.js"/>
 <div class="header-detail">
     <a class="px-3 flex items-center justify-center cursor-default">
