@@ -21,15 +21,15 @@
                 </li>
                 <li>
                     <span>사원코드</span>
-                    <span><input class="employeeCode" type="button"></span>
+                    <span><input class="employeeCode" type="button" value="434607"></span>
                 </li>
                 <li>
                     <span>사원명</span>
-                    <span><input class="employeeName" type="button"></span>
+                    <span><input class="employeeName" type="button" value="아브로르"></span>
                 </li>
                 <li>
                     <span>비밀번호</span>
-                    <span><input class="employeePw" type="button"></span>
+                    <span><input class="employeePw" type="button" value="s00722"></span>
                 </li>
                 <li>
                     <span>준비금</span>

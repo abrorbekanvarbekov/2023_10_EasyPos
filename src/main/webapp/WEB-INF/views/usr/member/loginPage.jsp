@@ -15,11 +15,11 @@
                 <div>
                     <div class="loginId">
                         <span class="material-symbols-outlined">person</span>
-                        <input type="text" id="loginId" value="">
+                        <input type="text" id="loginId" value="user1">
                     </div>
                     <div class="loginPw">
                         <span class="material-symbols-outlined">password</span>
-                        <input type="password" id="loginPw" value="">
+                        <input type="password" id="loginPw" value="user1pw">
                     </div>
                     <div class="loginSave-check-box">
                         <input type="checkbox" id="check-btn">
