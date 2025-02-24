@@ -35,6 +35,8 @@ public class MemberController {
         this.rq = rq;
         this.now = LocalTime.now();
         this.dateNow = new Date();
+
+
         this.formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     }
