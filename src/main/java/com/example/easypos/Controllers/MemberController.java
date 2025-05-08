@@ -82,7 +82,7 @@ public class MemberController {
 //            errorMsg = "이미 로그인 상태 입니다.";
 //            return ResultDate.from("S-2", errorMsg, "homeUrl", "/?floor=1");
 //        }
-
+// asdasdasdasdasdasdsd
         rq.login(member);
         if (rq.getLoginedEmployee() == null) {
             return ResultDate.from("S-1", "/usr/member/employeeListPage");
