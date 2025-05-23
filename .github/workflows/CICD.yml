@@ -54,7 +54,7 @@ jobs:
             echo "CURRENT_PORT=8080" >> $GITHUB_ENV
             echo "STOPPED_PORT=8081" >> $GITHUB_ENV
             echo "TARGET_UPSTREAM=green" >> $GITHUB_ENV
-          elif [ $CURRENT_UPSTREAM = green ]; then
+          else if [ $CURRENT_UPSTREAM = green ]; then
             echo "CURRENT_PORT=8081" >> $GITHUB_ENV
             echo "STOPPED_PORT=8080" >> $GITHUB_ENV
             echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
